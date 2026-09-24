@@ -377,11 +377,11 @@ Let's begin the review of analog and digital electronics.
 The review will cover:
 \begin{itemize}
 	\item Electrical components, including:
-	      \begin{itemize}
-		      \item \textbf{Passive components}, as in \textit{resistors}, \textit{capacitors} and \textit{inductors};
-		      \item \textbf{Active components}, as in \textit{diodes} and \textit{transistors};
-		      \item \textbf{Operational amplifiers}.
-	      \end{itemize}
+		\begin{itemize}
+			\item \textbf{Passive components}, as in \textit{resistors}, \textit{capacitors} and \textit{inductors};
+			\item \textbf{Active components}, as in \textit{diodes} and \textit{transistors};
+			\item \textbf{Operational amplifiers}.
+		\end{itemize}
 	\item Digital electronics, including \textit{logic gates}, \textit{digital functions}, \textbf{FSM}s (\textit{Finite State Machines}) and the \textit{VHDL} language.
 \end{itemize}
 
@@ -390,16 +390,16 @@ The review will cover:
 \textbf{\textsf{Resitors}} offer \textit{resistance} to electric current, measured in \textit{Ohms} ($\Omega$).
 By Ohm's law:
 $$
-	v_R(t) = R i_R(t), \quad V_R(s) = R I_R(s)
+v_R(t) = R i_R(t), \quad V_R(s) = R I_R(s)
 $$
 with $s = \sigma + j \omega$ in the Laplace domain.
 A definition via \textit{conductance}, measured in \textit{Siemens} ($S$), is also possible:
 $$
-	i_R(t) = G v_R(t), \quad g = \frac{1}{R}
+i_R(t) = G v_R(t), \quad g = \frac{1}{R}
 $$
 
 Resistor response doesn't depend on the frequency of periodic signals (all signals get attenuated) the same.
-This applies at least partly to real resistors, and we will assume the ideal model from now onwards.
+This applies at least partly to real resistors, and we will assume the ideal model from now onwards. 
 
 It can also be useful to remember the code used to distinguish different resistance values.
 \begin{center}
@@ -407,8 +407,8 @@ It can also be useful to remember the code used to distinguish different resista
 \end{center}
 
 Resistor tolerances are to be taken into account, as they might drive resistances in our circuits out of the feasible margins.
-Because of this, we preder using standard values in \textit{E series}.
-E series is a system of preferred numbers (also called preferred values) derived for use in electronic components.
+Because of this, we preder using standard values in \textit{E series}. 
+E series is a system of preferred numbers (also called preferred values) derived for use in electronic components. 
 It consists of the E3, E6, E12, E24, E48, E96, and E192 series, where the number after the "E" designates the quantity of logarithmic value "steps" per decade.
 \begin{center}
 	\includegraphics[scale=0.25]{../figures/e12.png}
@@ -419,18 +419,18 @@ It consists of the E3, E6, E12, E24, E48, E96, and E192 series, where the number
 \textbf{\textsf{Capacitors}} store energy as voltage potential between conductive armatures separated by a dielecric.
 \textit{Capacity}, measured in \textit{Farad} ($F$) is defined as:
 $$
-	C = \frac{Q}{V}
+C = \frac{Q}{V}
 $$
 
 The laws that govern capacitors in the time domain are differential equations:
 $$
-	i_C(t) = C \frac{d}{dt} v_C(t), \quad
-	v_C(t) = \frac{1}{C} \int_0^t i_C(t) \, d\tau
+i_C(t) = C \frac{d}{dt} v_C(t), \quad
+v_C(t) = \frac{1}{C} \int_0^t i_C(t) \, d\tau
 $$
 
 It is then easier to move to the Laplace domain, where we can simply express integration as division by $s$:
 $$
-	V_C(s) = \frac{I_C(s)}{sC}
+V_C(s) = \frac{I_C(s)}{sC}
 $$
 
 In regards to periodic signals, the behaviour of capacitors depends on frequency:
@@ -456,18 +456,18 @@ To read the value of a capacitor we have quite a complex system:
 \textbf{\textsf{Inductors}} store energy as magnetic field in a winding of conductive wire around a metal core.
 \textit{Indcutance}, measured in \textit{Henry} ($H$) is defined as:
 $$
-	L = \frac{\Phi}{I}
+L = \frac{\Phi}{I}
 $$
 
 The laws that govern indcutors in the time domain are differential equations:
 $$
-	v_L(t) = L \frac{d}{dt} i_L(t), \quad
-	i_L(t) = \frac{1}{L} \int_0^t v_L(t) \, d\tau
+v_L(t) = L \frac{d}{dt} i_L(t), \quad
+i_L(t) = \frac{1}{L} \int_0^t v_L(t) \, d\tau
 $$
 
 It is then easier to move to the Laplace domain, where we can simply express derivation as multiplication by $s$:
 $$
-	V_L(s) = s L I_L(s)
+V_L(s) = s L I_L(s) 
 $$
 
 In regards to periodic signals, the behaviour of inductors also depends on frequency, on the contrary of capacitors:
@@ -488,7 +488,7 @@ $V_{out}(t)$ is exactly the same, as the potential seen by $R_1$ on its left sid
 
 What actually does change in the example is the resistance: we have effectively built a current divider, where the input current is:
 $$
-	i_{in}(t) = \frac{v_{in}(t)}{R_1 + R_2} + \frac{v_{in}(t)}{R_3}
+i_{in}(t) = \frac{v_{in}(t)}{R_1 + R_2} + \frac{v_{in}(t)}{R_3}
 $$
 
 Lastly, let's note that all the equations in the Laplace domain are the same, changing the variables accordingly.
@@ -501,19 +501,19 @@ A simple \textbf{low pass} filter can be seen as a special case of a divider:
 
 By writing the \textit{Kirchoff Voltage Law} (\textbf{KVL}) of the circuit, we get:
 $$
-	v_{in}(t) - R \cdot C \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
+v_{in}(t) - R \cdot C \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
 $$
 with the first term being the voltage gain on the power supply, the second term being the voltage drop on the resistor, and the last term being the output voltage taken across the capacitor.
 
 
 \textbf{\textsf{Time domain solution}} This is a first order linear differential equation, which we can express as:
 $$
-	\frac{d}{dt} v_{out}(t) + \frac{1}{\tau} v_{out}(t) = \frac{1}{\tau} v_{in}(t), \quad \tau = RC
+\frac{d}{dt} v_{out}(t) + \frac{1}{\tau} v_{out}(t) = \frac{1}{\tau} v_{in}(t), \quad \tau = RC
 $$
 We refer to $\tau = RC$ as the \textit{time constant} of the circuit.
 A general solution is:
 $$
-	v_{out}(t) = e^{-\frac{t}{\tau}} \left( k + \int\left( \frac{v_{in}(t)}{\tau} e^{\frac{t}{\tau}} \right) dt \right)
+v_{out}(t) = e^{-\frac{t}{\tau}} \left( k + \int\left( \frac{v_{in}(t)}{\tau} e^{\frac{t}{\tau}} \right) dt \right) 
 $$
 
 \par\smallskip
@@ -521,48 +521,48 @@ $$
 It can be useful to carry out the full calculation.
 We start from the general differential equation obtained from KVL:
 $$
-	v_{in}(t) - RC \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
+v_{in}(t) - RC \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
 $$
 
 We can easily rearrange this into a standard first-order form:
 $$
-	\frac{d}{dt} v_{out}(t) + \frac{1}{RC} v_{out}(t) = \frac{1}{RC} v_{in}(t)
+\frac{d}{dt} v_{out}(t) + \frac{1}{RC} v_{out}(t) = \frac{1}{RC} v_{in}(t)
 $$
 
 Now we take a function $\mu(t)$ constructed such that:
 $$
-	\mu(t) \frac{1}{RC} =  \frac{d}{dt} \mu(t)
+\mu(t) \frac{1}{RC} =  \frac{d}{dt} \mu(t)
 $$
 While the purpose of this might at this point be unclear, we can clearly see that a function that satisifies the equation is:
 $$
-	\mu(t) = e^{\frac{t}{RC}}
+\mu(t) = e^{\frac{t}{RC}}
 $$
 
 Let's multiply both sides of the original differential equation by $\mu(t)$:
 $$
-	\mu(t) \frac{d}{dt} v_{out}(t) + \mu(t) \frac{1}{RC} v_{out}(t) = \mu(t) \frac{1}{RC} v_{in}(t)
+\mu(t) \frac{d}{dt} v_{out}(t) + \mu(t) \frac{1}{RC} v_{out}(t) = \mu(t) \frac{1}{RC} v_{in}(t)
 $$
 
 By applying the property above this leaves us with:
 $$
-	\mu(t) \frac{d}{dt} v_{out}(t) + \frac{d}{dt} \mu(t) v_{out}(t) = \frac{\mu(t)}{RC} v_{in}(t)
+\mu(t) \frac{d}{dt} v_{out}(t) + \frac{d}{dt} \mu(t) v_{out}(t) = \frac{\mu(t)}{RC} v_{in}(t)
 $$
 
 It's clear that the left hand side is the expansion of the derivative of a product, so we can write:
 $$
-	\frac{d}{dt} \left( \mu(t) v_{out}(t) \right) = \frac{\mu(t)}{RC} v_{in}(t)
+\frac{d}{dt} \left( \mu(t) v_{out}(t) \right) = \frac{\mu(t)}{RC} v_{in}(t)
 $$
 
 Recall that we were interested in $v_{out}(t)$. We can take it out the derivative by integrating both sides:
 $$
-	\mu(t)v_{out}(t) = \int \frac{\mu(t)}{RC} v_{in}(t) + k
+\mu(t)v_{out}(t) = \int \frac{\mu(t)}{RC} v_{in}(t) + k
 $$
 where the antiderivative operation requires that we include a $\pm k$ factor (sign indifferent).
 
 At this point we just have to make $v_{out}(t)$ explicit and substitute our original definition of $\mu(t)$:
 $$
-	v_{out}(t) = \frac{1}{\mu(t)} \left( \int \frac{\mu(t)}{RC} v_{in}(t) + k \right)
-	=  e^{-\frac{t}{RC}} \left( k + \int\left( \frac{v_{in}(t)}{RC} e^{\frac{t}{RC}} \right) dt \right)
+v_{out}(t) = \frac{1}{\mu(t)} \left( \int \frac{\mu(t)}{RC} v_{in}(t) + k \right)
+=  e^{-\frac{t}{RC}} \left( k + \int\left( \frac{v_{in}(t)}{RC} e^{\frac{t}{RC}} \right) dt \right) 
 $$
 Which is our original expression (given $\tau = RC$). $\hfill \square$
 
@@ -570,7 +570,7 @@ Which is our original expression (given $\tau = RC$). $\hfill \square$
 
 With $v_{in}(t)$ taken as a step of amplitude $V_M$, or equivalently by taking the solution given with zero initial conditions and a costant power source, we get the usual form:
 $$
-	v_{out}(t) = V_M (1 - e^{-\frac{t}{\tau}})
+v_{out}(t) = V_M (1 - e^{-\frac{t}{\tau}})
 $$
 where the time constant determines the time taken to reach saturation.
 We recall that in one time constant we reach around $63.2 \%$ of full saturation, and in three time constants we reach $95 \%$.
@@ -578,23 +578,23 @@ We recall that in one time constant we reach around $63.2 \%$ of full saturation
 \textbf{\textsf{Laplace domain solution}} Let's carry out the same calculation in the Laplace domain.
 By expressing the voltage divider we get:
 $$
-	V_{out}(S) = \frac{ \frac{1}{sC} }{ \frac{1}{sC} + R } V_{in}(S) = \frac{1}{sRC + 1} V_{in}(s)
+V_{out}(S) = \frac{ \frac{1}{sC} }{ \frac{1}{sC} + R } V_{in}(S) = \frac{1}{sRC + 1} V_{in}(s)
 $$
 where in the first expression we simply applied the voltage divider law to the impedance definitions of the capacitor and the resistor.
 We can then derive a \textit{transfer function}:
 $$
-	\frac{V_{out}(s)}{V_{in}(s)} = \frac{1}{sRC + 1}
+\frac{V_{out}(s)}{V_{in}(s)} = \frac{1}{sRC + 1}
 $$
 
 We can shift to the Fourier domain, or in equivalent terms take a projection of the Laplace domain in only the frequency direction, by setting $s = j \omega$:
 $$
-	\frac{V_{out} (j \omega)}{V_{in}(j \omega)} = \frac{1}{j \omega RC + 1}, \quad
-	\left| \frac{V_{out} (j \omega)}{V_{in}(j \omega)} \right| = \frac{1}{ \sqrt{ \omega^2 R^2 C^2 + 1 } }
+\frac{V_{out} (j \omega)}{V_{in}(j \omega)} = \frac{1}{j \omega RC + 1}, \quad
+\left| \frac{V_{out} (j \omega)}{V_{in}(j \omega)} \right| = \frac{1}{ \sqrt{ \omega^2 R^2 C^2 + 1 } }
 $$
 
 A \textit{pole} in this expression is a zero of the denominator, so:
 $$
-	s_p = - \frac{1}{RC}, \quad \omega_p = \frac{1}{RC}
+s_p = - \frac{1}{RC}, \quad \omega_p = \frac{1}{RC}
 $$
 with the frequency representation being bilateral, as always.
 Let's note that the \textit{pole pulsation} $\omega_p$ is not really a zero of the denominator, but just the characteristic frequency of the system, which we find useful for plotting and solving circuit responses.
@@ -602,7 +602,7 @@ Let's note that the \textit{pole pulsation} $\omega_p$ is not really a zero of t
 \textbf{\textsf{Time domain response}} Fixing $V_{in}$ to a periodic square wave, let's compute the time domain response.
 Each fragment in the response is an exponential:
 $$
-	v_{out}(t) = A + B e^{-\frac{t}{\tau}}
+v_{out}(t) = A + B e^{-\frac{t}{\tau}}
 $$
 where $\tau = RC$.
 
@@ -622,46 +622,46 @@ We say \textit{steady-state}, as when the oscillators first begins oscillating t
 Let's start with the rising edge.
 By remembering our first equation, we can compute $V_{out}$ at the first time instant:
 $$
-	V^r_{out}(0) = A + B = V_{min}
+V^r_{out}(0) = A + B = V_{min}
 $$
 If at this point the square wave never went to a low value, the capacitor would continue charging and we would approach saturaiton (at $V_H$, the maximum value of the square wave).
 From this we can derive $A = V_H$, as the $B$ term vanishes to $0$ approaching infinity, and it follows that $B = V_{min} - V_H$.
 This gives us:
 $$
-	V^r_{out}(t) = V_H + (V_{min} - V_H) e ^{-\frac{t}{\tau}}
+V^r_{out}(t) = V_H + (V_{min} - V_H) e ^{-\frac{t}{\tau}}
 $$
 
 What happens in reality is that at some time $T_H$ we switch to the falling edge, reaching a maximum value $V_{max}$.
 $$
-	V^r_{out}(T_H) = A + B e^{-\frac{t}{\tau}} = V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max}
+V^r_{out}(T_H) = A + B e^{-\frac{t}{\tau}} = V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max}
 $$
 
 To fix $V_{min}$ and $V_{max}$, we switch to anayzing the falling edge.
 With similar calculations, we can derive the equation:
 $$
-	V^f_{out}(T_L) = V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
+V^f_{out}(T_L) = V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
 $$
 with $V_L$ at the lowest point of the square wave.
 
 We can easily solve the resulting system of equations, to figure out the minimum and maximum bounds of the response of the circuit:
 \[
 	\begin{cases}
-		V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max} \\
-		V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
+	V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max} \\
+	V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
 	\end{cases}
 \]
 By setting:
 $$
-	\alpha=e^{-\frac{T_{H}}{T}}, \quad \beta=e^{-\frac{T_{L}}{T}}
+\alpha=e^{-\frac{T_{H}}{T}}, \quad \beta=e^{-\frac{T_{L}}{T}}
 $$
 we get the solutions (calculations omitted because they're boring):
 $$
-	V_{max}=\frac{V_{H}\left(1-\alpha\right)+\alpha V_{L}\left(1-\beta\right)}{1-\alpha\beta}
-	, \quad
-	V_{min}=\frac{\beta V_{H}\left(1-\alpha\right)+V_{L}\left(1-\beta\right)}{1-\alpha\beta}
+V_{max}=\frac{V_{H}\left(1-\alpha\right)+\alpha V_{L}\left(1-\beta\right)}{1-\alpha\beta}
+, \quad
+V_{min}=\frac{\beta V_{H}\left(1-\alpha\right)+V_{L}\left(1-\beta\right)}{1-\alpha\beta}
 $$
 
-We can then trace the actual response by drawing exponential branches with the time constant given by $\tau = RC$.
+We can then trace the actual response by drawing exponential branches with the time constant given by $\tau = RC$. 
 
 Lastly, let's see an LTSPICE (simulation program) plot of the square wave response of this circuit, which confirms our mathematical model:
 \begin{center}
@@ -671,18 +671,18 @@ Lastly, let's see an LTSPICE (simulation program) plot of the square wave respon
 \textbf{\textsf{Frequency domain response}} In the frequency domain, we can consider the effect on a periodic signal such as a sine wave.
 Let's have:
 $$
-	V_{in}(t) = M \sin ( \omega t ) = M \sin ( 2 \pi f t )
+V_{in}(t) = M \sin ( \omega t ) = M \sin ( 2 \pi f t )
 $$
 
 In a linear system at the steady state (which we have) if the input is sinusoidal, the output is sinusoidal at the same frequency: only the amplitude and the phase can be shifted:
 $$
-	V_{out}(t) = M' \sin(\omega t + \phi)
+V_{out}(t) = M' \sin(\omega t + \phi)
 $$
 
 By using the Fourier domain equations calculated earlier, we can actually express $M'$ and $\phi$:
 $$
-	M' = M \frac{\omega_p}{\sqrt{\omega^2 + \omega_p^2}}, \quad
-	\phi = -\tan^{-1} \left( \frac{\omega}{\omega_p} \right)
+M' = M \frac{\omega_p}{\sqrt{\omega^2 + \omega_p^2}}, \quad
+\phi = -\tan^{-1} \left( \frac{\omega}{\omega_p} \right)
 $$
 
 For arbitrary frequencies, we can plot the linear and logarithmic Bode diagrams of amplitude:
@@ -695,9 +695,9 @@ Let us note that at $f_p = \frac{\omega_p}{2 \pi}$ we have the $-3 \, \mathrm{dB
 \subsubsection{Superposition of effects}
 
 \begin{theorem}{Superposition of effects}
-	In a linear system with more than one input (independent ideal sources, voltage or
-	current), the output is the algebraic sum of the effects of each input with the other set
-	to 0.
+In a linear system with more than one input (independent ideal sources, voltage or
+current), the output is the algebraic sum of the effects of each input with the other set
+to 0.
 \end{theorem}
 This means:
 \begin{itemize}
@@ -723,11 +723,11 @@ Let us take the circuti:
 	\includegraphics[scale=0.25]{../figures/millman.png}
 \end{center}
 
-\begin{theorem}{Millman's Theorem}
-	In the general network on the right, the voltage $V_A$ is given by the expression:
-	$$
-		V_A = \frac{ \sum_{i = 1}^n \frac{V_i}{R_i} - \sum_{j = 1}^m I_j }{ \sum_{i = 1}^n \frac{1}{R_i} }
-	$$
+\begin{theorem}{Millman's Theorem}	
+In the general network on the right, the voltage $V_A$ is given by the expression:
+$$
+V_A = \frac{ \sum_{i = 1}^n \frac{V_i}{R_i} - \sum_{j = 1}^m I_j }{ \sum_{i = 1}^n \frac{1}{R_i} }
+$$
 \end{theorem}
 
 The theorem can be proved using the superposition of effects and voltage dividers with conductances.
@@ -745,42 +745,42 @@ Superposition is applied in both steps, and one final time to sum the contributi
 
 \begin{itemize}
 	\item
-	      For the voltage generators, we take the contribution of a single voltage generator $V_j$ as:
-	      $$
-		      V_A^{a_j} = \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j
-	      $$
-	      where $\parallel_{i \neq j}^n R_i$ is notation soup for the parallel of all resistance but $R_j$.
+For the voltage generators, we take the contribution of a single voltage generator $V_j$ as:
+$$
+V_A^{a_j} = \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j 
+$$
+where $\parallel_{i \neq j}^n R_i$ is notation soup for the parallel of all resistance but $R_j$.
 
-	      We can sum over these to get the total voltage generator contribution $V_A^a$:
-	      $$
-		      V_A^a = \sum_{j = 1}^n \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j
-	      $$
+We can sum over these to get the total voltage generator contribution $V_A^a$:
+$$
+V_A^a = \sum_{j = 1}^n \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j 
+$$
 
-	      This sum is a bit hard to compute, as the denominator changes at each value of $j$ and we don't have a clean way to expand it.
-	      Things would be quite a bit easier if we had the same denominator at each value of $j$.
-	      We can make this happen by dividing the numerator and the denominator by $R_j \parallel_{i \neq j}^n R_i$, which gives:
-	      $$
-		      V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \frac{1}{\parallel_{i \neq j}^n R_i} } V_j
-	      $$
+This sum is a bit hard to compute, as the denominator changes at each value of $j$ and we don't have a clean way to expand it.
+Things would be quite a bit easier if we had the same denominator at each value of $j$.
+We can make this happen by dividing the numerator and the denominator by $R_j \parallel_{i \neq j}^n R_i$, which gives:
+$$
+V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \frac{1}{\parallel_{i \neq j}^n R_i} } V_j
+$$
 
-	      To our convenience, we note that $\frac{1}{\parallel_{i \neq j}^n R_i}$ is equal to $\sum_{i \neq j}^n \frac{1}{R_i}$, so:
-	      $$
-		      V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \sum_{i \neq j}^n \frac{1}{R_i} } V_j =
-		      \sum_{j = 1}^n \frac{\frac{1}{R_j}}{  \sum_{i = 1}^n \frac{1}{R_i}} V_j =
-		      \frac{ \sum_{i = 1}^n \frac{V_i}{R_i} }{ \sum_{i=1}^n \frac{1}{R_i} }
-	      $$
+To our convenience, we note that $\frac{1}{\parallel_{i \neq j}^n R_i}$ is equal to $\sum_{i \neq j}^n \frac{1}{R_i}$, so:
+$$
+V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \sum_{i \neq j}^n \frac{1}{R_i} } V_j =
+\sum_{j = 1}^n \frac{\frac{1}{R_j}}{  \sum_{i = 1}^n \frac{1}{R_i}} V_j = 
+\frac{ \sum_{i = 1}^n \frac{V_i}{R_i} }{ \sum_{i=1}^n \frac{1}{R_i} }
+$$
 
 	\item
-	      Current generators are thankfully simpler to handle.
-	      We take the contribution of a single current generator $I_j$ as:
-	      $$
-		      V_A^{b_j} = I_j \parallel_{i = 1}^n
-	      $$
+Current generators are thankfully simpler to handle.
+We take the contribution of a single current generator $I_j$ as:
+$$
+V_A^{b_j} = I_j \parallel_{i = 1}^n
+$$
 
-	      We can sum over these to get the total voltage generator contribution $V_A^b$:
-	      $$
-		      V_A^b = \sum_{j = 1}^m I_j \parallel_{i = 1}^n = \sum_{j = 1}^m \frac{ I_j }{ \sum_{i = 1}^n \frac{1}{R_i} } = \frac{ \sum_{j = 1}^m I_i }{ \sum_{i = 1}^n \frac{1}{R_i} }
-	      $$
+We can sum over these to get the total voltage generator contribution $V_A^b$:
+$$
+V_A^b = \sum_{j = 1}^m I_j \parallel_{i = 1}^n = \sum_{j = 1}^m \frac{ I_j }{ \sum_{i = 1}^n \frac{1}{R_i} } = \frac{ \sum_{j = 1}^m I_i }{ \sum_{i = 1}^n \frac{1}{R_i} }
+$$
 
 \end{itemize}
 
