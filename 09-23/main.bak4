@@ -1,0 +1,828 @@
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, margin=8em]{geometry}
+
+% usa i pacchetti per la scrittura in italiano
+\usepackage[french,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\frenchspacing 
+
+% usa i pacchetti per la formattazione matematica
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+
+% usa altri pacchetti
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{standalone}
+
+\usepackage{colortbl}
+
+\usepackage{xstring}
+\usepackage{karnaugh-map}
+
+% imposta il titolo
+\title{Electronics for Embedded Systems notes}
+\author{Luca Seggiani}
+\date{2026}
+
+% imposta lo stile
+% usa helvetica
+\usepackage[scaled]{helvet}
+% usa palatino
+\usepackage{palatino}
+% usa un font monospazio guardabile
+\usepackage{lmodern}
+
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{lmtt}
+
+% circuiti
+\usepackage{circuitikz}
+\usetikzlibrary{babel}
+
+% testo cerchiato
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+% disponi il titolo
+\makeatletter
+\renewcommand{\maketitle} {
+	\begin{center} 
+		\begin{minipage}[t]{.8\textwidth}
+			\textsf{\huge\bfseries \@title} 
+		\end{minipage}%
+		\begin{minipage}[t]{.2\textwidth}
+			\raggedleft \vspace{-1.65em}
+			\textsf{\small \@author} \vfill
+			\textsf{\small \@date}
+		\end{minipage}
+		\par
+	\end{center}
+
+	\thispagestyle{empty}
+	\pagestyle{fancy}
+}
+\makeatother
+
+% disponi teoremi
+\usepackage{tcolorbox}
+\newtcolorbox[auto counter, number within=section]{theorem}[2][]{%
+	colback=blue!10, 
+	colframe=blue!40!black, 
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries, 
+	title=Theorem~\thetcbcounter: #2, 
+	#1
+}
+
+% disponi definizioni
+\newtcolorbox[auto counter, number within=section]{definition}[2][]{%
+	colback=red!10,
+	colframe=red!40!black,
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries,
+	title=Definition~\thetcbcounter: #2,
+	#1
+}
+
+% disponi codice
+\usepackage{listings}
+\usepackage[table]{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{codestyle}{
+		backgroundcolor=\color{black!5}, 
+		commentstyle=\color{codegreen},
+		keywordstyle=\bfseries\color{magenta},
+		numberstyle=\sffamily\tiny\color{black!60},
+		stringstyle=\color{green!50!black},
+		basicstyle=\ttfamily\footnotesize,
+		breakatwhitespace=false,         
+		breaklines=true,                 
+		captionpos=b,                    
+		keepspaces=true,                 
+		numbers=left,                    
+		numbersep=5pt,                  
+		showspaces=false,                
+		showstringspaces=false,
+		showtabs=false,                  
+		tabsize=2
+}
+
+\lstdefinestyle{shellstyle}{
+		backgroundcolor=\color{black!5}, 
+		basicstyle=\ttfamily\footnotesize\color{black}, 
+		commentstyle=\color{black}, 
+		keywordstyle=\color{black},
+		numberstyle=\color{black!5},
+		stringstyle=\color{black}, 
+		showspaces=false,
+		showstringspaces=false, 
+		showtabs=false, 
+		tabsize=2, 
+		numbers=none, 
+		breaklines=true
+}
+
+\lstdefinelanguage{x86}{ 
+  keywords={AAA, AAD, AAM, AAS, ADC, ADCB, ADCW, ADCL, ADD, ADDB, ADDW, ADDL, AND, ANDB, ANDW, ANDL,
+        ARPL, BOUND, BSF, BSFL, BSFW, BSR, BSRL, BSRW, BSWAP, BT, BTC, BTCB, BTCW, BTCL, BTR, 
+        BTRB, BTRW, BTRL, BTS, BTSB, BTSW, BTSL, CALL, CBW, CDQ, CLC, CLD, CLI, CLTS, CMC, CMP,
+        CMPB, CMPW, CMPL, CMPS, CMPSB, CMPSD, CMPSW, CMPXCHG, CMPXCHGB, CMPXCHGW, CMPXCHGL,
+        CMPXCHG8B, CPUID, CWDE, DAA, DAS, DEC, DECB, DECW, DECL, DIV, DIVB, DIVW, DIVL, ENTER,
+        HLT, IDIV, IDIVB, IDIVW, IDIVL, IMUL, IMULB, IMULW, IMULL, IN, INB, INW, INL, INC, INCB,
+        INCW, INCL, INS, INSB, INSD, INSW, INT, INT3, INTO, INVD, INVLPG, IRET, IRETD, JA, JAE,
+        JB, JBE, JC, JCXZ, JE, JECXZ, JG, JGE, JL, JLE, JMP, JNA, JNAE, JNB, JNBE, JNC, JNE, JNG,
+        JNGE, JNL, JNLE, JNO, JNP, JNS, JNZ, JO, JP, JPE, JPO, JS, JZ, LAHF, LAR, LCALL, LDS,
+        LEA, LEAVE, LES, LFS, LGDT, LGS, LIDT, LMSW, LOCK, LODSB, LODSD, LODSW, LOOP, LOOPE,
+        LOOPNE, LSL, LSS, LTR, MOV, MOVB, MOVW, MOVL, MOVSB, MOVSD, MOVSW, MOVSX, MOVSXB,
+        MOVSXW, MOVSXL, MOVZX, MOVZXB, MOVZXW, MOVZXL, MUL, MULB, MULW, MULL, NEG, NEGB, NEGW,
+        NEGL, NOP, NOT, NOTB, NOTW, NOTL, OR, ORB, ORW, ORL, OUT, OUTB, OUTW, OUTL, OUTSB, OUTSD,
+        OUTSW, POP, POPL, POPW, POPB, POPA, POPAD, POPF, POPFD, PUSH, PUSHL, PUSHW, PUSHB, PUSHA, 
+        RCLL, RCR, RCRB, RCRW, RCRL, RDMSR, RDPMC, RDTSC, REP, REPE, REPNE, RET, ROL, ROLB, ROLW,
+        ROLL, ROR, RORB, RORW, RORL, SAHF, SAL, SALB, SALW, SALL, SAR, SARB, SARW, SARL, SBB,
+        SBBB, SBBW, SBBL, SCASB, SCASD, SCASW, SETA, SETAE, SETB, SETBE, SETC, SETE, SETG, SETGE,
+        SETL, SETLE, SETNA, SETNAE, SETNB, SETNBE, SETNC, SETNE, SETNG, SETNGE, SETNL, SETNLE,
+        SETNO, SETNP, SETNS, SETNZ, SETO, SETP, SETPE, SETPO, SETS, SETZ, SGDT, SHL, SHLB, SHLW,
+        SHLL, SHLD, SHR, SHRB, SHRW, SHRL, SHRD, SIDT, SLDT, SMSW, STC, STD, STI, STOSB, STOSD,
+        STOSW, STR, SUB, SUBB, SUBW, SUBL, TEST, TESTB, TESTW, TESTL, VERR, VERW, WAIT, WBINVD,
+        XADD, XADDB, XADDW, XADDL, XCHG, XCHGB, XCHGW, XCHGL, XLAT, XLATB, XOR, XORB, XORW, XORL},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{riscv}{
+  keywords={
+    LUI, AUIPC,
+    JAL, JALR,
+    BEQ, BNE, BLT, BGE, BLTU, BGEU,
+    LB, LH, LW, LBU, LHU, LD,
+    SB, SH, SW, SD,
+    ADDI, SLTI, SLTIU, XORI, ORI, ANDI,
+    SLLI, SRLI, SRAI,
+    ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND,
+    ADDIW, SLLIW, SRLIW, SRAIW,
+    ADDW, SUBW, SLLW, SRLW, SRAW,
+    MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
+    MULW, DIVW, DIVUW, REMW, REMUW,
+    LR.W, SC.W, AMOSWAP.W, AMOADD.W, AMOXOR.W,
+    AMOAND.W, AMOOR.W, AMOMIN.W, AMOMAX.W,
+    AMOMINU.W, AMOMAXU.W,
+    LR.D, SC.D, AMOSWAP.D, AMOADD.D, AMOXOR.D,
+    AMOAND.D, AMOOR.D, AMOMIN.D, AMOMAX.D,
+    AMOMINU.D, AMOMAXU.D,
+    FLW, FSW,
+    FMADD.S, FMSUB.S, FNMSUB.S, FNMADD.S,
+    FADD.S, FSUB.S, FMUL.S, FDIV.S, FSQRT.S,
+    FSGNJ.S, FSGNJN.S, FSGNJX.S,
+    FMIN.S, FMAX.S,
+    FCVT.W.S, FCVT.WU.S, FCVT.S.W, FCVT.S.WU,
+    FMV.X.W, FMV.W.X,
+    FEQ.S, FLT.S, FLE.S,
+    FLD, FSD,
+    FMADD.D, FMSUB.D, FNMSUB.D, FNMADD.D,
+    FADD.D, FSUB.D, FMUL.D, FDIV.D, FSQRT.D,
+    FSGNJ.D, FSGNJN.D, FSGNJX.D,
+    FMIN.D, FMAX.D,
+    FCVT.W.D, FCVT.WU.D, FCVT.D.W, FCVT.D.WU,
+    FCVT.S.D, FCVT.D.S,
+    FMV.X.D, FMV.D.X,
+    FEQ.D, FLT.D, FLE.D,
+    CSRRW, CSRRS, CSRRC,
+    CSRRWI, CSRRSI, CSRRCI,
+    FENCE.I,
+    FENCE,
+    ECALL, EBREAK,
+    MRET, SRET, URET,
+    WFI,
+    SFENCE.VMA,
+    NOP, LI, LA, MV,
+    NOT, NEG, NEGW,
+    SEQZ, SNEZ, SLTZ, SGTZ,
+    BEQZ, BNEZ, BLEZ, BGEZ, BLTZ, BGTZ,
+    BGT, BLE, BGTU, BLEU,
+    J, JR, RET,
+    CALL, TAIL,
+    RDINSTRET, RDCYCLE, RDTIME,
+    CSRR, CSRW, CSRS, CSRC,
+    CSRWI, CSRSI, CSRCI
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{arm}{
+  keywords={
+    ADC, ADD, AND, BIC, CMN, CMP, EOR, MOV, MVN,
+    RSB, RSC, SBC, SUB, TST, TEQ,
+    MLA, MLS, MUL, SMLAL, SMULL, UMLAL, UMULL,
+    QADD, QSUB, QDADD, QDSUB,
+    QADD16, QADD8, QASX, QSAX,
+    QSUB16, QSUB8, QSAX, QSUBADDX,
+    ASR, LSL, LSR, ROR, RRX,
+    B, BL, BX, BLX,
+    BXJ,
+    BEQ, BNE, BCS, BHS, BCC, BLO,
+    BMI, BPL, BVS, BVC,
+    BHI, BLS, BGE, BLT, BGT, BLE,
+    BAL,
+    LDR, LDRB, LDRH, LDRSB, LDRSH,
+    LDRD, LDM, LDMIA, LDMIB, LDMDA, LDMDB,
+    LDRT, LDRBT, LDRHT, LDRSBT, LDRSHT,
+    STR, STRB, STRH, STRD,
+    STM, STMIA, STMIB, STMDA, STMDB,
+    STRT, STRBT, STRHT,
+    PUSH, POP,
+    SWP, SWPB,
+    REV, REV16, REVSH,
+    BFC, BFI, BFXIL, SBFX, UBFX,
+    CLZ,
+    LDREX, LDREXB, LDREXH, LDREXD,
+    STREX, STREXB, STREXH, STREXD,
+    DMB, DSB, ISB,
+    MCR, MCRR, MRC, MRRC,
+    MRS, MSR,
+    CPS, SETEND, SVC, BKPT,
+    CLREX, WFE, WFI, SEV,
+    YIELD, NOP,
+    VLDR, VSTR,
+    VMOV, VABS, VNEG,
+    VADD, VSUB, VMUL, VDIV,
+    VMLA, VMLS, VNMLA, VNMLS, VNMUL,
+    VMAX, VMIN,
+    VSQRT,
+    VCMP, VCMPE,
+    VCVT,
+    VCLZ, VCLS,
+    VAND, VORR, VEOR, VBIC, VMVN,
+    VLD1, VLD2, VLD3, VLD4,
+    VST1, VST2, VST3, VST4,
+    ADR, ADCS, ADDS, SUBS, MOVS, ANDS, ORRS, EORS
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{@},
+  morecomment=[l]{;},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{style=codestyle, language=C}
+
+% disponi sezioni
+\usepackage{titlesec}
+
+\titleformat{\section}
+	{\sffamily\Large\bfseries} 
+	{\thesection}{1em}{} 
+\titleformat{\subsection}
+	{\sffamily\large\bfseries}   
+	{\thesubsection}{1em}{} 
+\titleformat{\subsubsection}
+	{\sffamily\normalsize\bfseries} 
+	{\thesubsubsection}{1em}{}
+
+% tikz
+\usepackage{tikz}
+
+% float
+\usepackage{float}
+
+% grafici
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+% disponi alberi
+\usepackage{forest}
+
+\forestset{
+	rectstyle/.style={
+		for tree={rectangle,draw,font=\large\sffamily}
+	},
+	roundstyle/.style={
+		for tree={circle,draw,font=\large}
+	}
+}
+
+% disponi algoritmi
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\makeatletter
+\renewcommand{\ALG@name}{Algorithm}
+\makeatother
+
+% disponi numeri di pagina
+\usepackage{fancyhdr}
+\fancyhf{} 
+\fancyfoot[L]{\sffamily{\thepage}}
+
+\makeatletter
+\fancyhead[L]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@title \ \@date}}} 
+\fancyhead[R]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@author}}}
+\makeatother
+
+\begin{document}
+% sezione (data)
+\section{Lesson 23-09-26}
+
+% stili pagina
+\thispagestyle{empty}
+\pagestyle{fancy}
+
+% testo
+
+\subsection{Introduction}
+
+The course is meant to ggive an introduction to \textit{embedded systems}, after a review of analog and digital electronics.
+The topics covered are:
+\begin{itemize}
+	\item Memories;
+	\item \textit(Programmable Logic Devices) (\textbf{PLD}s);
+	\item Interconnection protocols and I/O;
+	\item Embedded processors an peripherals;
+	\item \textbf{DA} (\textit{Digital-to-Analog}) and \textbf{AD} (\textit{Analog-to-Digital}) conversion;
+	\item Power management.
+\end{itemize}
+
+\subsection{Review}
+
+Let's begin the review of analog and digital electronics.
+The review will cover:
+\begin{itemize}
+	\item Electrical components, including:
+	      \begin{itemize}
+		      \item \textbf{Passive components}, as in \textit{resistors}, \textit{capacitors} and \textit{inductors};
+		      \item \textbf{Active components}, as in \textit{diodes} and \textit{transistors};
+		      \item \textbf{Operational amplifiers}.
+	      \end{itemize}
+	\item Digital electronics, including \textit{logic gates}, \textit{digital functions}, \textbf{FSM}s (\textit{Finite State Machines}) and the \textit{VHDL} language.
+\end{itemize}
+
+\subsubsection{Passive components}
+
+\textbf{\textsf{Resitors}} offer \textit{resistance} to electric current, measured in \textit{Ohms} ($\Omega$).
+By Ohm's law:
+$$
+	v_R(t) = R i_R(t), \quad V_R(s) = R I_R(s)
+$$
+with $s = \sigma + j \omega$ in the Laplace domain.
+A definition via \textit{conductance}, measured in \textit{Siemens} ($S$), is also possible:
+$$
+	i_R(t) = G v_R(t), \quad g = \frac{1}{R}
+$$
+
+Resistor response doesn't depend on the frequency of periodic signals (all signals get attenuated) the same.
+This applies at least partly to real resistors, and we will assume the ideal model from now onwards.
+
+It can also be useful to remember the code used to distinguish different resistance values.
+\begin{center}
+	\includegraphics[scale=0.45]{../figures/resistor_chart.png}
+\end{center}
+
+Resistor tolerances are to be taken into account, as they might drive resistances in our circuits out of the feasible margins.
+Because of this, we preder using standard values in \textit{E series}.
+E series is a system of preferred numbers (also called preferred values) derived for use in electronic components.
+It consists of the E3, E6, E12, E24, E48, E96, and E192 series, where the number after the "E" designates the quantity of logarithmic value "steps" per decade.
+\begin{center}
+	\includegraphics[scale=0.25]{../figures/e12.png}
+\end{center}
+
+\par\smallskip
+
+\textbf{\textsf{Capacitors}} store energy as voltage potential between conductive armatures separated by a dielecric.
+\textit{Capacity}, measured in \textit{Farad} ($F$) is defined as:
+$$
+	C = \frac{Q}{V}
+$$
+
+The laws that govern capacitors in the time domain are differential equations:
+$$
+	i_C(t) = C \frac{d}{dt} v_C(t), \quad
+	v_C(t) = \frac{1}{C} \int_0^t i_C(t) \, d\tau
+$$
+
+It is then easier to move to the Laplace domain, where we can simply express integration as division by $s$:
+$$
+	V_C(s) = \frac{I_C(s)}{sC}
+$$
+
+In regards to periodic signals, the behaviour of capacitors depends on frequency:
+\begin{itemize}
+	\item When $f \rightarrow 0$ it behaves as an \textit{open circuit};
+	\item When $f \rightarrow \infty$ it behaves as a \textit{short circuit};
+\end{itemize}
+
+Many types of capacitors are available:
+\begin{itemize}
+	\item \textit{Electrolytic} capacitors, which are polar;
+	\item \textit{Ceramic} capacitors, which are not polar.
+\end{itemize}
+
+To read the value of a capacitor we have quite a complex system:
+\begin{itemize}
+	\item Two digits: it is the value in $pF$;
+	\item Three digits: the first two are the value in $pF$, and the third is the multiplier; If the third digit is 8 the multiplier is $10^{-2}$, if it is 9 the multiplier is $10^{-1}$;
+	\item A digit, a character and a digit: the two digits are the one before and after the decimal point, the character is the unit of measure;
+	\item A character follows the last digit indicates the tolerance, with $J = \pm 5 \%$, $K = \pm 10 \%$, $M = \pm 20 \%$.
+\end{itemize}
+
+\textbf{\textsf{Inductors}} store energy as magnetic field in a winding of conductive wire around a metal core.
+\textit{Indcutance}, measured in \textit{Henry} ($H$) is defined as:
+$$
+	L = \frac{\Phi}{I}
+$$
+
+The laws that govern indcutors in the time domain are differential equations:
+$$
+	v_L(t) = L \frac{d}{dt} i_L(t), \quad
+	i_L(t) = \frac{1}{L} \int_0^t v_L(t) \, d\tau
+$$
+
+It is then easier to move to the Laplace domain, where we can simply express derivation as multiplication by $s$:
+$$
+	V_L(s) = s L I_L(s)
+$$
+
+In regards to periodic signals, the behaviour of inductors also depends on frequency, on the contrary of capacitors:
+\begin{itemize}
+	\item When $f \rightarrow \infty$ it behaves as an \textit{open circuit};
+	\item When $f \rightarrow 0$ it behaves as a \textit{short circuit};
+\end{itemize}
+
+\subsubsection{Voltage and current dividers}
+We show a chart showcasing a number of elementary divider circuits which we can use.
+
+\begin{center}
+	\includegraphics[scale=0.25]{../figures/dividers.png}
+\end{center}
+
+Let us note in the second example (voltage divider with three resistances) that nothing changes by adding the third resistor.
+$V_{out}(t)$ is exactly the same, as the potential seen by $R_1$ on its left side doesn't change (and the potential across $R_3$ is the same as $v_{in}(t)$).
+
+What actually does change in the example is the resistance: we have effectively built a current divider, where the input current is:
+$$
+	i_{in}(t) = \frac{v_{in}(t)}{R_1 + R_2} + \frac{v_{in}(t)}{R_3}
+$$
+
+Lastly, let's note that all the equations in the Laplace domain are the same, changing the variables accordingly.
+
+\subsubsection{Simple low pass filters}
+A simple \textbf{low pass} filter can be seen as a special case of a divider:
+\begin{center}
+	\includegraphics[scale=0.4]{../figures/lowpass.png}
+\end{center}
+
+By writing the \textit{Kirchoff Voltage Law} (\textbf{KVL}) of the circuit, we get:
+$$
+	v_{in}(t) - R \cdot C \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
+$$
+with the first term being the voltage gain on the power supply, the second term being the voltage drop on the resistor, and the last term being the output voltage taken across the capacitor.
+
+
+\textbf{\textsf{Time domain solution}} This is a first order linear differential equation, which we can express as:
+$$
+	\frac{d}{dt} v_{out}(t) + \frac{1}{\tau} v_{out}(t) = \frac{1}{\tau} v_{in}(t), \quad \tau = RC
+$$
+We refer to $\tau = RC$ as the \textit{time constant} of the circuit.
+A general solution is:
+$$
+	v_{out}(t) = e^{-\frac{t}{\tau}} \left( k + \int\left( \frac{v_{in}(t)}{\tau} e^{\frac{t}{\tau}} \right) dt \right)
+$$
+
+\par\smallskip
+
+It can be useful to carry out the full calculation.
+We start from the general differential equation obtained from KVL:
+$$
+	v_{in}(t) - RC \frac{d}{dt} v_{out}(t) - v_{out}(t) = 0
+$$
+
+We can easily rearrange this into a standard first-order form:
+$$
+	\frac{d}{dt} v_{out}(t) + \frac{1}{RC} v_{out}(t) = \frac{1}{RC} v_{in}(t)
+$$
+
+Now we take a function $\mu(t)$ constructed such that:
+$$
+	\mu(t) \frac{1}{RC} =  \frac{d}{dt} \mu(t)
+$$
+While the purpose of this might at this point be unclear, we can clearly see that a function that satisifies the equation is:
+$$
+	\mu(t) = e^{\frac{t}{RC}}
+$$
+
+Let's multiply both sides of the original differential equation by $\mu(t)$:
+$$
+	\mu(t) \frac{d}{dt} v_{out}(t) + \mu(t) \frac{1}{RC} v_{out}(t) = \mu(t) \frac{1}{RC} v_{in}(t)
+$$
+
+By applying the property above this leaves us with:
+$$
+	\mu(t) \frac{d}{dt} v_{out}(t) + \frac{d}{dt} \mu(t) v_{out}(t) = \frac{\mu(t)}{RC} v_{in}(t)
+$$
+
+It's clear that the left hand side is the expansion of the derivative of a product, so we can write:
+$$
+	\frac{d}{dt} \left( \mu(t) v_{out}(t) \right) = \frac{\mu(t)}{RC} v_{in}(t)
+$$
+
+Recall that we were interested in $v_{out}(t)$. We can take it out the derivative by integrating both sides:
+$$
+	\mu(t)v_{out}(t) = \int \frac{\mu(t)}{RC} v_{in}(t) + k
+$$
+where the antiderivative operation requires that we include a $\pm k$ factor (sign indifferent).
+
+At this point we just have to make $v_{out}(t)$ explicit and substitute our original definition of $\mu(t)$:
+$$
+	v_{out}(t) = \frac{1}{\mu(t)} \left( \int \frac{\mu(t)}{RC} v_{in}(t) + k \right)
+	=  e^{-\frac{t}{RC}} \left( k + \int\left( \frac{v_{in}(t)}{RC} e^{\frac{t}{RC}} \right) dt \right)
+$$
+Which is our original expression (given $\tau = RC$). $\hfill \square$
+
+\par\smallskip
+
+With $v_{in}(t)$ taken as a step of amplitude $V_M$, or equivalently by taking the solution given with zero initial conditions and a costant power source, we get the usual form:
+$$
+	v_{out}(t) = V_M (1 - e^{-\frac{t}{\tau}})
+$$
+where the time constant determines the time taken to reach saturation.
+We recall that in one time constant we reach around $63.2 \%$ of full saturation, and in three time constants we reach $95 \%$.
+
+\textbf{\textsf{Laplace domain solution}} Let's carry out the same calculation in the Laplace domain.
+By expressing the voltage divider we get:
+$$
+	V_{out}(S) = \frac{ \frac{1}{sC} }{ \frac{1}{sC} + R } V_{in}(S) = \frac{1}{sRC + 1} V_{in}(s)
+$$
+where in the first expression we simply applied the voltage divider law to the impedance definitions of the capacitor and the resistor.
+We can then derive a \textit{transfer function}:
+$$
+	\frac{V_{out}(s)}{V_{in}(s)} = \frac{1}{sRC + 1}
+$$
+
+We can shift to the Fourier domain, or in equivalent terms take a projection of the Laplace domain in only the frequency direction, by setting $s = j \omega$:
+$$
+	\frac{V_{out} (j \omega)}{V_{in}(j \omega)} = \frac{1}{j \omega RC + 1}, \quad
+	\left| \frac{V_{out} (j \omega)}{V_{in}(j \omega)} \right| = \frac{1}{ \sqrt{ \omega^2 R^2 C^2 + 1 } }
+$$
+
+A \textit{pole} in this expression is a zero of the denominator, so:
+$$
+	s_p = - \frac{1}{RC}, \quad \omega_p = \frac{1}{RC}
+$$
+with the frequency representation being bilateral, as always.
+Let's note that the \textit{pole pulsation} $\omega_p$ is not really a zero of the denominator, but just the characteristic frequency of the system, which we find useful for plotting and solving circuit responses.
+
+\textbf{\textsf{Time domain response}} Fixing $V_{in}$ to a periodic square wave, let's compute the time domain response.
+Each fragment in the response is an exponential:
+$$
+	v_{out}(t) = A + B e^{-\frac{t}{\tau}}
+$$
+where $\tau = RC$.
+
+\begin{center}
+	\includegraphics[scale=0.25]{../figures/lowpass_sqwave.png}
+\end{center}
+
+We can proceed with the following approach:
+\begin{enumerate}
+	\item Evaluate the waveforms at the extreme, fixing initial conditions;
+	\item Determine A and B for the rising and falling cases;
+	\item Determine the maximum and minimum voltages.
+\end{enumerate}
+And the result we obtain should be valid at the steady-state.
+We say \textit{steady-state}, as when the oscillators first begins oscillating there will be a transient, which will temporarily not obey to our prediction.
+
+Let's start with the rising edge.
+By remembering our first equation, we can compute $V_{out}$ at the first time instant:
+$$
+	V^r_{out}(0) = A + B = V_{min}
+$$
+If at this point the square wave never went to a low value, the capacitor would continue charging and we would approach saturaiton (at $V_H$, the maximum value of the square wave).
+From this we can derive $A = V_H$, as the $B$ term vanishes to $0$ approaching infinity, and it follows that $B = V_{min} - V_H$.
+This gives us:
+$$
+	V^r_{out}(t) = V_H + (V_{min} - V_H) e ^{-\frac{t}{\tau}}
+$$
+
+What happens in reality is that at some time $T_H$ we switch to the falling edge, reaching a maximum value $V_{max}$.
+$$
+	V^r_{out}(T_H) = A + B e^{-\frac{t}{\tau}} = V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max}
+$$
+
+To fix $V_{min}$ and $V_{max}$, we switch to anayzing the falling edge.
+With similar calculations, we can derive the equation:
+$$
+	V^f_{out}(T_L) = V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
+$$
+with $V_L$ at the lowest point of the square wave.
+
+We can easily solve the resulting system of equations, to figure out the minimum and maximum bounds of the response of the circuit:
+\[
+	\begin{cases}
+		V_H + (V_{min} - V_H) e^{-\frac{T_H}{\tau}} = V_{max} \\
+		V_L + (V_{max} - V_L) e^{-\frac{T_L}{\tau}} = V_{min}
+	\end{cases}
+\]
+By setting:
+$$
+	\alpha=e^{-\frac{T_{H}}{T}}, \quad \beta=e^{-\frac{T_{L}}{T}}
+$$
+we get the solutions (calculations omitted because they're boring):
+$$
+	V_{max}=\frac{V_{H}\left(1-\alpha\right)+\alpha V_{L}\left(1-\beta\right)}{1-\alpha\beta}
+	, \quad
+	V_{min}=\frac{\beta V_{H}\left(1-\alpha\right)+V_{L}\left(1-\beta\right)}{1-\alpha\beta}
+$$
+
+We can then trace the actual response by drawing exponential branches with the time constant given by $\tau = RC$.
+
+Lastly, let's see an LTSPICE (simulation program) plot of the square wave response of this circuit, which confirms our mathematical model:
+\begin{center}
+	\includegraphics[scale=0.2]{../figures/lowpass_sqwave_spice.png}
+\end{center}
+
+\textbf{\textsf{Frequency domain response}} In the frequency domain, we can consider the effect on a periodic signal such as a sine wave.
+Let's have:
+$$
+	V_{in}(t) = M \sin ( \omega t ) = M \sin ( 2 \pi f t )
+$$
+
+In a linear system at the steady state (which we have) if the input is sinusoidal, the output is sinusoidal at the same frequency: only the amplitude and the phase can be shifted:
+$$
+	V_{out}(t) = M' \sin(\omega t + \phi)
+$$
+
+By using the Fourier domain equations calculated earlier, we can actually express $M'$ and $\phi$:
+$$
+	M' = M \frac{\omega_p}{\sqrt{\omega^2 + \omega_p^2}}, \quad
+	\phi = -\tan^{-1} \left( \frac{\omega}{\omega_p} \right)
+$$
+
+For arbitrary frequencies, we can plot the linear and logarithmic Bode diagrams of amplitude:
+\begin{center}
+	\includegraphics[scale=0.2]{../figures/lowpass_bode.png}
+\end{center}
+
+Let us note that at $f_p = \frac{\omega_p}{2 \pi}$ we have the $-3 \, \mathrm{dB}$ band for our transfer function, which we can also refer to as the \textit{cutoff frequency} or \textit{pole frequency} of the lowpass.
+
+\subsubsection{Superposition of effects}
+
+\begin{theorem}{Superposition of effects}
+	In a linear system with more than one input (independent ideal sources, voltage or
+	current), the output is the algebraic sum of the effects of each input with the other set
+	to 0.
+\end{theorem}
+This means:
+\begin{itemize}
+	\item Voltage source at zero $\rightarrow$ short circuit;
+	\item Current source at zero $\rightarrow$ open circuit;
+	\item Dependent sources must not be set to 0.
+\end{itemize}
+
+Superposition applies to \textit{linear} systems, that is circuits which feature:
+\begin{itemize}
+	\item Sources (independent and dependent), resistors, capacitors, inductors, transformers;
+	\item Non linear system
+\end{itemize}
+
+If diodes, transistors, operational amplifiers or other active elements are present, the superposition of effects is not applicable.
+In these cases we need to first \textit{linearize} the system around a bias point.
+
+\subsubsection{Millman's theorem}
+
+Let us take the circuti:
+
+\begin{center}
+	\includegraphics[scale=0.25]{../figures/millman.png}
+\end{center}
+
+\begin{theorem}{Millman's Theorem}
+	In the general network on the right, the voltage $V_A$ is given by the expression:
+	$$
+		V_A = \frac{ \sum_{i = 1}^n \frac{V_i}{R_i} - \sum_{j = 1}^m I_j }{ \sum_{i = 1}^n \frac{1}{R_i} }
+	$$
+\end{theorem}
+
+The theorem can be proved using the superposition of effects and voltage dividers with conductances.
+Let us work through it.
+
+\par\smallskip
+
+The idea is to:
+\begin{enumerate}
+	\item Calculate the contribution on voltage $V_A$ given by just a voltage generator $V_j$; then we can sum the contribution over all voltage generators to get the cumulative voltage generator contribution, which we'll call $V_A^a$;
+	\item Calculate the contribution on voltage $V_A$ given by just a current generator $I_j$; then we can sum the contribution over all current generators to get the cumulative current generator contribution, which we'll call $V_A^b$.
+\end{enumerate}
+
+Superposition is applied in both steps, and one final time to sum the contributions of the voltage and current generators and get the final expression for $V_A$.
+
+\begin{itemize}
+	\item
+	      For the voltage generators, we take the contribution of a single voltage generator $V_j$ as:
+	      $$
+		      V_A^{a_j} = \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j
+	      $$
+	      where $\parallel_{i \neq j}^n R_i$ is notation soup for the parallel of all resistance but $R_j$.
+
+	      We can sum over these to get the total voltage generator contribution $V_A^a$:
+	      $$
+		      V_A^a = \sum_{j = 1}^n \frac{\parallel_{i \neq j}^n R_i}{\parallel_{i \neq j}^n R_i + R_j} V_j
+	      $$
+
+	      This sum is a bit hard to compute, as the denominator changes at each value of $j$ and we don't have a clean way to expand it.
+	      Things would be quite a bit easier if we had the same denominator at each value of $j$.
+	      We can make this happen by dividing the numerator and the denominator by $R_j \parallel_{i \neq j}^n R_i$, which gives:
+	      $$
+		      V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \frac{1}{\parallel_{i \neq j}^n R_i} } V_j
+	      $$
+
+	      To our convenience, we note that $\frac{1}{\parallel_{i \neq j}^n R_i}$ is equal to $\sum_{i \neq j}^n \frac{1}{R_i}$, so:
+	      $$
+		      V_A^a = \sum_{j = 1}^n \frac{ \frac{1}{R_j} }{ \frac{1}{R_j} + \sum_{i \neq j}^n \frac{1}{R_i} } V_j =
+		      \sum_{j = 1}^n \frac{\frac{1}{R_j}}{  \sum_{i = 1}^n \frac{1}{R_i}} V_j =
+		      \frac{ \sum_{i = 1}^n \frac{V_i}{R_i} }{ \sum_{i=1}^n \frac{1}{R_i} }
+	      $$
+
+	\item
+	      Current generators are thankfully simpler to handle.
+	      We take the contribution of a single current generator $I_j$ as:
+	      $$
+		      V_A^{b_j} = I_j \parallel_{i = 1}^n
+	      $$
+
+	      We can sum over these to get the total voltage generator contribution $V_A^b$:
+	      $$
+		      V_A^b = \sum_{j = 1}^m I_j \parallel_{i = 1}^n = \sum_{j = 1}^m \frac{ I_j }{ \sum_{i = 1}^n \frac{1}{R_i} } = \frac{ \sum_{j = 1}^m I_i }{ \sum_{i = 1}^n \frac{1}{R_i} }
+	      $$
+
+\end{itemize}
+
+At this point we just sum to get the final result. $\hfill \square$
+
+\par\smallskip
+
+\subsubsection{Active components}
+
+\textbf{\textsf{Diodes}} are non-linear active components, built today using solid state technologies, and more specifically \textit{PN junctions} (as opposite to tubes, which were historically used).
+
+By combining two doped regions of semiconductors (usually Silicon), respectively P (boron) and N (arsenic or phosphorous) doped, we obtain an initial condition where:
+\begin{itemize}
+	\item Electrons from the n side flow by diffusion to the p side: fixed positive ions are left in the n side.
+	\item Holes from the p side flow by diffusion to the n side: fixed negative ions are left in the p side.
+\end{itemize}
+
+At thermal equilibrium:
+\begin{itemize}
+	\item Fixed ions in the two sides create an electrical field which opposes the further diffusion of electrons and holes, this is called a \textit{depletion layer} or \textit{space charge region};
+	\item A built-in voltage $V_{bi}$ is established;
+	\item The built-in voltage opposes current, acting as a barrier, or \textit{threshold}, which must be overcome in order to have current flowing.
+\end{itemize}
+
+The usual value of the voltage needed to get current flowing through a diode is around $V_\gamma \approx 0.7 V$.
+
+\begin{center}
+	\includegraphics[scale=0.5]{../figures/diodes.png}
+\end{center}
+
+Applying a voltage to the junction, that is applying a \textit{forward bias}, we get mutliple effects around $V_\gamma$:
+\begin{itemize}
+	\item No current flows if $v_D < V_\gamma$;
+	\item Current starts flowing if $v_D > V_\gamma$.
+\end{itemize}
+
+In \textit{reverse bias}, no current flows and depletion layer width increases.
+For large reverse voltages, we see \textit{breakdown} of the junction, followed by a large reverse current.
+
+This effect is the combined result of \textit{tunneling effect} or \textit{avalanche effect}.
+
+There is no damages to the diode, but the large current may increase power dissipation and heat, causing damages.
+This effect is exploited in Zener diodes, which break at specific reference voltages.
+
+\end{document}

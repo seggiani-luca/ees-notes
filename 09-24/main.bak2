@@ -1,0 +1,634 @@
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, margin=8em]{geometry}
+
+% usa i pacchetti per la scrittura in italiano
+\usepackage[french,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\frenchspacing 
+
+% usa i pacchetti per la formattazione matematica
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+
+% usa altri pacchetti
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{standalone}
+
+\usepackage{colortbl}
+
+\usepackage{xstring}
+\usepackage{karnaugh-map}
+
+% imposta il titolo
+\title{Electronics for Embedded Systems notes}
+\author{Luca Seggiani}
+\date{2026}
+
+% spaziatura liste
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+\setlist[enumerate]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+
+% imposta lo stile
+% usa helvetica
+\usepackage[scaled]{helvet}
+% usa palatino
+\usepackage{palatino}
+% usa un font monospazio guardabile
+\usepackage{lmodern}
+
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{lmtt}
+
+% circuiti
+\usepackage{circuitikz}
+\usetikzlibrary{babel}
+
+% testo cerchiato
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+% disponi il titolo
+\makeatletter
+\renewcommand{\maketitle} {
+	\begin{center} 
+		\begin{minipage}[t]{.8\textwidth}
+			\textsf{\huge\bfseries \@title} 
+		\end{minipage}%
+		\begin{minipage}[t]{.2\textwidth}
+			\raggedleft \vspace{-1.65em}
+			\textsf{\small \@author} \vfill
+			\textsf{\small \@date}
+		\end{minipage}
+		\par
+	\end{center}
+
+	\thispagestyle{empty}
+	\pagestyle{fancy}
+}
+\makeatother
+
+% disponi teoremi
+\usepackage{tcolorbox}
+\newtcolorbox[auto counter, number within=section]{theorem}[2][]{%
+	colback=blue!10, 
+	colframe=blue!40!black, 
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries, 
+	title=Theorem~\thetcbcounter: #2, 
+	#1
+}
+
+% disponi definizioni
+\newtcolorbox[auto counter, number within=section]{definition}[2][]{%
+	colback=red!10,
+	colframe=red!40!black,
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries,
+	title=Definition~\thetcbcounter: #2,
+	#1
+}
+
+% disponi codice
+\usepackage{listings}
+\usepackage[table]{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{codestyle}{
+		backgroundcolor=\color{black!5}, 
+		commentstyle=\color{codegreen},
+		keywordstyle=\bfseries\color{magenta},
+		numberstyle=\sffamily\tiny\color{black!60},
+		stringstyle=\color{green!50!black},
+		basicstyle=\ttfamily\footnotesize,
+		breakatwhitespace=false,         
+		breaklines=true,                 
+		captionpos=b,                    
+		keepspaces=true,                 
+		numbers=left,                    
+		numbersep=5pt,                  
+		showspaces=false,                
+		showstringspaces=false,
+		showtabs=false,                  
+		tabsize=2
+}
+
+\lstdefinestyle{shellstyle}{
+		backgroundcolor=\color{black!5}, 
+		basicstyle=\ttfamily\footnotesize\color{black}, 
+		commentstyle=\color{black}, 
+		keywordstyle=\color{black},
+		numberstyle=\color{black!5},
+		stringstyle=\color{black}, 
+		showspaces=false,
+		showstringspaces=false, 
+		showtabs=false, 
+		tabsize=2, 
+		numbers=none, 
+		breaklines=true
+}
+
+\lstdefinelanguage{x86}{ 
+  keywords={AAA, AAD, AAM, AAS, ADC, ADCB, ADCW, ADCL, ADD, ADDB, ADDW, ADDL, AND, ANDB, ANDW, ANDL,
+        ARPL, BOUND, BSF, BSFL, BSFW, BSR, BSRL, BSRW, BSWAP, BT, BTC, BTCB, BTCW, BTCL, BTR, 
+        BTRB, BTRW, BTRL, BTS, BTSB, BTSW, BTSL, CALL, CBW, CDQ, CLC, CLD, CLI, CLTS, CMC, CMP,
+        CMPB, CMPW, CMPL, CMPS, CMPSB, CMPSD, CMPSW, CMPXCHG, CMPXCHGB, CMPXCHGW, CMPXCHGL,
+        CMPXCHG8B, CPUID, CWDE, DAA, DAS, DEC, DECB, DECW, DECL, DIV, DIVB, DIVW, DIVL, ENTER,
+        HLT, IDIV, IDIVB, IDIVW, IDIVL, IMUL, IMULB, IMULW, IMULL, IN, INB, INW, INL, INC, INCB,
+        INCW, INCL, INS, INSB, INSD, INSW, INT, INT3, INTO, INVD, INVLPG, IRET, IRETD, JA, JAE,
+        JB, JBE, JC, JCXZ, JE, JECXZ, JG, JGE, JL, JLE, JMP, JNA, JNAE, JNB, JNBE, JNC, JNE, JNG,
+        JNGE, JNL, JNLE, JNO, JNP, JNS, JNZ, JO, JP, JPE, JPO, JS, JZ, LAHF, LAR, LCALL, LDS,
+        LEA, LEAVE, LES, LFS, LGDT, LGS, LIDT, LMSW, LOCK, LODSB, LODSD, LODSW, LOOP, LOOPE,
+        LOOPNE, LSL, LSS, LTR, MOV, MOVB, MOVW, MOVL, MOVSB, MOVSD, MOVSW, MOVSX, MOVSXB,
+        MOVSXW, MOVSXL, MOVZX, MOVZXB, MOVZXW, MOVZXL, MUL, MULB, MULW, MULL, NEG, NEGB, NEGW,
+        NEGL, NOP, NOT, NOTB, NOTW, NOTL, OR, ORB, ORW, ORL, OUT, OUTB, OUTW, OUTL, OUTSB, OUTSD,
+        OUTSW, POP, POPL, POPW, POPB, POPA, POPAD, POPF, POPFD, PUSH, PUSHL, PUSHW, PUSHB, PUSHA, 
+        RCLL, RCR, RCRB, RCRW, RCRL, RDMSR, RDPMC, RDTSC, REP, REPE, REPNE, RET, ROL, ROLB, ROLW,
+        ROLL, ROR, RORB, RORW, RORL, SAHF, SAL, SALB, SALW, SALL, SAR, SARB, SARW, SARL, SBB,
+        SBBB, SBBW, SBBL, SCASB, SCASD, SCASW, SETA, SETAE, SETB, SETBE, SETC, SETE, SETG, SETGE,
+        SETL, SETLE, SETNA, SETNAE, SETNB, SETNBE, SETNC, SETNE, SETNG, SETNGE, SETNL, SETNLE,
+        SETNO, SETNP, SETNS, SETNZ, SETO, SETP, SETPE, SETPO, SETS, SETZ, SGDT, SHL, SHLB, SHLW,
+        SHLL, SHLD, SHR, SHRB, SHRW, SHRL, SHRD, SIDT, SLDT, SMSW, STC, STD, STI, STOSB, STOSD,
+        STOSW, STR, SUB, SUBB, SUBW, SUBL, TEST, TESTB, TESTW, TESTL, VERR, VERW, WAIT, WBINVD,
+        XADD, XADDB, XADDW, XADDL, XCHG, XCHGB, XCHGW, XCHGL, XLAT, XLATB, XOR, XORB, XORW, XORL},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{riscv}{
+  keywords={
+    LUI, AUIPC,
+    JAL, JALR,
+    BEQ, BNE, BLT, BGE, BLTU, BGEU,
+    LB, LH, LW, LBU, LHU, LD,
+    SB, SH, SW, SD,
+    ADDI, SLTI, SLTIU, XORI, ORI, ANDI,
+    SLLI, SRLI, SRAI,
+    ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND,
+    ADDIW, SLLIW, SRLIW, SRAIW,
+    ADDW, SUBW, SLLW, SRLW, SRAW,
+    MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
+    MULW, DIVW, DIVUW, REMW, REMUW,
+    LR.W, SC.W, AMOSWAP.W, AMOADD.W, AMOXOR.W,
+    AMOAND.W, AMOOR.W, AMOMIN.W, AMOMAX.W,
+    AMOMINU.W, AMOMAXU.W,
+    LR.D, SC.D, AMOSWAP.D, AMOADD.D, AMOXOR.D,
+    AMOAND.D, AMOOR.D, AMOMIN.D, AMOMAX.D,
+    AMOMINU.D, AMOMAXU.D,
+    FLW, FSW,
+    FMADD.S, FMSUB.S, FNMSUB.S, FNMADD.S,
+    FADD.S, FSUB.S, FMUL.S, FDIV.S, FSQRT.S,
+    FSGNJ.S, FSGNJN.S, FSGNJX.S,
+    FMIN.S, FMAX.S,
+    FCVT.W.S, FCVT.WU.S, FCVT.S.W, FCVT.S.WU,
+    FMV.X.W, FMV.W.X,
+    FEQ.S, FLT.S, FLE.S,
+    FLD, FSD,
+    FMADD.D, FMSUB.D, FNMSUB.D, FNMADD.D,
+    FADD.D, FSUB.D, FMUL.D, FDIV.D, FSQRT.D,
+    FSGNJ.D, FSGNJN.D, FSGNJX.D,
+    FMIN.D, FMAX.D,
+    FCVT.W.D, FCVT.WU.D, FCVT.D.W, FCVT.D.WU,
+    FCVT.S.D, FCVT.D.S,
+    FMV.X.D, FMV.D.X,
+    FEQ.D, FLT.D, FLE.D,
+    CSRRW, CSRRS, CSRRC,
+    CSRRWI, CSRRSI, CSRRCI,
+    FENCE.I,
+    FENCE,
+    ECALL, EBREAK,
+    MRET, SRET, URET,
+    WFI,
+    SFENCE.VMA,
+    NOP, LI, LA, MV,
+    NOT, NEG, NEGW,
+    SEQZ, SNEZ, SLTZ, SGTZ,
+    BEQZ, BNEZ, BLEZ, BGEZ, BLTZ, BGTZ,
+    BGT, BLE, BGTU, BLEU,
+    J, JR, RET,
+    CALL, TAIL,
+    RDINSTRET, RDCYCLE, RDTIME,
+    CSRR, CSRW, CSRS, CSRC,
+    CSRWI, CSRSI, CSRCI
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{arm}{
+  keywords={
+    ADC, ADD, AND, BIC, CMN, CMP, EOR, MOV, MVN,
+    RSB, RSC, SBC, SUB, TST, TEQ,
+    MLA, MLS, MUL, SMLAL, SMULL, UMLAL, UMULL,
+    QADD, QSUB, QDADD, QDSUB,
+    QADD16, QADD8, QASX, QSAX,
+    QSUB16, QSUB8, QSAX, QSUBADDX,
+    ASR, LSL, LSR, ROR, RRX,
+    B, BL, BX, BLX,
+    BXJ,
+    BEQ, BNE, BCS, BHS, BCC, BLO,
+    BMI, BPL, BVS, BVC,
+    BHI, BLS, BGE, BLT, BGT, BLE,
+    BAL,
+    LDR, LDRB, LDRH, LDRSB, LDRSH,
+    LDRD, LDM, LDMIA, LDMIB, LDMDA, LDMDB,
+    LDRT, LDRBT, LDRHT, LDRSBT, LDRSHT,
+    STR, STRB, STRH, STRD,
+    STM, STMIA, STMIB, STMDA, STMDB,
+    STRT, STRBT, STRHT,
+    PUSH, POP,
+    SWP, SWPB,
+    REV, REV16, REVSH,
+    BFC, BFI, BFXIL, SBFX, UBFX,
+    CLZ,
+    LDREX, LDREXB, LDREXH, LDREXD,
+    STREX, STREXB, STREXH, STREXD,
+    DMB, DSB, ISB,
+    MCR, MCRR, MRC, MRRC,
+    MRS, MSR,
+    CPS, SETEND, SVC, BKPT,
+    CLREX, WFE, WFI, SEV,
+    YIELD, NOP,
+    VLDR, VSTR,
+    VMOV, VABS, VNEG,
+    VADD, VSUB, VMUL, VDIV,
+    VMLA, VMLS, VNMLA, VNMLS, VNMUL,
+    VMAX, VMIN,
+    VSQRT,
+    VCMP, VCMPE,
+    VCVT,
+    VCLZ, VCLS,
+    VAND, VORR, VEOR, VBIC, VMVN,
+    VLD1, VLD2, VLD3, VLD4,
+    VST1, VST2, VST3, VST4,
+    ADR, ADCS, ADDS, SUBS, MOVS, ANDS, ORRS, EORS
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{@},
+  morecomment=[l]{;},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{style=codestyle, language=C}
+
+% disponi sezioni
+\usepackage{titlesec}
+
+\titleformat{\section}
+	{\sffamily\Large\bfseries} 
+	{\thesection}{1em}{} 
+\titleformat{\subsection}
+	{\sffamily\large\bfseries}   
+	{\thesubsection}{1em}{} 
+\titleformat{\subsubsection}
+	{\sffamily\normalsize\bfseries} 
+	{\thesubsubsection}{1em}{}
+
+% tikz
+\usepackage{tikz}
+
+% float
+\usepackage{float}
+
+% grafici
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+% disponi alberi
+\usepackage{forest}
+
+\forestset{
+	rectstyle/.style={
+		for tree={rectangle,draw,font=\large\sffamily}
+	},
+	roundstyle/.style={
+		for tree={circle,draw,font=\large}
+	}
+}
+
+% disponi algoritmi
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\makeatletter
+\renewcommand{\ALG@name}{Algorithm}
+\makeatother
+
+% disponi numeri di pagina
+\usepackage{fancyhdr}
+\fancyhf{} 
+\fancyfoot[L]{\sffamily{\thepage}}
+
+\makeatletter
+\fancyhead[L]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@title \ \@date}}} 
+\fancyhead[R]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@author}}}
+\makeatother
+
+\begin{document}
+% sezione (data)
+\section{Lesson 24-09-26}
+
+% stili pagina
+\thispagestyle{empty}
+\pagestyle{fancy}
+
+% testo
+We continue treating \textit{active components}, starting from the \textbf{current-voltage} characteristic of the Diode:
+\begin{definition}{Schottky's law}
+	The current-voltage characteristic of a diode is:
+	$$
+		i_D(t) = I_S \left( e^{\frac{v_D(t)}{\eta V_T}} - 1 \right)
+	$$
+\end{definition}
+
+Where:
+\begin{itemize}
+	\item $I_S$ is the \textit{saturation current}, interpreted as the maximum reverse current we can force through the diode;
+	\item $\eta$ is the \textit{ideality factor}, between $1$ and $3$ (usually simplified to $1$);
+	\item $V_T$ is the \textit{voltage equivalent of temperature}, around 26 millivolts.
+\end{itemize}
+
+Of course, the breakdown effect experienced by the diode for $v_D(t) << 0$ isn't taken into account in Schottky's law.
+We usually take approximated models where the diode starts acting like a voltage source if the revers current conduction constraint is satisfied.
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/diode_char.png}
+\end{center}
+
+Diodes can be \textit{modeled} in a variety of simplified ways:
+\begin{itemize}
+	\item \textbf{Ideal switch}: when voltage drop is negative, current is $0$; when current is positive, the voltage drop is $0$;
+	\item \textbf{Ideal switch} with \textit{offset}: when voltage drop is less than $V_\gamma$, the current is $0$; when current is positive, the voltage drop is $V_\gamma$;
+	\item \textbf{Ideal switch} with \textit{dynamic resistance}: when voltage drop is less than $V_\gamma$, the current is $0$; whn voltage drop is more than $V_\gamma$, the current follows a resistive law. This is equivalent to applying a small series resistance when the ideal diode is conducting.
+\end{itemize}
+
+The way circuits are solved by using approximate models is by first making an \textit{assumption} about the state of a diode (conducting or not), and then checking that assumption.
+Since the models have 2 states, for a diode we can assume that if it's not one state, it's the other.
+For $n$ diodes we have to make $n$ choices, and thus explore a $2^n$ assumption space.
+
+\textbf{\textsf{BJT transistors}} are active semiconductor components, commonly used as amplifiers or current controlled switches.
+They also are a non-linear component, built from 2 PN junctions put head-to-head (which we know on their own made diodes).
+Two types of BJT transistors exist: PNP and NPN.
+NPNs are more common.
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/bjt.png}
+\end{center}
+
+The BJT transistor is \textit{tripole} made up of:
+\begin{itemize}
+	\item \textbf{Emitter}: emits charge carriers scaled by the base current;
+	\item \textbf{Base}, used to control the device via current;
+	\item \textbf{Collector}, collects charge carriers emitted by the emitter.
+\end{itemize}
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/bjt_char.png}
+\end{center}
+
+BJTs work in 3 main regions:
+\begin{itemize}
+	\item \textbf{Forward active} region, where the collector current is $\beta i_B$, so a direct scaling of the base current by a gain factor $\beta$. The voltage drop of the base on the emitter is taken with the usual diode law as $V_\gamma \approx 0.7 V$. A \textit{reverse active} region also exists but is usually undesirable;
+	\item \textbf{Cut-off} region, where the collector current is 0 and the BJT acts as an open switch;
+	\item \textbf{Saturation} region, where the $v_{CE}$ between collector and emitter is approximately 0 (around $0.1 \sim 0.2 V$). In this region the collector cannot give more current and the BJT acts as a closed switch.
+\end{itemize}
+
+\textbf{\textsf{MOS transistors}} are also active semiconductor components, like BJTs, commonly used as amplifiers or current controlled switches.
+They use a different technology to obtain basically the same characteristics: historically they were proposed around the time BJTs started becoming popoular, but weren't implemented until much later.
+
+The main difference is that MOS transistors act as \textit{voltage controlled}, instead of \textit{current controlled} devices.
+
+MOSes consist, briefly, of three superimposed layers:
+
+\begin{itemize}
+	\item A base layer of doped semiconductor, which is usually silicon (Si) doped P;
+	\item An intermediate oxide layer, which historically was silicon oxide ($SiO_2$) and today is mainly polysilicate. In general, we assume that the oxide is a perfect insulator (in reality, it never is, but this approximation is useful to us);
+	\item An upper metal layer, which historically was aluminum (Al).
+\end{itemize}
+
+There are then two additional electrodes, connected to N-doped regions in the P-type substrate. We call these electrodes \textbf{source} and \textbf{drain}. At this point, the bottom electrode $G$ is called \textbf{gate}.
+
+We can see that between the P-type substrate and the two N-type electrodes (source and drain), \textit{diodes} are essentially formed, preventing current from flowing from the source and drain into the substrate.
+
+For the MOSFET to operate, therefore, the N-doped regions need to extend beneath (or at least slightly overlap) the oxide. We call the distance $L$ between the two N-doped regions the \textit{gate length}.
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/mos.png}
+\end{center}
+
+So, we can say that a MOS transistor is another \textit{tripole} made up of:
+\begin{itemize}
+	\item \textbf{Source}: emits charge carriers scaled by the base voltage;
+	\item \textbf{Gate}, used to control the device via voltage, it is always isolated from drain and source;
+	\item \textbf{Drain}, collects charge carriers emitted by the emitter.
+\end{itemize}
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/mos_char.png}
+\end{center}
+
+MOSes work in 3 main regions:
+\begin{itemize}
+	\item \textbf{Cut-off} region: when the $v_{GS}$ voltage between gate and source is lower than a certain $v_{th}$ threshold voltage, the drain current is zero and the MOS behaves as an open circuit;
+	\item \textbf{Triode} or \textit{linear} region: when the $v_{GS}$ voltage is higher than $v_{th}$, but $v_{DS}$ is less than $v_{GS} - v_{th}$, that is:
+	      $$
+		      v_{GS} > v_{th}, \quad v_{DS} < v_{GS} - v_{th}
+	      $$
+	      then we are in a linear region where current scales mostly directly with voltage applied to $v_{DS}$. The exact law is:
+	      $$
+		      i_D = \mu C_{ox} \frac{W}{L} \left( (v_{GS} - v_{th}) v_{DS} - \frac{v_{DS}^2}{2} \right)
+	      $$
+	      where $C_{ox}$ is the oxidation coefficient of the oxide (usually a polysilicate), and $W$ and $L$ are respectively the width and the length of the MOS gate channel;
+	\item \textbf{Saturation} region:  when the $v_{GS}$ voltage is higher than $v_{th}$, but $v_{DS}$ is higher than $v_{GS} - v_{th}$, that is:
+	      $$
+		      v_{GS} > v_{th}, \quad v_{DS} > v_{GS} - v_{th}
+	      $$
+	      then we are in saturation, where the current scales directly with $v_{GS}$ indipendently of $v_{DS}$. The exact law is:
+	      $$
+		      i_D = \frac{1}{2} \mu C_{ox} \frac{W}{L} \left( v_{GS} - v_{th} \right)^2
+	      $$
+\end{itemize}
+
+\textbf{\textsf{Operational amplifiers}} are complex components comprised of DC-coupled differential amplifiers with very high gain values.
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/opamp.png}
+\end{center}
+
+What OP amps basically do is take the difference in voltage between two terminals (usually labeled $+$ and $-$) and amply that difference with an extremely high open loop gain ($G_{OL}$).
+
+\begin{center}
+	\includegraphics[scale=0.3]{../figures/opamp_char.png}
+\end{center}
+
+This means the output characteristic is:
+$$
+	v_{out} = G_{OL} (v^+ - v^-) = G_{OL} v_D
+$$
+Let us note that, even if $G_{OL}$ is in the order of several millions, an OP amp is a powered device which requires power and ground rails, and that cannot return voltages lower than the ground rail or higher than the power rail (a phonmenon known as \textit{saturation}).
+
+They are most commonly used as a \textbf{linear amplifier}:
+\begin{itemize}
+	\item With a negative feedback network;
+	\item Forced to work in linear region;
+	\item Lower final gain, larger bandwidth, stability.
+\end{itemize}
+
+Or used as a \textbf{comparator}:
+\begin{itemize}
+	\item With a positive feedback network (or no feedback);
+	\item Forced to work in saturation regions.
+\end{itemize}
+
+They are widely used in many embedded systems.
+
+Below, a few common circuits with OP amps are noted.
+\begin{center}
+	\includegraphics[scale=0.2]{../figures/opamps.png}
+\end{center}
+
+We note that transresistance amplifiers will be useful to us when we need to implement analog converters.
+
+\textbf{\textsf{Generalized analog adders / subtractors}} can be designed via OP amps by connecting inputs we want to add to the non inverting input and inputs we want to subtract to the inverting input.
+
+\begin{center}
+	\includegraphics[scale=0.2]{../figures/add_sub_analog.png}
+\end{center}
+
+Let's make sure to clearly define what we're after before delving into the implementation details.
+We ideally want a network based on a negative feedback OP amp amplifier, with a single $R_f$ resistance as the feedback network.
+\begin{itemize}
+	\item On the non-inverting input, we'll connect in parallel $n$ voltage generators $v_1'$, $v_2'$, ..., $v_n'$, with series resistances of $R_1'$, $R_2'$, ..., $R_n'$;
+	\item On the inverting input, we'll connect in parallel a $m$ voltage generators $v_1''$, $v_2''$, ..., $v_n''$, with series resistances of $R_1''$, $R_2''$, ..., $R_n''$.
+\end{itemize}
+
+We want the output of this network to perform the following operation on the voltage sources, taken as inputs:
+$$
+	V_{out} = \sum_{i = 1}^n A_i' v_i' - \sum_{i = 1}^m A_i'' v_i''
+$$
+
+\begin{itemize}
+	\item
+	      Let's recall that the inverting input gain can be taken as:
+	      $$
+		      {V_{out}}_j'' = - \frac{R_f}{R_j''} v_j''
+	      $$
+	\item
+	      Whereas the non-inverting input gain can be taken as:
+	      $$
+		      {V_{out}}_j' = \left( 1 + \frac{R_f}{ \parallel_{i = 1}^m R_i'' } \right) V_j'
+	      $$
+\end{itemize}
+
+The idea is to choose the resistances $R_i'$ and $R_i''$ such that the expression of $V_{out}$ above holds.
+
+\begin{itemize}
+	\item
+	      Choosing the resistances on the inverting side is really easy as we can simply say:
+	      $$
+		      R_i'' = \frac{R_f}{A_i''}
+	      $$
+	      and in the inverting input gain equation we get the correct gain;
+	\item
+	      For the inverting side, we first compute the voltage on node $V^+$ through Millman's theorem (theorem 1.2, of which we gave a proof in section 1.2.5):
+	      $$
+		      V^+ = \frac{ \sum_{i = 1}^n \frac{v_i'}{R_i'} }{ \sum_{i = 1}^n \frac{1}{R_i'} }
+	      $$
+
+	      From this equation we see that a good starting point is setting:
+	      $$
+		      R_i' = \frac{R_f}{A_i''}
+	      $$
+	      so that the gains at the numerator are correct:
+	      $$
+		      V^+ = \frac{ \sum_{i = 1}^n A_i' v_i' }{ \sum_{i = 1}^n A_i' }
+	      $$
+
+	      Now we use the non-inverting input gain to compute the output of the non-inverting side:
+	      $$
+		      V_{out}' = V^+ \left( 1 + \frac{R_f}{ \parallel_{i = 1}^m R_i'' } \right) =
+		      \frac{ \sum_{i = 1}^n A_i' v_i' }{ \sum_{i = 1}^n A_i' } \left( 1 + \frac{R_f}{ \frac{1}{ \sum_{i = 1}^m \frac{1}{R_i''} } } \right)
+	      $$
+	      $$
+		      =
+		      \frac{ \sum_{i = 1}^n A_i' v_i' }{ \sum_{i = 1}^n A_i' } \left( 1 + R_f \sum_{i = 1}^m \frac{1}{R_i''} \right) =
+		      \frac{ \sum_{i = 1}^n A_i' v_i' }{ \sum_{i = 1}^n A_i' } \left( 1 + \sum_{i = 1}^m A_i'' \right)
+	      $$
+
+	      At this point we impose the output be equal to the positive side of the original output equation:
+	      $$
+		      \frac{ \sum_{i = 1}^n A_i' v_i' }{ \sum_{i = 1}^n A_i' } \left( 1 + \sum_{i = 1}^m A_i'' \right) =
+		      \sum_{i = 1}^n A_i' v_i' \implies
+		      \frac{1 + \sum_{i = 1}^m A_i''}{\sum_{i = 1}^n A_i'} = 1
+	      $$
+
+\end{itemize}
+
+This last equation we obtained is what we have to satisfy in order to get the correct resistor values.
+It's pretty simple to make the result right by just adding a resistance on the inverting or non-inverting path based on the value of the left hand side, which we'll call $\alpha$:
+$$
+	\alpha = \frac{1 + \sum_{i = 1}^m A_i''}{\sum_{i = 1}^n A_i'}, \quad
+	\begin{cases}
+		A_{n + 1}' = 1 - \sum_{i = 1}^n A_i' + \sum_{i = 1}^m A_i'' \\
+		A_{m + 1}'' = -1  + \sum_{i = 1}^n A_i' - \sum_{i = 1}^m A_i''
+	\end{cases}
+$$
+
+\subsection{Logic gates}
+
+We can move on to digital electronics concept, by introducing \textbf{logic gates}.
+A logic gate is an electronic component which performs some sort of operation on digital signals.
+
+A simple example of a logic gate is an \textbf{inverter}.
+The simplest inverter is given by a \textit{resistive load} inverter.
+
+\begin{center}
+	\includegraphics[scale=0.2]{../figures/resist_load.png}
+\end{center}
+
+What happens in the circuit is that if we raise $v_{in}$, and thus $v_{GS}$, above the threshold voltage $v_{th}$, then we get conduction betweeen the drain and source of the MOS transistors, and the circuit acts as an open switch.
+If we then sample $v_{out}$, we see the voltage after the fall on $R_{pu}$ (which will be close to zero).
+
+
+In the other two graphs we see two non idealities of this circuit:
+\begin{itemize}
+	\item \textbf{Asymmetric} response: the falling edge is much sharper than rising edge, as the $R_{DS}$ of the NMOS is much smaller than $R_{pu}$;
+	\item We have \textbf{static} power consumption in the on state (when output is at logic 0), as current flows from drain to source:
+	      $$
+		      P = \frac{v_{DD}^2}{R_{DS} + R_{pu}}
+	      $$
+	\item We also have a certain amount of \textbf{dynamic} power consumption, given by the transients happening at state changes. These rely on equivalent capacitances of wires and MOS transistors, and will be studied in more detail later.
+\end{itemize}
+
+We can then see that we need a better design, at least in term of response alignment, and absolutely without static power consumption.
+
+\end{document}
