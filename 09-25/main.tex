@@ -471,6 +471,54 @@ Below, we show the symbol of a tri-state inverter and a possible CMOS implementa
 	\includegraphics[scale=0.22]{../figures/tristate_inv.png}
 \end{center}
 
+\par\smallskip
+
+A better design (or which at least uses less components in CMOS logic) for enabled inverters can be obtained using a general method for tri-stating CMOS network outputs.
+Because the outputs of CMOS logic networks are only given by shortcircuiting to $V_{cc}$ (via the \textbf{PUN}, \textit{Pull Up Network}) or to ground (via the \textbf{PDN}, \textit{Pull Down Network}), we can fully isolate the output by separating the PUN and PDN's connection to $V_{cc}$ and ground respectively.
+This is better explained by the following circuit:
+
+\begin{center}
+\begin{tikzpicture}[transform shape]
+	% Paths, nodes and wires:
+	\node[pmos] at (7.5, 7.77){};
+	\node[nmos] at (7.5, 3.23){};
+	\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 6.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 6.5){Pull Up Network};
+	\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 4.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 4.5){Pull Down Network};
+	\draw (7.5, 5) -| (7.5, 6);
+	\draw[-stealth] (7.5, 5.5) -- (10, 5.5);
+	\draw (6.52, 3.23) -| (5, 3.25) -- (5, 7.75);
+	\node[ieeestd not port, xscale=0.5, yscale=0.5] at (6.082, 7.77){};
+	\draw (5.643, 7.77) |- (5, 7.75);
+	\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (6, 4.5) -- (4, 4.5) -| (4, 6.5) -- (6, 6.5);
+	\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (4, 5.5) -- (3, 5.5);
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (2.5, 5.5){} node[anchor=east, align=right, text width=0.077cm, inner sep=6pt] at (, 5.5){Inputs};
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N1) at (10.5, 5.5){} node[anchor=center] at (N1.text){$V_{out}$};
+	\node[vcc] at (7.5, 8.5){};
+	\node[ground] at (7.5, 2.75){};
+	\draw (5, 7.75) -| (5, 8);
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N2) at (5, 8.25){} node[anchor=center] at (N2.text){$V_{enable}$};
+\end{tikzpicture}
+\end{center}
+
+We note that this implementation is active \textit{high}, as when $V_{enable}$ is high the connection to ground of the PDN is broken, and after the inverter (which pulls the enable signal to low) the connection to $V_{cc}$ of the PUN is broken.
+We can easily turn this circuit into an active \textit{low} implementation by just swapping the positino of the NOT gate.
+
+Lastly, we show how this technique can be used to design a CMOS inverter with enable signal, in a simulator such as LTSPICE:
+\begin{center}
+	\includegraphics[scale=0.35]{../figures/cmos_inv_tristate.png}
+\end{center}
+
+In the circuit, we implement the active \textit{low} version, and implement the NOT circuit manually via 2 other MOS transistors.
+We also note the RC network at the end of the circuit: this is useful in testing, as it simulates an actual driven line which might have capacitance and resistance (exagerated here for the example).
+
+We see how such a network behaves by driving it.
+In the figure below, after a delay of $10 \, \mathrm{ms}$ the inverter is enabled, we do a low to high transition, and then it is disabled again.
+We see how we can temporarily drive the output line, which then goes back to $0 \, \mathrm{V}$ (by draining thorugh the RC network) after disabling the inverter.
+\begin{center}
+	\includegraphics[scale=0.21]{../figures/cmos_inv_tristate_plot.png}
+\end{center}
+\par\smallskip
+
 As we said, tri-state outputs are useful when multiple logic gates drive the same line, for instance in a shared bus.
 All drivers must be in high impedance except one: it is vital to guarantee the above condition to avoid short circuits.
 
@@ -507,6 +555,8 @@ Many ways exist to synthesize a combinatorial circuit:
 	\item Another possibility is the \textit{Quine-McCluskey algorithm} for more inputs;
 	\item Often, we just stick to logic synthesis \textit{software tools}, which implement these ore other advanced algorithms.
 \end{itemize}
+
+Some other help about this topic can be found in the author's notes at \url{https://seggiani-luca.github.io/appunti/triennale/2/reti-logiche.html}.
 
 \textbf{\textsf{Multiplexers}} are circuits which allow to select an input and output just one of them, between different inputs.
 A one bit multiplexer with 2 inputs has this boolean law:
