@@ -378,28 +378,28 @@ We see that in such a design:
 	\item The response is \textbf{symmetric} (or mostly symmetric, we can act on the gate sizes to account for mobility effects);
 	\item There is no \textbf{static} power consumption (in the ideal case, some leakage does happen);
 	\item \textbf{Dynamic} power is present and measurable based on equivalent capacitance of the wire and the MOS transistors:
-$$
-P \approx C_{e1} f V^2
-$$
+	      $$
+		      P \approx C_{e1} f V^2
+	      $$
 \end{itemize}
 
-This design is very common in digital circuits nowadays, as it performs much better than the resistive load inverter. 
+This design is very common in digital circuits nowadays, as it performs much better than the resistive load inverter.
 
 \textbf{\textsf{CMOS logic}}: other logic functions are needed to implement a logic family.
 For CMOS technolog, we can use combinations of transistors in series or in parallel to implement any kind of logic.
 
 In particular:
 \begin{itemize}
-\item In the pull-down branch:
-\begin{itemize}
-\item Series NMOS implements a NAND
-\item Parallel NMOS implements a NOR
-\end{itemize}
-\item In the pull-up branch:
-\begin{itemize}
-\item Series PMOS implements a NOR
-\item Parallel PMOS implements a NAND
-\end{itemize}
+	\item In the pull-down branch:
+	      \begin{itemize}
+		      \item Series NMOS implements a NAND
+		      \item Parallel NMOS implements a NOR
+	      \end{itemize}
+	\item In the pull-up branch:
+	      \begin{itemize}
+		      \item Series PMOS implements a NOR
+		      \item Parallel PMOS implements a NAND
+	      \end{itemize}
 \end{itemize}
 
 We show a figure of the synthesis of a NAND and NOR circuit in CMOS technology:
@@ -424,9 +424,9 @@ This way we see we can define the parameters:
 
 From these parameters (given by constructors) we can compute the value of the modeling resistances:
 $$
-R_{OL} = \frac{V_{OL}}{|I_{OL}|}
-,\quad
-R_{OH} = \frac{V_{dd} - V_{OH}}{I_{OH}}
+	R_{OL} = \frac{V_{OL}}{|I_{OL}|}
+	,\quad
+	R_{OH} = \frac{V_{dd} - V_{OH}}{I_{OH}}
 $$
 
 \par\smallskip
@@ -446,14 +446,14 @@ We are interested on whether ouput voltages of the first inverter will be correc
 
 From this we can derive stability \textit{conditions} for the whole logic family:
 $$
-V_{OH} > V_{IH}, \quad V_{OL} < V_{IL}
+	V_{OH} > V_{IH}, \quad V_{OL} < V_{IL}
 $$
 where we define the following margins:
 $$
-V_{OH} - V_{IH} = NM_H \quad \text{(noise margin high)}
+	V_{OH} - V_{IH} = NM_H \quad \text{(noise margin high)}
 $$
 $$
-V_{IL} - V_{OL} = NM_L \quad \text{(noise margin low)}
+	V_{IL} - V_{OL} = NM_L \quad \text{(noise margin low)}
 $$
 
 \textbf{\textsf{Tri-state}} outputs are needed to avoid logic gates shorting when connected to the same outputs.
@@ -462,7 +462,7 @@ In these designs we have an additional Enable input, which can be \textit{active
 \begin{itemize}
 	\item When Enable is active, the output is driven normally;
 	\item When Enable is NOT active, both the pull-up (high side) and pull-down (low side) transistors are switched OFF, and the output line is left floating.
-		At this point the voltage level (and consequently the logic level) is set by some other circuit, or remains undetermined.
+	      At this point the voltage level (and consequently the logic level) is set by some other circuit, or remains undetermined.
 \end{itemize}
 
 Below, we show the symbol of a tri-state inverter and a possible CMOS implementation.
@@ -478,26 +478,26 @@ Because the outputs of CMOS logic networks are only given by shortcircuiting to 
 This is better explained by the following circuit:
 
 \begin{center}
-\begin{tikzpicture}[transform shape]
-	% Paths, nodes and wires:
-	\node[pmos] at (7.5, 7.77){};
-	\node[nmos] at (7.5, 3.23){};
-	\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 6.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 6.5){Pull Up Network};
-	\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 4.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 4.5){Pull Down Network};
-	\draw (7.5, 5) -| (7.5, 6);
-	\draw[-stealth] (7.5, 5.5) -- (10, 5.5);
-	\draw (6.52, 3.23) -| (5, 3.25) -- (5, 7.75);
-	\node[ieeestd not port, xscale=0.5, yscale=0.5] at (6.082, 7.77){};
-	\draw (5.643, 7.77) |- (5, 7.75);
-	\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (6, 4.5) -- (4, 4.5) -| (4, 6.5) -- (6, 6.5);
-	\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (4, 5.5) -- (3, 5.5);
-	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (2.5, 5.5){} node[anchor=east, align=right, text width=0.077cm, inner sep=6pt] at (, 5.5){Inputs};
-	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N1) at (10.5, 5.5){} node[anchor=center] at (N1.text){$V_{out}$};
-	\node[vcc] at (7.5, 8.5){};
-	\node[ground] at (7.5, 2.75){};
-	\draw (5, 7.75) -| (5, 8);
-	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N2) at (5, 8.25){} node[anchor=center] at (N2.text){$V_{enable}$};
-\end{tikzpicture}
+	\begin{tikzpicture}[transform shape]
+		% Paths, nodes and wires:
+		\node[pmos] at (7.5, 7.77){};
+		\node[nmos] at (7.5, 3.23){};
+		\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 6.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 6.5){Pull Up Network};
+		\node[shape=rectangle, draw, line width=1pt, minimum width=2.965cm, minimum height=0.965cm] at (7.5, 4.5){} node[anchor=center, align=center, text width=2.577cm, inner sep=6pt] at (7.5, 4.5){Pull Down Network};
+		\draw (7.5, 5) -| (7.5, 6);
+		\draw[-stealth] (7.5, 5.5) -- (10, 5.5);
+		\draw (6.52, 3.23) -| (5, 3.25) -- (5, 7.75);
+		\node[ieeestd not port, xscale=0.5, yscale=0.5] at (6.082, 7.77){};
+		\draw (5.643, 7.77) |- (5, 7.75);
+		\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (6, 4.5) -- (4, 4.5) -| (4, 6.5) -- (6, 6.5);
+		\draw[line width=1pt, dash pattern={on 4pt off 1pt on 1pt off 1pt}] (4, 5.5) -- (3, 5.5);
+		\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (2.5, 5.5){} node[anchor=east, align=right, text width=0.077cm, inner sep=6pt] at (, 5.5){Inputs};
+		\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N1) at (10.5, 5.5){} node[anchor=center] at (N1.text){$V_{out}$};
+		\node[vcc] at (7.5, 8.5){};
+		\node[ground] at (7.5, 2.75){};
+		\draw (5, 7.75) -| (5, 8);
+		\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm](N2) at (5, 8.25){} node[anchor=center] at (N2.text){$V_{enable}$};
+	\end{tikzpicture}
 \end{center}
 
 We note that this implementation is active \textit{high}, as when $V_{enable}$ is high the connection to ground of the PDN is broken, and after the inverter (which pulls the enable signal to low) the connection to $V_{cc}$ of the PUN is broken.
@@ -558,10 +558,10 @@ Many ways exist to synthesize a combinatorial circuit:
 
 Some other help about this topic can be found in the author's notes at \url{https://seggiani-luca.github.io/appunti/triennale/2/reti-logiche.html}.
 
-\textbf{\textsf{Multiplexers}} are circuits which allow to select an input and output just one of them, between different inputs.
+\textbf{\textsf{Multiplexers / demultiplexers}} are circuits which allow to select an input and output just one of them, between different inputs.
 A one bit multiplexer with 2 inputs has this boolean law:
 $$
-y = a \cdot s + b \cdot \overline{s}
+	y = a \cdot s + b \cdot \overline{s}
 $$
 where $a$ and $b$ are the inputs, and $s$ is the selection signal.
 
@@ -569,11 +569,28 @@ For multiplexers on multiple bits, we repeat the same structure multiple times;
 For multiplexers with more than two inputs, we need more than one selection signal (usually built hierarchically with $\log{\text{number of inputs}}$ smaller multiplexers).
 Multiplexers with more than two inputs on multiple bits are built as a combination of the above two cases.
 
-\textbf{\textsf{Decoders}} decode the binary representation of a number, on $n$ bits, to the same number in one-hot representation, on $2^n$ bits.
+We can summarize this via the following distinction:
+\begin{itemize}
+	\item We can expand multiplexers \textbf{vertically}, that is add more multiplexers vertically with the same control variables, to extend the width (in bits) of the inputs;
+	\item We can expand multiplexers \textbf{horizontally}, that is build hierarchical structures with more control signals, to extend the number of inputs available.
+\end{itemize}
 
-\textbf{\textsf{Encoders}} do the reverse job of converting a one-hot representation on $2^n$ bits in a single $n$ bit encoded value.
+\par\smallskip
 
-More complex components like \textit{priority encoders}, ... can be built.
+One technique commonly used to build multiplers with MOS transistors is \textit{pass-transistor} logic.
+Pass-transistor logic involves using an NMOS and a PMOS transistor in parallel to build a (basically) ideal voltage controlled switch. This can implement the logic function of a 2 to 1 multiplexer (above) with less transistors than the equivalent CMOS solution.
+At this point, more 2 to 1 multiplexers can be expanded as we saw above to have wider or more inputs.
+
+\par\smallskip
+
+We also note that the inverse of a multiplexer is called a \textbf{demultiplexer}, that is a component with multiple outputs, to which we can route a single input based on control signals.
+
+\textbf{\textsf{Decoders / encoders}}: \textbf{decoders} are components which decode the binary representation of a number, on $n$ bits, to the same number in one-hot representation, on $2^n$ bits.
+\textbf{Encoders}, on the other hand, do the reverse job of converting a one-hot representation on $2^n$ bits in a single $n$ bit encoded value.
+
+More complex components like \textit{priority encoders}, ... can be built, but usually an encoder is in an inconsistent state when multiple input lines are high.
+
+Decoders and encoders are still utility logic circuits, but as opposed to multiplexers and demultiplexers they are more easily implemented with standard CMOS logic, or by cascading CMOS logic devices (such as NOT, NAND and NOR gates).
 
 \textbf{\textsf{Digital adders / subtractors}} are built in combinatorial logic too.
 
@@ -583,9 +600,9 @@ For \textit{multibit} adders we combine multiple half adders.
 Different area and performance can be achieved based on carry computation.
 For instance, we remember:
 \begin{itemize}
-\item Ripple Carry
-\item Carry Look Ahead
-\item Carry Select
+	\item \textbf{Ripple Carry}: this is the traditional method of stacking full adders, where we connect a $C_{in}$ (carry in) and $C_{out}$ (carry out) pin for each adder pair;
+	\item \textbf{Carry Look Ahead}: with carry look-ahead we compute the carries in place via a CLA network, and perform the actual sums in parallel. This adds logic but saves time; 
+	\item \textbf{Carry Select}: with carry select we compute both pairs (without carry and with carry) for each adder, and only at the end of the calculation we choose the correct carry. 
 \end{itemize}
 
 \textit{Subtractors} are just implemented using an adder (using 2-complement notation).
