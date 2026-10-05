@@ -135,7 +135,6 @@
 		breaklines=true
 }
 
-
 \lstdefinelanguage{x86}{ 
   keywords={AAA, AAD, AAM, AAS, ADC, ADCB, ADCW, ADCL, ADD, ADDB, ADDW, ADDL, AND, ANDB, ANDW, ANDL,
         ARPL, BOUND, BSF, BSFL, BSFW, BSR, BSRL, BSRW, BSWAP, BT, BTC, BTCB, BTCW, BTCL, BTR, 
@@ -355,16 +354,118 @@
 \makeatother
 
 \begin{document}
+% sezione (data)
+\section{Lesson 02-10-26}
 
-\pagestyle{fancy}
+% stili pagina
 \thispagestyle{empty}
-\renewcommand{\thispagestyle}[1]{}
+\pagestyle{fancy}
 
-\maketitle
-\input{../09-23/main.tex}
-\input{../09-24/main.tex}
-\input{../09-25/main.tex}
-\input{../09-30/main.tex}
-\input{../10-01/main.tex}
-\input{../10-02/main.tex}
+% testo
+
+Last lesson we looked into \textit{memories} and \textit{memory interfacing}.
+
+\subsubsection{Addenda on memory interfacing}
+
+We introduced \textbf{masking} for memories that live within a processor's addressing space, but don't occupy it fully: these just need to consider the top $k$ bits and output an active low enable signal.
+
+An extra case we didn't show is that of memory combinations with different word lengths.
+Let's say our processor takes 16 bit words, that is it has a 16 bit data bus, and we try to populate it with a single 8 bit wordlength memory.
+
+This means we need a more complex memory controller:
+\begin{itemize}
+	\item The Data Bus is not compatible;
+	\item We need multiple transactions.
+\end{itemize}
+
+\subsubsection{Addenda on memory parameters}
+
+Let's name a few more memory parameters.
+
+\begin{itemize}
+	\item We talked about \textbf{size}: this is expressed in bits, bytes or multiples of these. Requirements of this are based on the application specifications:
+		\begin{itemize}
+\item Strong impact on costs;
+\item We try to reduce memory requirements;
+\item Small Embedded Systems use only some Kbytes of memory.
+		\end{itemize}
+
+	\item \textbf{Speed} can be defined in several different ways. For instance:
+		\begin{itemize}
+			\item \textbf{Asynchronous reads}: from when the address given is stable to when the provided value on the data bus (by the memory chip) is stable;
+			\item \textbf{Asynchronous writes}: from when the address given is stable to when the provided value on the data bus (by the CPU) is guaranteed to be stored.
+		\end{itemize}
+
+		\textbf{Throughput} is the opposite measure, defined as the maximum number of operations per second.
+
+		For \textbf{synchronous} memories we count the time measured in clock cycles given the clock frequency.
+
+	\item \textbf{Area} is a good example of a physically interesting metric: the actual size of the bit cell.
+
+		The total size is given by the total number of bits multiplied by the size of a single bit cell.
+		Over that, we need to account for the overhead of decoders, multiplexers and I/O circuits.
+
+		Note that different kind of memories have different bit cells:
+		\begin{itemize}
+\item Different bit cells provide different features;
+\item Very strong impact on the total area;
+\item Very strong impact on the total cost.
+		\end{itemize}
+
+		In fact, memories (especially DRAMs) are at the cutting edge of technology: they are the first components to adopt smaller gate lengths;
+
+	\item \textbf{Cost} is related to the size of the bit cell, the size of the memory (in number of bits), and external factors like production volume.
+
+	\item Another important metric is \textbf{power consumption}: this depends on the bit cell structure and technology, and is very important for portable systems;
+
+	\item \textbf{Write ability}: this refers to the manner and speed a memory can be written.
+
+		\begin{itemize}
+			\item \textit{High end} writeability: processor writes to memory simply and quickly. In-system, unlimited cycles;
+			\item \textit{Middle range} writeability: processor writes to memory, but slower than the high end. In-system, thousands or tens of thousands of cycles;
+			\item \textit{Lower range} writeability: special equipment to be used to program the memory (external programmer), thousands of cycles permitted;
+			\item \textit{Low end} writeability: once at fabrication.
+		\end{itemize}
+
+	\item \textbf{Storage permanence}, also known as its opposite, \textit{volatility}: it's the ability of the memory to hold stored bits after they are written.
+
+		\begin{itemize}
+			\item \textbf{High End} storage permanence: bits are never lost, even without power. Lifetime is that of the device;
+			\item \textbf{Middle range} storage permanence: bits are held for years, even without power. Sometimes more than the lifetime of the embedded system;
+			\item \textbf{Lower range} storage permanence: as long as power is supplied to the memory;
+			\item \textbf{Low End} storage permanence: memory content is lost after a certain amount of time, even if power is supplied. Often after a few tens of millisecond.
+		\end{itemize}
+\end{itemize}
+
+\subsection{Read Only Memories}
+
+We finally come around to talking about \textbf{ROM}s (\textit{Read Only Memories}).
+
+Let's first consider \textit{Mask Programmable Read Only Memories}:
+these are written at fabrication time, so they have:
+\begin{itemize}
+\item Lowest write ability (only once)
+\item Highest storage permanence (for ever)
+\end{itemize}
+
+To summarize, they can only be read and not written to.
+
+The \textit{costs} are high NRE (we need to develop specific masks for memory contents, though the same masks may be shared for memories of the same size and organization), low per-unit, so good for very large productions.
+
+\subsubsection{NOR memory}
+
+A common implementation of ROM memory is the \textbf{NOR} structure.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/nor_rom.png}
+\end{center}
+
+All bit Lines are normally pulled-up to $V_{dd}$: the output is logic 0 because of the inverter.
+A single Word Line is active (high) at any given time, and transistors in the corresponding word are conducting.
+Transistors in all other words are in cut-off.
+
+A conducting transistor in the active word
+lowers a Bit Line to 0, so the presence of a transistor at a given bit cell becomes our "one", the absence our "zero".
+Transistors of course are defined at the mask level: \textit{Diffusions, Thin Oxide, Polysilicon, Metal}.
+
 \end{document}
