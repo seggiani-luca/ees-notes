@@ -1,0 +1,819 @@
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, margin=8em]{geometry}
+
+% usa i pacchetti per la scrittura in italiano
+\usepackage[french,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\frenchspacing 
+
+% usa i pacchetti per la formattazione matematica
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+
+% usa altri pacchetti
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{standalone}
+
+\usepackage{colortbl}
+
+\usepackage{xstring}
+\usepackage{karnaugh-map}
+
+% imposta il titolo
+\title{Electronics for Embedded Systems notes}
+\author{Luca Seggiani}
+\date{2026}
+
+% spaziatura liste
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+\setlist[enumerate]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+
+% imposta lo stile
+% usa helvetica
+\usepackage[scaled]{helvet}
+% usa palatino
+\usepackage{palatino}
+% usa un font monospazio guardabile
+\usepackage{lmodern}
+
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{lmtt}
+
+% circuiti
+\usepackage{circuitikz}
+\usetikzlibrary{babel}
+
+% testo cerchiato
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+% disponi il titolo
+\makeatletter
+\renewcommand{\maketitle} {
+	\begin{center} 
+		\begin{minipage}[t]{.8\textwidth}
+			\textsf{\huge\bfseries \@title} 
+		\end{minipage}%
+		\begin{minipage}[t]{.2\textwidth}
+			\raggedleft \vspace{-1.65em}
+			\textsf{\small \@author} \vfill
+			\textsf{\small \@date}
+		\end{minipage}
+		\par
+	\end{center}
+
+	\thispagestyle{empty}
+	\pagestyle{fancy}
+}
+\makeatother
+
+% disponi teoremi
+\usepackage{tcolorbox}
+\newtcolorbox[auto counter, number within=section]{theorem}[2][]{%
+	colback=blue!10, 
+	colframe=blue!40!black, 
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries, 
+	title=Theorem~\thetcbcounter: #2, 
+	#1
+}
+
+% disponi definizioni
+\newtcolorbox[auto counter, number within=section]{definition}[2][]{%
+	colback=red!10,
+	colframe=red!40!black,
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries,
+	title=Definition~\thetcbcounter: #2,
+	#1
+}
+
+% disponi codice
+\usepackage{listings}
+\usepackage[table]{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{codestyle}{
+		backgroundcolor=\color{black!5}, 
+		commentstyle=\color{codegreen},
+		keywordstyle=\bfseries\color{magenta},
+		numberstyle=\sffamily\tiny\color{black!60},
+		stringstyle=\color{green!50!black},
+		basicstyle=\ttfamily\footnotesize,
+		breakatwhitespace=false,         
+		breaklines=true,                 
+		captionpos=b,                    
+		keepspaces=true,                 
+		numbers=left,                    
+		numbersep=5pt,                  
+		showspaces=false,                
+		showstringspaces=false,
+		showtabs=false,                  
+		tabsize=2
+}
+
+\lstdefinestyle{shellstyle}{
+		backgroundcolor=\color{black!5}, 
+		basicstyle=\ttfamily\footnotesize\color{black}, 
+		commentstyle=\color{black}, 
+		keywordstyle=\color{black},
+		numberstyle=\color{black!5},
+		stringstyle=\color{black}, 
+		showspaces=false,
+		showstringspaces=false, 
+		showtabs=false, 
+		tabsize=2, 
+		numbers=none, 
+		breaklines=true
+}
+
+\lstdefinelanguage{x86}{ 
+  keywords={AAA, AAD, AAM, AAS, ADC, ADCB, ADCW, ADCL, ADD, ADDB, ADDW, ADDL, AND, ANDB, ANDW, ANDL,
+        ARPL, BOUND, BSF, BSFL, BSFW, BSR, BSRL, BSRW, BSWAP, BT, BTC, BTCB, BTCW, BTCL, BTR, 
+        BTRB, BTRW, BTRL, BTS, BTSB, BTSW, BTSL, CALL, CBW, CDQ, CLC, CLD, CLI, CLTS, CMC, CMP,
+        CMPB, CMPW, CMPL, CMPS, CMPSB, CMPSD, CMPSW, CMPXCHG, CMPXCHGB, CMPXCHGW, CMPXCHGL,
+        CMPXCHG8B, CPUID, CWDE, DAA, DAS, DEC, DECB, DECW, DECL, DIV, DIVB, DIVW, DIVL, ENTER,
+        HLT, IDIV, IDIVB, IDIVW, IDIVL, IMUL, IMULB, IMULW, IMULL, IN, INB, INW, INL, INC, INCB,
+        INCW, INCL, INS, INSB, INSD, INSW, INT, INT3, INTO, INVD, INVLPG, IRET, IRETD, JA, JAE,
+        JB, JBE, JC, JCXZ, JE, JECXZ, JG, JGE, JL, JLE, JMP, JNA, JNAE, JNB, JNBE, JNC, JNE, JNG,
+        JNGE, JNL, JNLE, JNO, JNP, JNS, JNZ, JO, JP, JPE, JPO, JS, JZ, LAHF, LAR, LCALL, LDS,
+        LEA, LEAVE, LES, LFS, LGDT, LGS, LIDT, LMSW, LOCK, LODSB, LODSD, LODSW, LOOP, LOOPE,
+        LOOPNE, LSL, LSS, LTR, MOV, MOVB, MOVW, MOVL, MOVSB, MOVSD, MOVSW, MOVSX, MOVSXB,
+        MOVSXW, MOVSXL, MOVZX, MOVZXB, MOVZXW, MOVZXL, MUL, MULB, MULW, MULL, NEG, NEGB, NEGW,
+        NEGL, NOP, NOT, NOTB, NOTW, NOTL, OR, ORB, ORW, ORL, OUT, OUTB, OUTW, OUTL, OUTSB, OUTSD,
+        OUTSW, POP, POPL, POPW, POPB, POPA, POPAD, POPF, POPFD, PUSH, PUSHL, PUSHW, PUSHB, PUSHA, 
+        RCLL, RCR, RCRB, RCRW, RCRL, RDMSR, RDPMC, RDTSC, REP, REPE, REPNE, RET, ROL, ROLB, ROLW,
+        ROLL, ROR, RORB, RORW, RORL, SAHF, SAL, SALB, SALW, SALL, SAR, SARB, SARW, SARL, SBB,
+        SBBB, SBBW, SBBL, SCASB, SCASD, SCASW, SETA, SETAE, SETB, SETBE, SETC, SETE, SETG, SETGE,
+        SETL, SETLE, SETNA, SETNAE, SETNB, SETNBE, SETNC, SETNE, SETNG, SETNGE, SETNL, SETNLE,
+        SETNO, SETNP, SETNS, SETNZ, SETO, SETP, SETPE, SETPO, SETS, SETZ, SGDT, SHL, SHLB, SHLW,
+        SHLL, SHLD, SHR, SHRB, SHRW, SHRL, SHRD, SIDT, SLDT, SMSW, STC, STD, STI, STOSB, STOSD,
+        STOSW, STR, SUB, SUBB, SUBW, SUBL, TEST, TESTB, TESTW, TESTL, VERR, VERW, WAIT, WBINVD,
+        XADD, XADDB, XADDW, XADDL, XCHG, XCHGB, XCHGW, XCHGL, XLAT, XLATB, XOR, XORB, XORW, XORL},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{riscv}{
+  keywords={
+    LUI, AUIPC,
+    JAL, JALR,
+    BEQ, BNE, BLT, BGE, BLTU, BGEU,
+    LB, LH, LW, LBU, LHU, LD,
+    SB, SH, SW, SD,
+    ADDI, SLTI, SLTIU, XORI, ORI, ANDI,
+    SLLI, SRLI, SRAI,
+    ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND,
+    ADDIW, SLLIW, SRLIW, SRAIW,
+    ADDW, SUBW, SLLW, SRLW, SRAW,
+    MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
+    MULW, DIVW, DIVUW, REMW, REMUW,
+    LR.W, SC.W, AMOSWAP.W, AMOADD.W, AMOXOR.W,
+    AMOAND.W, AMOOR.W, AMOMIN.W, AMOMAX.W,
+    AMOMINU.W, AMOMAXU.W,
+    LR.D, SC.D, AMOSWAP.D, AMOADD.D, AMOXOR.D,
+    AMOAND.D, AMOOR.D, AMOMIN.D, AMOMAX.D,
+    AMOMINU.D, AMOMAXU.D,
+    FLW, FSW,
+    FMADD.S, FMSUB.S, FNMSUB.S, FNMADD.S,
+    FADD.S, FSUB.S, FMUL.S, FDIV.S, FSQRT.S,
+    FSGNJ.S, FSGNJN.S, FSGNJX.S,
+    FMIN.S, FMAX.S,
+    FCVT.W.S, FCVT.WU.S, FCVT.S.W, FCVT.S.WU,
+    FMV.X.W, FMV.W.X,
+    FEQ.S, FLT.S, FLE.S,
+    FLD, FSD,
+    FMADD.D, FMSUB.D, FNMSUB.D, FNMADD.D,
+    FADD.D, FSUB.D, FMUL.D, FDIV.D, FSQRT.D,
+    FSGNJ.D, FSGNJN.D, FSGNJX.D,
+    FMIN.D, FMAX.D,
+    FCVT.W.D, FCVT.WU.D, FCVT.D.W, FCVT.D.WU,
+    FCVT.S.D, FCVT.D.S,
+    FMV.X.D, FMV.D.X,
+    FEQ.D, FLT.D, FLE.D,
+    CSRRW, CSRRS, CSRRC,
+    CSRRWI, CSRRSI, CSRRCI,
+    FENCE.I,
+    FENCE,
+    ECALL, EBREAK,
+    MRET, SRET, URET,
+    WFI,
+    SFENCE.VMA,
+    NOP, LI, LA, MV,
+    NOT, NEG, NEGW,
+    SEQZ, SNEZ, SLTZ, SGTZ,
+    BEQZ, BNEZ, BLEZ, BGEZ, BLTZ, BGTZ,
+    BGT, BLE, BGTU, BLEU,
+    J, JR, RET,
+    CALL, TAIL,
+    RDINSTRET, RDCYCLE, RDTIME,
+    CSRR, CSRW, CSRS, CSRC,
+    CSRWI, CSRSI, CSRCI
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{arm}{
+  keywords={
+    ADC, ADD, AND, BIC, CMN, CMP, EOR, MOV, MVN,
+    RSB, RSC, SBC, SUB, TST, TEQ,
+    MLA, MLS, MUL, SMLAL, SMULL, UMLAL, UMULL,
+    QADD, QSUB, QDADD, QDSUB,
+    QADD16, QADD8, QASX, QSAX,
+    QSUB16, QSUB8, QSAX, QSUBADDX,
+    ASR, LSL, LSR, ROR, RRX,
+    B, BL, BX, BLX,
+    BXJ,
+    BEQ, BNE, BCS, BHS, BCC, BLO,
+    BMI, BPL, BVS, BVC,
+    BHI, BLS, BGE, BLT, BGT, BLE,
+    BAL,
+    LDR, LDRB, LDRH, LDRSB, LDRSH,
+    LDRD, LDM, LDMIA, LDMIB, LDMDA, LDMDB,
+    LDRT, LDRBT, LDRHT, LDRSBT, LDRSHT,
+    STR, STRB, STRH, STRD,
+    STM, STMIA, STMIB, STMDA, STMDB,
+    STRT, STRBT, STRHT,
+    PUSH, POP,
+    SWP, SWPB,
+    REV, REV16, REVSH,
+    BFC, BFI, BFXIL, SBFX, UBFX,
+    CLZ,
+    LDREX, LDREXB, LDREXH, LDREXD,
+    STREX, STREXB, STREXH, STREXD,
+    DMB, DSB, ISB,
+    MCR, MCRR, MRC, MRRC,
+    MRS, MSR,
+    CPS, SETEND, SVC, BKPT,
+    CLREX, WFE, WFI, SEV,
+    YIELD, NOP,
+    VLDR, VSTR,
+    VMOV, VABS, VNEG,
+    VADD, VSUB, VMUL, VDIV,
+    VMLA, VMLS, VNMLA, VNMLS, VNMUL,
+    VMAX, VMIN,
+    VSQRT,
+    VCMP, VCMPE,
+    VCVT,
+    VCLZ, VCLS,
+    VAND, VORR, VEOR, VBIC, VMVN,
+    VLD1, VLD2, VLD3, VLD4,
+    VST1, VST2, VST3, VST4,
+    ADR, ADCS, ADDS, SUBS, MOVS, ANDS, ORRS, EORS
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{@},
+  morecomment=[l]{;},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{style=codestyle, language=C}
+
+% disponi sezioni
+\usepackage{titlesec}
+
+\titleformat{\section}
+	{\sffamily\Large\bfseries} 
+	{\thesection}{1em}{} 
+\titleformat{\subsection}
+	{\sffamily\large\bfseries}   
+	{\thesubsection}{1em}{} 
+\titleformat{\subsubsection}
+	{\sffamily\normalsize\bfseries} 
+	{\thesubsubsection}{1em}{}
+
+% tikz
+\usepackage{tikz}
+
+% float
+\usepackage{float}
+
+% grafici
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+% disponi alberi
+\usepackage{forest}
+
+\forestset{
+	rectstyle/.style={
+		for tree={rectangle,draw,font=\large\sffamily}
+	},
+	roundstyle/.style={
+		for tree={circle,draw,font=\large}
+	}
+}
+
+% disponi algoritmi
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\makeatletter
+\renewcommand{\ALG@name}{Algorithm}
+\makeatother
+
+% disponi numeri di pagina
+\usepackage{fancyhdr}
+\fancyhf{} 
+\fancyfoot[L]{\sffamily{\thepage}}
+
+\makeatletter
+\fancyhead[L]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@title \ \@date}}} 
+\fancyhead[R]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@author}}}
+\makeatother
+
+\begin{document}
+% sezione (data)
+\section{Lesson 07-10-26}
+
+% stili pagina
+\thispagestyle{empty}
+\pagestyle{fancy}
+
+% testo
+
+\subsubsection{NAND memory}
+In the last lesson we saw \textit{NOR memories}. Now we look at the \textbf{NAND} structure.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/nand_rom.png}
+\end{center}
+
+All bit lines are normally pulled-up to $V_{dd}$: the output is still logic 0 because of the inverter.
+
+Now, we knot that if all transistors are at gate low, we don't connect them to ground: it follows that the bit line stays high and the output low (logic 0 at default).
+
+The control signals for the word lines ($WL_i$) are active low.
+This means that every word line is at 1 but the selected one (which is at 0).
+
+Now:
+\begin{itemize}
+	\item If there is no short circuit between the drain and source of the selected transistor, we don't get a short to ground, and the line stays high: so the output stays low;
+	\item If there is a short circuit, on the other hand, we short to ground, meaning the output stays high: we encode a logic 1 by shorting a transistor.
+\end{itemize}
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/nand_wl.png}
+\end{center}
+
+Clearly, the mask topology of the NAND topology is more complicated.
+We have the delay of the address decoder, given by:
+\begin{enumerate}
+\item Delay of the address lines inverters , which are driving half of the NAND gates, and have large parasitic capacitance.
+\item Delay of the NAND gates, with large parasitic resistance when all pull-down transistors are ON;
+\item Lastly there's the delay of the Word Line inverters, driving all transistors in the bit cells in a row, with large parasitic capacitance and resistance as the word Line is long.
+\end{enumerate}
+
+This tradeoff comes at the gain of higher \textit{densities} overall, meaning NAND memories are usually less performant but smaller.
+
+\subsubsection{Memory timings}
+
+Let's look at the simulated delay, specifically of the address decoder.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/mem_timings.png}
+\end{center}
+
+We see the 3 delay source cited above ($t_{inv_1}$, $t_{NAND}$, and $t_{inv_2}$).
+The total delay is:
+$$
+t_{delay} = t_{inv_1} + t_{NAND} + t_{inv_2}
+$$
+
+Note that this is the example with 64 bit cells in a row:
+the delay for the first bit cell is much
+lower than the delay of the last bit cell
+We must always consider the worst case!
+
+\par\smallskip
+
+We must also look at the performance of NOR and NAND technology on bit line discharging.
+The bit line has a certain parasitic capacitance $C_L$.
+When the memory is idle, the bit line is pulled-up to $V_{dd}$, and $C_L$ charges up to it.
+When a bit is read, we have to discharge $C_L$ down to 0.
+
+\begin{itemize}
+	\item In a \textbf{NOR} structure, the parasitic capacitance dominates.
+	The resistance of the bit line is small (metal), and all capacitances are in parallel. This means that:
+	$$
+	\tau = R_{DSon} \cdot C_L = R_{DSon} \cdot C_{drain} \cdot n_{tr}
+	$$
+	where $n_{tr}$ is the number of transistors;
+	\item In NAND topology the parasitic resistance dominates: it is the channel resistance of all transistors in the series.
+	The structure can be studied using the \textit{Elmore} delay, and we get that:
+	$$
+	\tau = \frac{RC}{2}, \quad R = n_{tr} \cdot R_{DSon}, \quad C = n_{tr} \cdot C_{drain}
+	$$
+\end{itemize}
+
+\par\smallskip
+
+Latly, we show a picture of the general timing parameters for a memory access (a read, as we're talking EPROM memories) operation.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/mem_timings1.png}
+\end{center}
+
+From when address is stable and $\overline{CS}$ (active low) is low, we note the following delays:
+\begin{itemize}
+	\item $t_{OE}$ is the \textbf{minimum Output Enable} time, which is the time before the output takes some value, but is not yet stable. After $t_{OE}$ the value on DataOut might be wrong, but DataOut is not in high impedance anymore;
+	\item $t_{ACS}$ is the \textbf{maxmimum Chip Select Access} time, after which the DataOut will be stable;
+	\item $t_{OD}$ is the \textbf{maximum Output Disable} time, after which the output returns to high impedance.
+\end{itemize}
+
+We then see that the time we have to wait before having a result from memory is in between $t_{OE}$ and $t_{ACS}$.
+
+\par\smallskip
+
+Let's see what happens when changing the address.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/mem_timings2.png}
+\end{center}
+
+From when the address is changed, we note the following delays:
+\begin{itemize}
+	\item $t_{AA}$ is the \textbf{maximum Address Access} time, after which DataOut takes the value pointed to by that address;
+	\item $t_{OH}$ is the \textbf{minimum Output Hold} time, after which the DataOut goes back to being undetermined after address changes;
+	\item $t_{cyc}$ is the \textbf{cycle} time, for which addresses should at least be stable.
+\end{itemize}
+
+We then see that, as long as we keep addresses stable for at least $t_{cyc}$, the data will be available at most after $t_{AA}$, and at least for $t_{OH}$ after the address change.
+
+\subsection{One Time Programmable Read Only Memories}
+
+We now look at \textbf{OTP-ROM} (\textit{One Time Programmable Read Only Memories}).
+These are based on \textbf{fuses} or \textit{anti-fuses} (which blow to become shorts), which get blown in order to encode data.
+Of course this process is irreversible and means writing operations are permanent.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/otprom.png}
+\end{center}
+
+As in the standard NOR structure, all bit cells have a transistor, with the drain of each transistor is connected to the bit line through a fuse.
+
+All fuses are short circuit after fabrication, meaning all transistors are connected to the bit lines: the initial content of the memory is all 1s.
+
+Blowing a fuse turns a logic 1 into a logic 0, with he corresponding transistor being disconnected from the bit line.
+
+As we said, the fuse cannot be restored, the operation is one time and we cannot turn a logic 0 back to a logic 1.
+
+\par\smallskip
+
+To correctly program an OTPROM the procedure is to:
+\begin{itemize}
+	\item Enable the word line of the bit we want to program;
+	\item Select the bit line of the bit we want to progam;
+	\item Drive the bit line at $V_p >> V_{dd}$, high enough to blow the fuse.
+\end{itemize}
+
+We call the mode in which $V_p$ is feed to the memory \textit{programming mode}.
+In programming mode the data bus is an input which selects the bit lines to be connected to $V_p$.
+$V_p$ itself is provided through a dedicated memory pin.
+
+\subsubsection{Performance of OTPROMs}
+
+First off, \textbf{writing} an OTPROM takes considerably (orders of magnitude) higher time than reading it.
+This is fine, as writing an OTPROM is as we said an one-time only operation.
+
+As for other characteristics, we see that a \textbf{read} operation is mostly identical in performance to Mask Programmable ROMs.
+The disadvantages are higher resistances of the fuse compared to a short circuit, which get a bit slower compared to a Mask Programmable ROM.
+
+OTPROMs are also \textit{unntestable}: they need to be produced in small size to have a good yield.
+
+The number of defective ICs in a wafer does not depend on the IC size, but smaller ICs of course have less chance to be detective.
+This means that usually there are more small ICs in a wafer than large ICs.
+Note that the yield $y$ is roughly given by:
+$$
+y = \frac{n_{ICok}}{n_{ICtot}} = 1 - \frac{n_{ICdefective}}{n_{ICtot}}
+$$
+
+\subsection{Programmable Read Only Memories}
+
+OTPROMs are suboptimal as they can be written \textit{only once}. 
+Because of this, more advanced solutions which allow memory to be rewritten (that is, \textit{reprogrammed}), a number of times.
+We call these \textbf{PROM}s (\textit{Programmable Read Only Memories}).
+
+\subsubsection{Floating-gate transistors}
+
+The core element of a PROM is a \textit{floating-gate} transistor, that is a MOS transistor which can have its gate biased by applying a high voltage to it.
+One example of such a transistor is the \textbf{FAMOS} (\textit{Floating gate Avalanche MOS}), which is actually not famous at all.
+
+They are similar to a MOS transistor, with an dditional polysilicon layer between two thin $SiO2$ layers below the gate.
+This means the gate is \textit{floating}.
+Charges trapped in the floating gate change the threshold voltage $V_T$, where 
+\begin{itemize}
+	\item 
+Negative charges increase the threshold;
+	\item
+Positive charges decrease the threshold.
+\end{itemize}
+
+\newpage
+\textbf{\textsf{Programming}}
+
+The floating gate is completely isolated, and to program it we use \textit{hot electron programming}:
+\begin{itemize}
+	\item By applying a high programming voltage $V_p$ to the gate, a rich channel forms (as the gate is pulled high). This is not enough to lower $V_T$!
+	\item By applying a high programming voltage $V_p'$ to the drain-source channel, electrons in the channel are subject to strong electrical fields.
+Due to strong vertical electrical field from the gate, the high energy electrons may overcome the $SiO2$ barrier, reach the floating gate. The result is that the gate is pulled low and $V_T$ increases.
+\end{itemize}
+
+\par\smallskip
+\textbf{\textsf{Performance}}
+
+When programming a FAMOS transistor, as the threshold voltage $V_T$ increases, the channel is less rich and the vertical electrical field is less strong.
+This clearly means that the number of electrons with enough energy to jump in the floating gate decreases (less electrical field), and process is \textit{self regulating} (!)
+The nice property of this system is that the final threshold voltage is quite consistent among all transistors, regardless of the length of the process.
+
+We then have that $V_T$ grows above $V_{dd}$ by a certain margin.
+By playing with doping levels, densities, geometries, we can change that margin.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/famos.png}
+\end{center}
+
+The \textit{disadvantages} of FAMOS transistors are:
+\begin{itemize}
+	\item The process takes time and requires high voltages
+	\item How to generate those voltages in the first place: provided externally using pins? Generated internally from the standard voltage supply?
+	\item Damages to the lattice: we cannot apply programming too many times. 1000 – 10000 program ing cycles seems to be the sweet spot in most commercial applications;
+	\item Leakage current removes electrons from the floating gate: the information is lost over time, on a timescale of sveral tens of years.
+\end{itemize}
+
+\par\smallskip
+\textbf{\textsf{Erasing}}
+
+\textit{Erasing} FAMOS transistors is the most interesting part.
+Electrons cannot be removed electrically from the floating gate: energy has to provided to the electrons via an \textit{UV lamp}.
+
+As high energy photons hit electrons, the electrons jump back to the substrate and diffuse.
+After a sufficiently long amount of time (minutes) all electrons are removed, and the floating gate is left unbiased.
+
+For this reason we need a window on the integrated circuit (which we'll tape off when the circuit is at work to avoid accidental exposure to UV light).
+We also cannot target a \textit{single} transistor: all transistors are erased at the same time.
+This makes PROM erasure an usually out of the circuit operation, as with programming, done with external hardware in a lab. 
+
+\subsubsection{Programmable ROM}
+
+Let's look at a NOR structure \textbf{PROM}.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/prom.png}
+\end{center}
+
+The funky transistor symbol with the triple gate line represents a FAMOS transistor (with the middle line being the floating gate).
+
+All bit cells have a FAMOS transistor.
+The drain of each transistor is connected to the bit line.
+All FAMOS transistors are not programmed after fabrication, so they behave normally.
+The initial content of the memory, as a result, is all 1s, and programming a transistor (raising the $V_T$ higher, disconnecting it) turns a logic 1 into a logic 0.
+
+As we said, the memory can be reset to the initial state by shining UV rays through a window.
+All programmed transistors are erased, and all non programmed transistors are not affected: the memory contents return to all 1s. 
+
+To correctly program a PROM we proceed similarly to OTPROMs:
+\begin{itemize}
+	\item Enable the word line of the bit we want to program;
+	\item Select the bit line of the bit we want to program;
+	\item The selected word line is driven to the voltage $V_p > V_{dd}$;
+	\item The selected bit lines (possibly more than one for the same word) are driven to the voltage $V_p' > V_{dd}$.
+\end{itemize}
+
+To avoid impacting other components, other rows are at ground, and bits not to be programmed on this row have their drains at $V_{dd}$.
+
+\subsubsection{Performance of PROMs}
+
+For the read operation, PROMs are identical to Mask Programmable ROM and OTPROMs.
+
+For the \textit{write} operation, that is \textit{programming},
+moving negative charges to the floating gate
+makes the transistor a permanent open circuit:
+\begin{itemize}
+	\item Turns a 1 into a 0 (if the bit line is inverted);
+	\item Turns a 0 into a 1 (if the bit line is affirmed).
+\end{itemize}
+
+It works at the word level too.
+
+For erasing, we emove the negative charges from the floating gate.
+This restores the normal transistor behavior, but applies to the entire memory at once.
+
+This means PROMs have almost completely superseded OTPROMs:
+\begin{itemize}
+\item Much more flexible;
+\item Cheaper during prototyping;
+\item Can be reused;
+\item Still, not suitable for data that is frequently changed.
+\end{itemize}
+
+\subsubsection{FLOTOX transistors}
+
+Another variant of floating-gate transistor is the \textbf{FLOTOX} (\textit{FLOating gate Tunneling OXide transistor}). Similarly to FAMOS, it has a floating gate.
+
+The FLOTOX differs from the FAMOS in its erasure properties: it is \textit{electrically erasable}.
+
+This is achieved through the \textit{tunneling effect}.
+The tunneling effect is  a quantum mechanical phenomenon, where a particle (electron) can pass a potential barrier even if it has insufficient energy.
+
+A thinner oxide layer on the drain (source) side makes tunneling easier.
+Electrons come from the drain (source) region rather than from the substrate or channel.
+An higher electrical field is necessary for this.
+
+\par\smallskip
+\textbf{\textsf{Programming}}
+
+The floating gate is completely isolated, and to program it we use
+\textit{Fowler--Nordheim tunneling}:
+\begin{itemize}
+    \item By applying a high programming voltage $V_p$ to the control
+    gate, a strong electric field is established across the thin
+    tunnel oxide.
+
+    \item The strong electric field allows electrons to tunnel through
+    the thin $SiO_2$ barrier from the substrate onto the floating gate.
+
+    \item The floating gate accumulates negative charge. As a result,
+    the threshold voltage increases:
+    \[
+        Q_{FG}<0 \quad\Rightarrow\quad V_T \uparrow.
+    \]
+\end{itemize}
+
+To erase the cell, the polarity of the applied voltage is reversed:
+\begin{itemize}
+    \item A high voltage of opposite polarity is applied to the control
+    gate, producing a strong electric field across the tunnel oxide.
+
+    \item Electrons tunnel from the floating gate through the thin
+    $SiO_2$ layer into the substrate.
+
+    \item The floating gate loses its negative charge, causing the
+    threshold voltage to decrease:
+    \[
+        Q_{FG}\rightarrow 0 \quad\Rightarrow\quad V_T \downarrow.
+    \]
+\end{itemize}
+
+\par\smallskip
+\textbf{\textsf{Performance}}
+
+Let's make a comparison of programming mechanisms:
+\begin{itemize}
+
+	\item Hot Electron Programming is faster than Tunneling, which may increase performance, but performance may be limited by other issues.
+
+	\item Tunneling causes less damages to the lattice than Hot Electron Programming, leading to higher life-time of the device, and many more programming cycles;
+
+	\item Hot Electron Programming is Self Regulated, Tunneling is not;
+
+	\item Tunneling requires careful timing to achieve good consistency:
+	the resulting distribution of $V_T$ after programming has a larger standard deviation,
+	and requires larger margins during operations;
+
+	\item FLOTOX transistors are larger and harder to fabricate: lower yield, higher costs.
+\end{itemize}
+
+\par\smallskip
+\textbf{\textsf{Addenda on programming}}
+
+There is a famous issue with FLOTOX programming.
+The straightforward implementation (but it doesn't work!) is:
+\begin{itemize}
+	\item The drain of each transistor is connected to the bit line;
+	\item The source of each transistor is grounded.
+\end{itemize}
+This has a problem: programming a transistor erases another one.
+
+\begin{itemize}
+    \item To program $T_1$:
+    $
+        \text{Gate: } WL_0 = 12\,V,
+        \qquad
+        \text{Drain: } BL_1 = 0\,V
+    $
+
+    \item To avoid programming $T_2$:
+    $
+        WL_1 = 0\,V
+    $
+
+    \item To avoid programming $T_3$:
+    $
+        BL_0 = 12\,V,
+        \qquad
+        V_{GD} = 0
+    $
+
+    \item However, $T_4$ is erased:
+    $
+        WL_1 = 0\,V,
+        \qquad
+        BL_0 = 12\,V
+    $
+
+\end{itemize}
+
+The solution is to use an access transistor for each bit cell.
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/flotox_prog.png}
+\end{center}
+
+\subsubsection{Electrically Erasable Programmable ROM}
+
+We use FLOTOX transistors to realize \textbf{EEPROM}s (\textit{Electrically Erasable Programmable ROMs}). 
+
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/eeprom.png}
+\end{center}
+
+All bit cells have a FLOTOX transistor, with thin oxide on the drain side.
+
+All bit cells also have an access transistor;
+drain connected to the bit bine, source connected to the FLOTOX,
+gate driven by the address decoder (via dedicated $AWL_i$ lines). 
+
+Access transistors are activated when the word is selected.
+
+Out of the factory, all transistors behave normally, and the initial content of the memory is all 1s.
+\begin{itemize}
+	\item Programming a transistor turns a logic 1 into a logic 0;
+	\item Erasing a transistor turns a logic 0 back into a logic 1.
+\end{itemize}
+
+This happens \textit{electrically} and \textit{in circuit}.
+
+Let's look at how the main operations are carried out:
+\begin{itemize}
+	\item For \textbf{programming}, we select the word by raising the word line, and the data in the word by raising the D line (which as always acts as an input for programming).
+		
+		We then enter the \textit{programming} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
+
+		At this point, to program we raise the word line (that is the gate) to $V_p$, and the selected bit lines (that is the drains) to $0 \, \matrhm{V}$. The rest of the lines are kept at $V_p$; 
+
+	\item For \textbf{erasing}, we select the word by raising the word line, and the data (to erase) in the word by raising the D line.
+
+		We then enter the \textit{erasing} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
+
+		At this point, to erase we lower the word line (that is the gate) to $0 \, \mathrm{V}$, and the selected bit lines (that is the drains) to $V_p$. The rest of the lines are kept at $0 \, \mathrm{V}$.
+\end{itemize}
+
+\subsubsection{Performance of EEPROMs}
+
+The read operation is identical to Mask Programmable ROM, OTPROM and EPROMs (which we called PROMs so far).
+The eternal interface is to:
+\begin{itemize}
+	\item Provide programming voltages;
+	\item Signal to select programming;
+	\item Signal to select erasing.
+\end{itemize}
+External interface often simplified by providing internal programming and erasing mechanisms.
+
+They are widely used, and much more flexible than EPROMs, as they can be erased by a micro-processor in circuit.
+On the other hand, they are expensive, and the bit cell is larger than in an EPROM.
+
+\par\smallskip
+
+\textit{Writeability} is very good as it is:
+\begin{itemize}
+	\item In circut;
+	\item Repeatable, thousands of times.
+\end{itemize}
+
+We also have \textit{erasure} in circuit, with single bit access both in writing and erasing.
+
+The storage permanence is very high, and the NREs are kept low (though they are higher than EPROMs).
+
+\end{document}
