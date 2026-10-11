@@ -378,7 +378,7 @@ The circuits we could get are the following:
 Note that we decided to simplify the SR latch circuitry in the middle circuit, by setting $S$ to a data value $D$, and $R$ to its negation.
 This allows us to build what's essentialy a \textbf{D latch} (last circuit in the row).
 
-\textbf{\textsf{D flip flop}}: this is one last memory circuit we can build, which is even more convenient than the past two. 
+\textbf{\textsf{D flip flop}}: this is one last memory circuit we can build, which is even more convenient than the past two.
 
 \begin{center}
 	\includegraphics[scale=0.3]{../figures/d_flip_flop.png}
@@ -387,7 +387,7 @@ This allows us to build what's essentialy a \textbf{D latch} (last circuit in th
 In the figure we note the master/slave implementation, but there are many others that can be built.
 The idea of the D flip flop, no matter the implementation, is that the output value $Q$ follows the input $D$ \textit{only} on the rising edges of the clock signal.
 This makes D flip flops non \textit{transparent}: a change in the input isn't trasmitted directly to the output (but only transiently during clock rising edges): in other words, if the circuit oscillates, it oscillates synchronized to the clock.
-This makes this circuit extremely useful in sequential networks as a memory element (for instance in \textit{registers}). 
+This makes this circuit extremely useful in sequential networks as a memory element (for instance in \textit{registers}).
 
 \par\smallskip
 
@@ -430,10 +430,10 @@ There are different kinds:
 \begin{itemize}
 	\item Serial In, Parallel Out (\textbf{SIPO});
 	\item Parallel In, Serial Out (\textbf{PISO}): these need extra control inputs such as:
-	\begin{itemize}
-		\item Parallel Load (PL)
-		\item Load Enable (LE)
-	\end{itemize}
+	      \begin{itemize}
+		      \item Parallel Load (PL)
+		      \item Load Enable (LE)
+	      \end{itemize}
 	\item Serial In, Serial Out (\textbf{SISO}): these often come with parallel out, as well.
 \end{itemize}
 All shift registers may have a shift enable signal.
@@ -505,31 +505,31 @@ The nice part of VHDL is that the syntax similar to a programming language.
 The basic design element of a VHDL description is an \textbf{entity}, which is a design unit comprised of:
 \begin{itemize}
 	\item The \textbf{entity} specification, which acts as a black-box interface for the component:
-		\begin{itemize}
-			\item \textbf{Name} of entity;
-			\item \textbf{Inputs};
-			\item \textbf{Outputs};
-			\item \textbf{In/out} ports;
-		\end{itemize}
+	      \begin{itemize}
+		      \item \textbf{Name} of entity;
+		      \item \textbf{Inputs};
+		      \item \textbf{Outputs};
+		      \item \textbf{In/out} ports;
+	      \end{itemize}
 	\item The \textbf{architecture} specification, which describes the entity's behavior and/or internal structure. VHDL allows for a number of specification styles:
-		\begin{itemize}
-			\item \textbf{RTL} (\textit{Register Transfer Level}): uses \textit{concurrent signal assignments}.
+	      \begin{itemize}
+		      \item \textbf{RTL} (\textit{Register Transfer Level}): uses \textit{concurrent signal assignments}.
 
-				These are \textit{boolean expressions} assigned to a signal, executed in \textit{parallel}, so without any implied order. Not that lists of concurrent assignments are \textit{not} sequential in execution. High level operators such as arithmetic, logic and conditionals can be used;
-			\item \textbf{Structural}: similar to a schematic diagram, but using a textual programming language.
+		            These are \textit{boolean expressions} assigned to a signal, executed in \textit{parallel}, so without any implied order. Not that lists of concurrent assignments are \textit{not} sequential in execution. High level operators such as arithmetic, logic and conditionals can be used;
+		      \item \textbf{Structural}: similar to a schematic diagram, but using a textual programming language.
 
-				We first declare \textit{components}, then \textit{signals} to interconnect those components, and lastly \textit{map} signal and input/output ports to components. This allows for a hierarchical description of a circuit (Top/Down or Bottom/Up);
-			\item \textbf{Behavioral}: uses a process, which is a sort of an endless loop, specified in a programming language-like way.
+		            We first declare \textit{components}, then \textit{signals} to interconnect those components, and lastly \textit{map} signal and input/output ports to components. This allows for a hierarchical description of a circuit (Top/Down or Bottom/Up);
+		      \item \textbf{Behavioral}: uses a process, which is a sort of an endless loop, specified in a programming language-like way.
 
-				In most cases it uses an implicit \textit{wait statement} on a \textit{sensitivity list}:
-\begin{itemize}
-	\item The process suspends when it reaches the end
-	\item Resumes when any signal on the sensitivity list changes
-\end{itemize}
-Instructions in the process are, this time, in fact \textit{sequential}, but may still be implemented in parallel to increase performance if the compiler finds it is feasible.
-Still, we note that signal assignments happen only \textit{at the end} of a certain process.
-Higher level constructs such as if or case conditional expressions are available, variables can be defined and assignments to variables are immediate.
-		\end{itemize}
+		            In most cases it uses an implicit \textit{wait statement} on a \textit{sensitivity list}:
+		            \begin{itemize}
+			            \item The process suspends when it reaches the end
+			            \item Resumes when any signal on the sensitivity list changes
+		            \end{itemize}
+		            Instructions in the process are, this time, in fact \textit{sequential}, but may still be implemented in parallel to increase performance if the compiler finds it is feasible.
+		            Still, we note that signal assignments happen only \textit{at the end} of a certain process.
+		            Higher level constructs such as if or case conditional expressions are available, variables can be defined and assignments to variables are immediate.
+	      \end{itemize}
 \end{itemize}
 
 \subsection{Introduction to embedded systems}
@@ -555,7 +555,7 @@ This means that an embedded system:
 	\item It is dedicated to a particular \textbf{application} (single task).
 \end{itemize}
 
-This gives designers the opportunity to highly optimize and adapt to different situations, in highly constrained environments. 
+This gives designers the opportunity to highly optimize and adapt to different situations, in highly constrained environments.
 
 \textbf{Designing} embedded systems, in this regard, is difficult because:
 \begin{itemize}
@@ -593,18 +593,18 @@ Common metrics are:
 	\item \textbf{Per-product cost} $p$: cost of a singular product, with amortized NRE costs. Calculated as $p = \frac{T}{N_{unit}} = \frac{N}{N_{unit}} + U$. Keeping the per-product cost low entails spending as little as possible on NRE (as these costs get amortized over units produced) or producing as many units as possible. Of course the unit cost $U$ plays a significant role: lowering is sometimes useful at the cost of increasing $N$;
 	\item \textbf{Time-to-market}: it is the time required to develop a product to the point it can be sold to customers. Smaller time-to-market means less losses due to delayed market entry (for instance, when competing with other products);
 	\item \textbf{Performance}: it can be measured in many ways. For instance:
-		\begin{itemize}
-			\item \textbf{Latency}, or \textit{response time}, the time between task start and task end;
-			\item \textbf{Throughput}, taskes per second, usually $\frac{1}{\text{Latency}}$.
-		\end{itemize}
-		\textit{Parallelism} is a way to increase performance. Usually, $N$ parallel blocks allow to increase throughput to $N \times \text{Throughput}_\text{Serial}$ (unless Ahmdal's law comes into play);
+	      \begin{itemize}
+		      \item \textbf{Latency}, or \textit{response time}, the time between task start and task end;
+		      \item \textbf{Throughput}, taskes per second, usually $\frac{1}{\text{Latency}}$.
+	      \end{itemize}
+	      \textit{Parallelism} is a way to increase performance. Usually, $N$ parallel blocks allow to increase throughput to $N \times \text{Throughput}_\text{Serial}$ (unless Ahmdal's law comes into play);
 	\item \textbf{Technologies}, that is technical processes, methods and knowledge, are in some way a design metric.
 \end{itemize}
 
 \subsubsection{Technologies}
 
 Let's look at a few \textbf{technologies} which we have available for the design of embedded systems.
-We noted the design space is very large, so it is useful to know about them. 
+We noted the design space is very large, so it is useful to know about them.
 
 \par\smallskip
 \textbf{\textsf{Processor technology}}
@@ -612,45 +612,45 @@ We noted the design space is very large, so it is useful to know about them.
 Let's look at \textbf{processor} thecnologies.
 
 \begin{itemize}
-	\item 
-The \textit{General Purpose} (\textbf{GP}) processor, as found in desktop PCs, is the classic programmable micro-processor we are used to.
-\begin{itemize}
-	\item They are not optimized for any specific application;
-	\item They are often cheaper than general purpose technology: billions of units are sold every year;
-	\item Flexible, low time-to-market: software is easy to update and modify;
-	\item No high performance compared to a dedicated design;
-	\item Not power efficient
-\end{itemize}
+	\item
+	      The \textit{General Purpose} (\textbf{GP}) processor, as found in desktop PCs, is the classic programmable micro-processor we are used to.
+	      \begin{itemize}
+		      \item They are not optimized for any specific application;
+		      \item They are often cheaper than general purpose technology: billions of units are sold every year;
+		      \item Flexible, low time-to-market: software is easy to update and modify;
+		      \item No high performance compared to a dedicated design;
+		      \item Not power efficient
+	      \end{itemize}
 
 	\item
-\textit{Embedded} micro-processors, though, are different from PC micro-processors.
-For instance, they are usually within a \textit{System-On-Chip} (\textbf{SoC}), which includes needed components and a number of peripherals. 
+	      \textit{Embedded} micro-processors, though, are different from PC micro-processors.
+	      For instance, they are usually within a \textit{System-On-Chip} (\textbf{SoC}), which includes needed components and a number of peripherals.
 
 	\item
-A method of implementing embedded processors is \textit{Application Specific Instruction Processor} (\textbf{ASIP}).
-This entails:
-\begin{itemize}
-	\item A general purpose processor with specific hardware for a certain application domain, for instance \textbf{DSP} (\textit{Digital Signal Processing});
-	\item Dedicated to signal processing application;
-	\item Possibly dedicated hardware to drive and read external pins;
-	\item Cheap;
-	\item Flexible, low time-to-market;
-	\item Higher performance and better power than a GP processor.
-\end{itemize}
+	      A method of implementing embedded processors is \textit{Application Specific Instruction Processor} (\textbf{ASIP}).
+	      This entails:
+	      \begin{itemize}
+		      \item A general purpose processor with specific hardware for a certain application domain, for instance \textbf{DSP} (\textit{Digital Signal Processing});
+		      \item Dedicated to signal processing application;
+		      \item Possibly dedicated hardware to drive and read external pins;
+		      \item Cheap;
+		      \item Flexible, low time-to-market;
+		      \item Higher performance and better power than a GP processor.
+	      \end{itemize}
 
 	\item
-Another method is \textit{Single Purpose} (custom) \textit{Processor}.
-This entails:
-\begin{itemize}
-	\item Digital hardware designed specifically for a certain application;
-	\item Best performance;
-	\item Best power consumption;
-	\item Small size;
-	\item Long time-to-market;
-	\item Very high NRE costs;
-	\item Low flexibility;
-	\item Good for large volume productions and for extremely high performance designs.
-\end{itemize}
+	      Another method is \textit{Single Purpose} (custom) \textit{Processor}.
+	      This entails:
+	      \begin{itemize}
+		      \item Digital hardware designed specifically for a certain application;
+		      \item Best performance;
+		      \item Best power consumption;
+		      \item Small size;
+		      \item Long time-to-market;
+		      \item Very high NRE costs;
+		      \item Low flexibility;
+		      \item Good for large volume productions and for extremely high performance designs.
+	      \end{itemize}
 \end{itemize}
 
 \par\smallskip
@@ -660,38 +660,38 @@ This entails:
 
 \begin{itemize}
 	\item
-		\textit{Full Custom} (\textbf{VLSI}, \textit{Very Large Scale Integration}):
-\begin{itemize}
-	\item The integrated circuit is entirely designed and optimized for a particular application;
-	\item Transistor sizing, placing and routing;
-	\item Best for performance, size and power consumption;
-	\item High NRE costs;
-	\item All masks in the production process are dedicated to a single design;
-	\item Long time-to-market;
-	\item Currently used to design micro-processors (GPs and ASIPs), memories and off-the-shelf Programmable Logic.
-\end{itemize}
+	      \textit{Full Custom} (\textbf{VLSI}, \textit{Very Large Scale Integration}):
+	      \begin{itemize}
+		      \item The integrated circuit is entirely designed and optimized for a particular application;
+		      \item Transistor sizing, placing and routing;
+		      \item Best for performance, size and power consumption;
+		      \item High NRE costs;
+		      \item All masks in the production process are dedicated to a single design;
+		      \item Long time-to-market;
+		      \item Currently used to design micro-processors (GPs and ASIPs), memories and off-the-shelf Programmable Logic.
+	      \end{itemize}
 
-	\item 
-		\textit{Semi-Custom} (Gate Array / Standard cells) technology:
-\begin{itemize}
-	\item The lower layers are fully or partially built: design entails placing of large blocks, routing;
-	\item Good performance, size and power consumption;
-	\item Lower NRE compared to a full custom implementation;
-	\item Some masks are shared among more than one design;
-	\item Still, high NRE costs (tough lower than VLSI);
-	\item Long time-to-market.
-\end{itemize}
+	\item
+	      \textit{Semi-Custom} (Gate Array / Standard cells) technology:
+	      \begin{itemize}
+		      \item The lower layers are fully or partially built: design entails placing of large blocks, routing;
+		      \item Good performance, size and power consumption;
+		      \item Lower NRE compared to a full custom implementation;
+		      \item Some masks are shared among more than one design;
+		      \item Still, high NRE costs (tough lower than VLSI);
+		      \item Long time-to-market.
+	      \end{itemize}
 
-\item
-	\textit{Programmable Logic Device} (\textbf{PLD}):
-\begin{itemize}
-	\item The integrated circuit is fully built by the manufacturer: the embedded system designer buys the IC. The PLD can be customized after fabrication for a specific application;
-	\item Logic functions and interconnections are programmable;
-	\item Low NRE costs;
-	\item Fairly good performance and power consumption, but worse than full custom and semi-custom;
-	\item High unit cost;
-	\item Large size.
-\end{itemize}
+	\item
+	      \textit{Programmable Logic Device} (\textbf{PLD}):
+	      \begin{itemize}
+		      \item The integrated circuit is fully built by the manufacturer: the embedded system designer buys the IC. The PLD can be customized after fabrication for a specific application;
+		      \item Logic functions and interconnections are programmable;
+		      \item Low NRE costs;
+		      \item Fairly good performance and power consumption, but worse than full custom and semi-custom;
+		      \item High unit cost;
+		      \item Large size.
+	      \end{itemize}
 \end{itemize}
 
 \par\smallskip
@@ -713,13 +713,13 @@ Using well-trusted methodologies or using new ones is also an important factor t
 \subsection{Memories}
 
 \textbf{Memories} are the first component of embedded systems we will encounter.
-They exist in the digital domain, and more specifically in the storage component of the digital processing part of an embedded system. 
+They exist in the digital domain, and more specifically in the storage component of the digital processing part of an embedded system.
 
 In general, there are different kinds of memory, which differ in types, operations available, interfaces, timings and composition of different memories to make bigger ones.
 
 We know the usual types of memory:
 \begin{itemize}
-	\item \textbf{ROM} (\textit{Read Only Memory}), that is EPROMs, ... 
+	\item \textbf{ROM} (\textit{Read Only Memory}), that is EPROMs, ...
 	\item \textbf{RAM} (\textit{Random Access Memory}), that is SRAM, DRAM, ...
 \end{itemize}
 

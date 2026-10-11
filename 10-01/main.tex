@@ -385,7 +385,7 @@ Addresses usually start from $0$ up to $A_\text{last} = N_\text{words} - 1$.
 Since we usually address with binary counters, the number of words is always a power of 2:
 addresses can be expressed on:
 $$
-k = \log_2(N_\text{words}) \, \text{bits}
+	k = \log_2(N_\text{words}) \, \text{bits}
 $$
 
 The number of bits in a word, on the other hand, can be any number (though usually it also is a power of 2, allowing memories to store their own addresses).
@@ -393,9 +393,9 @@ Sometimes it is useful to include extra bits after $2^n$ bits, for parity checki
 
 We can call the \textbf{size} of the whole memory the product of words per bits:
 $$
-\text{size} = N_\text{words} \times n_\text{bits}
+	\text{size} = N_\text{words} \times n_\text{bits}
 $$
-This can be interpreted as the total number of bits in the memory. 
+This can be interpreted as the total number of bits in the memory.
 
 Two memories can have the same size but different organization: for instance, the same total number of bits, but different word size and number of words.
 The organization affects the memory interface (number and kind of access pins).
@@ -466,9 +466,9 @@ They are grouped based on their function:
 	\item \textbf{Address} bus: identifies the memory location (the index of the word) where an operation is performed. A straightforward address bus is comprised of $k = \log_2(N_\text{words})$ lines;
 	\item \textbf{Data} bus: provides the data to/from the memory word. Can be bidirectional, or split in input/output monodirectional buses. A straightforward data bus is comprised of $n_\text{bits}$ lines;
 	\item \textbf{Control} bus: this contains the control lines used to perform operations on the data stored in memory. A lot of control lines can be defined, for instance:
-		\begin{itemize}
-			\item Clock; \item Reset; \item Chip select; \item Output enable; \item Write enable; \item Read/write select; \item ...
-		\end{itemize}
+	      \begin{itemize}
+		      \item Clock; \item Reset; \item Chip select; \item Output enable; \item Write enable; \item Read/write select; \item ...
+	      \end{itemize}
 \end{itemize}
 
 Memory interfaces (as the name suggests) are designed for interfacing a memory to a digital circuit.
@@ -514,63 +514,63 @@ This entails combining multiple memory chips of a given size $s_i$ to obtain a s
 We have 3 main cases:
 \begin{enumerate}
 	\item
-Let's assume the case where the required memory needs more words than those available in a single memory chip.
-For compatibility, we also assume that word width is the same.
+	      Let's assume the case where the required memory needs more words than those available in a single memory chip.
+	      For compatibility, we also assume that word width is the same.
 
-This means that addresses are size $k$, with each memory chip having addresses of size $k'$ and:
-$$
-k > k'
-$$
+	      This means that addresses are size $k$, with each memory chip having addresses of size $k'$ and:
+	      $$
+		      k > k'
+	      $$
 
-The number of memory chips needed is given by:
-$$
-n_\text{chips} = \frac{2^k}{2^{k'}} = 2^{k - k'}
-$$
+	      The number of memory chips needed is given by:
+	      $$
+		      n_\text{chips} = \frac{2^k}{2^{k'}} = 2^{k - k'}
+	      $$
 
-We want only one of these chips to be active (to \textit{respond}) for a given address range: this means implementing custom logc to drive the $\overline{CS}$ (\textit{active low Chip Select}) signal of the memory chips.
-This custom logic is basically a decoder, controlled by the $k - k'$ additional address lines (over $k'$) and enabling $2^{k - k'}$ (which have to alternatively drive one singular data output bus, a.k.a. tristate outputs).
+	      We want only one of these chips to be active (to \textit{respond}) for a given address range: this means implementing custom logc to drive the $\overline{CS}$ (\textit{active low Chip Select}) signal of the memory chips.
+	      This custom logic is basically a decoder, controlled by the $k - k'$ additional address lines (over $k'$) and enabling $2^{k - k'}$ (which have to alternatively drive one singular data output bus, a.k.a. tristate outputs).
 
-\begin{center}
-	\includegraphics[scale=0.3]{../figures/mem_compo_1.png}
-\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.3]{../figures/mem_compo_1.png}
+	      \end{center}
 
-	\item 
-Now there's the case where the required memory needs words with more bits than those available on a single memory chip. For compatibility, we also assume that $N_\text{word}$ is the same.
+	\item
+	      Now there's the case where the required memory needs words with more bits than those available on a single memory chip. For compatibility, we also assume that $N_\text{word}$ is the same.
 
-This means that words are to be size $n$, with each memory chip having words of size $n'$ and:
-$$
-n > n'
-$$
+	      This means that words are to be size $n$, with each memory chip having words of size $n'$ and:
+	      $$
+		      n > n'
+	      $$
 
-The number of memory chips needed is given by:
-$$
-n_\text{chips} = \mathrm{ceil}\left( \frac{n}{n'} \right)
-$$
-
-
-At this point the composition is trivial:
-\begin{itemize}
-	\item All memory chips share the same address,;
-	\item All memory chips share the same $\overline{CS}$ chip select signal;
-	\item Their data busses are combined (concatenated) to form a larger data bus.
-\end{itemize}
-
-\begin{center}
-	\includegraphics[scale=0.3]{../figures/mem_compo_2.png}
-\end{center}
-
- \item
-The last case is the combination of the first two: required memory needs more words than those available in a single memory chip and needs more bits in a word than those available in a single memory chip.
-
-This means that there are:
-• $k$ required address lines, but $k$ address lines in a memory chip, with $k > k'$;
-• $n$ required data lines, but $n'$ data lines in a memory chip, with $n > n'$.
+	      The number of memory chips needed is given by:
+	      $$
+		      n_\text{chips} = \mathrm{ceil}\left( \frac{n}{n'} \right)
+	      $$
 
 
-We need more than one memory chip (of course), and exactly:
-$$
-n_\text{chips} = \mathrm{ceil}\left( \frac{n}{n'} \right) \cdot 2^{k - k'}
-$$
+	      At this point the composition is trivial:
+	      \begin{itemize}
+		      \item All memory chips share the same address,;
+		      \item All memory chips share the same $\overline{CS}$ chip select signal;
+		      \item Their data busses are combined (concatenated) to form a larger data bus.
+	      \end{itemize}
+
+	      \begin{center}
+		      \includegraphics[scale=0.3]{../figures/mem_compo_2.png}
+	      \end{center}
+
+	\item
+	      The last case is the combination of the first two: required memory needs more words than those available in a single memory chip and needs more bits in a word than those available in a single memory chip.
+
+	      This means that there are:
+	      • $k$ required address lines, but $k$ address lines in a memory chip, with $k > k'$;
+	      • $n$ required data lines, but $n'$ data lines in a memory chip, with $n > n'$.
+
+
+	      We need more than one memory chip (of course), and exactly:
+	      $$
+		      n_\text{chips} = \mathrm{ceil}\left( \frac{n}{n'} \right) \cdot 2^{k - k'}
+	      $$
 
 \end{enumerate}
 

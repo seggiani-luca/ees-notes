@@ -601,8 +601,8 @@ Different area and performance can be achieved based on carry computation.
 For instance, we remember:
 \begin{itemize}
 	\item \textbf{Ripple Carry}: this is the traditional method of stacking full adders, where we connect a $C_{in}$ (carry in) and $C_{out}$ (carry out) pin for each adder pair;
-	\item \textbf{Carry Look Ahead}: with carry look-ahead we compute the carries in place via a CLA network, and perform the actual sums in parallel. This adds logic but saves time; 
-	\item \textbf{Carry Select}: with carry select we compute both pairs (without carry and with carry) for each adder, and only at the end of the calculation we choose the correct carry. 
+	\item \textbf{Carry Look Ahead}: with carry look-ahead we compute the carries in place via a CLA network, and perform the actual sums in parallel. This adds logic but saves time;
+	\item \textbf{Carry Select}: with carry select we compute both pairs (without carry and with carry) for each adder, and only at the end of the calculation we choose the correct carry.
 \end{itemize}
 
 \textit{Subtractors} are just implemented using an adder (using 2-complement notation).

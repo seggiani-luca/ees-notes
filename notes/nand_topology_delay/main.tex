@@ -1,0 +1,535 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, margin=8em]{geometry}
+
+% usa i pacchetti per la scrittura in italiano
+\usepackage[french,italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\frenchspacing 
+
+% usa i pacchetti per la formattazione matematica
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+
+% usa altri pacchetti
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{standalone}
+
+\usepackage{colortbl}
+
+\usepackage{xstring}
+\usepackage{karnaugh-map}
+
+% imposta il titolo
+\title{Notes on NAND topology MPROM delay}
+\author{Luca Seggiani}
+\date{2026}
+
+% spaziatura liste
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+\setlist[enumerate]{noitemsep, topsep=4pt, partopsep=0pt, parsep=2pt, leftmargin=*}
+
+% imposta lo stile
+% usa helvetica
+\usepackage[scaled]{helvet}
+% usa palatino
+\usepackage{palatino}
+% usa un font monospazio guardabile
+\usepackage{lmodern}
+
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{lmtt}
+
+% circuiti
+\usepackage{circuitikz}
+\usetikzlibrary{babel}
+
+% testo cerchiato
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+% disponi il titolo
+\makeatletter
+\renewcommand{\maketitle} {
+	\begin{center} 
+		\begin{minipage}[t]{.8\textwidth}
+			\textsf{\huge\bfseries \@title} 
+		\end{minipage}%
+		\begin{minipage}[t]{.2\textwidth}
+			\raggedleft \vspace{-1.65em}
+			\textsf{\small \@author} \vfill
+			\textsf{\small \@date}
+		\end{minipage}
+		\par
+	\end{center}
+
+	\thispagestyle{empty}
+	\pagestyle{fancy}
+}
+\makeatother
+
+% disponi teoremi
+\usepackage{tcolorbox}
+\newtcolorbox[auto counter, number within=section]{theorem}[2][]{%
+	colback=blue!10, 
+	colframe=blue!40!black, 
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries, 
+	title=Theorem~\thetcbcounter: #2, 
+	#1
+}
+
+% disponi definizioni
+\newtcolorbox[auto counter, number within=section]{definition}[2][]{%
+	colback=red!10,
+	colframe=red!40!black,
+	sharp corners=northwest,
+	fonttitle=\sffamily\bfseries,
+	title=Definition~\thetcbcounter: #2,
+	#1
+}
+
+% disponi codice
+\usepackage{listings}
+\usepackage[table]{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{codestyle}{
+		backgroundcolor=\color{black!5}, 
+		commentstyle=\color{codegreen},
+		keywordstyle=\bfseries\color{magenta},
+		numberstyle=\sffamily\tiny\color{black!60},
+		stringstyle=\color{green!50!black},
+		basicstyle=\ttfamily\footnotesize,
+		breakatwhitespace=false,         
+		breaklines=true,                 
+		captionpos=b,                    
+		keepspaces=true,                 
+		numbers=left,                    
+		numbersep=5pt,                  
+		showspaces=false,                
+		showstringspaces=false,
+		showtabs=false,                  
+		tabsize=2
+}
+
+\lstdefinestyle{shellstyle}{
+		backgroundcolor=\color{black!5}, 
+		basicstyle=\ttfamily\footnotesize\color{black}, 
+		commentstyle=\color{black}, 
+		keywordstyle=\color{black},
+		numberstyle=\color{black!5},
+		stringstyle=\color{black}, 
+		showspaces=false,
+		showstringspaces=false, 
+		showtabs=false, 
+		tabsize=2, 
+		numbers=none, 
+		breaklines=true
+}
+
+\lstdefinelanguage{x86}{ 
+  keywords={AAA, AAD, AAM, AAS, ADC, ADCB, ADCW, ADCL, ADD, ADDB, ADDW, ADDL, AND, ANDB, ANDW, ANDL,
+        ARPL, BOUND, BSF, BSFL, BSFW, BSR, BSRL, BSRW, BSWAP, BT, BTC, BTCB, BTCW, BTCL, BTR, 
+        BTRB, BTRW, BTRL, BTS, BTSB, BTSW, BTSL, CALL, CBW, CDQ, CLC, CLD, CLI, CLTS, CMC, CMP,
+        CMPB, CMPW, CMPL, CMPS, CMPSB, CMPSD, CMPSW, CMPXCHG, CMPXCHGB, CMPXCHGW, CMPXCHGL,
+        CMPXCHG8B, CPUID, CWDE, DAA, DAS, DEC, DECB, DECW, DECL, DIV, DIVB, DIVW, DIVL, ENTER,
+        HLT, IDIV, IDIVB, IDIVW, IDIVL, IMUL, IMULB, IMULW, IMULL, IN, INB, INW, INL, INC, INCB,
+        INCW, INCL, INS, INSB, INSD, INSW, INT, INT3, INTO, INVD, INVLPG, IRET, IRETD, JA, JAE,
+        JB, JBE, JC, JCXZ, JE, JECXZ, JG, JGE, JL, JLE, JMP, JNA, JNAE, JNB, JNBE, JNC, JNE, JNG,
+        JNGE, JNL, JNLE, JNO, JNP, JNS, JNZ, JO, JP, JPE, JPO, JS, JZ, LAHF, LAR, LCALL, LDS,
+        LEA, LEAVE, LES, LFS, LGDT, LGS, LIDT, LMSW, LOCK, LODSB, LODSD, LODSW, LOOP, LOOPE,
+        LOOPNE, LSL, LSS, LTR, MOV, MOVB, MOVW, MOVL, MOVSB, MOVSD, MOVSW, MOVSX, MOVSXB,
+        MOVSXW, MOVSXL, MOVZX, MOVZXB, MOVZXW, MOVZXL, MUL, MULB, MULW, MULL, NEG, NEGB, NEGW,
+        NEGL, NOP, NOT, NOTB, NOTW, NOTL, OR, ORB, ORW, ORL, OUT, OUTB, OUTW, OUTL, OUTSB, OUTSD,
+        OUTSW, POP, POPL, POPW, POPB, POPA, POPAD, POPF, POPFD, PUSH, PUSHL, PUSHW, PUSHB, PUSHA, 
+        RCLL, RCR, RCRB, RCRW, RCRL, RDMSR, RDPMC, RDTSC, REP, REPE, REPNE, RET, ROL, ROLB, ROLW,
+        ROLL, ROR, RORB, RORW, RORL, SAHF, SAL, SALB, SALW, SALL, SAR, SARB, SARW, SARL, SBB,
+        SBBB, SBBW, SBBL, SCASB, SCASD, SCASW, SETA, SETAE, SETB, SETBE, SETC, SETE, SETG, SETGE,
+        SETL, SETLE, SETNA, SETNAE, SETNB, SETNBE, SETNC, SETNE, SETNG, SETNGE, SETNL, SETNLE,
+        SETNO, SETNP, SETNS, SETNZ, SETO, SETP, SETPE, SETPO, SETS, SETZ, SGDT, SHL, SHLB, SHLW,
+        SHLL, SHLD, SHR, SHRB, SHRW, SHRL, SHRD, SIDT, SLDT, SMSW, STC, STD, STI, STOSB, STOSD,
+        STOSW, STR, SUB, SUBB, SUBW, SUBL, TEST, TESTB, TESTW, TESTL, VERR, VERW, WAIT, WBINVD,
+        XADD, XADDB, XADDW, XADDL, XCHG, XCHGB, XCHGW, XCHGL, XLAT, XLATB, XOR, XORB, XORW, XORL},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{riscv}{
+  keywords={
+    LUI, AUIPC,
+    JAL, JALR,
+    BEQ, BNE, BLT, BGE, BLTU, BGEU,
+    LB, LH, LW, LBU, LHU, LD,
+    SB, SH, SW, SD,
+    ADDI, SLTI, SLTIU, XORI, ORI, ANDI,
+    SLLI, SRLI, SRAI,
+    ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND,
+    ADDIW, SLLIW, SRLIW, SRAIW,
+    ADDW, SUBW, SLLW, SRLW, SRAW,
+    MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
+    MULW, DIVW, DIVUW, REMW, REMUW,
+    LR.W, SC.W, AMOSWAP.W, AMOADD.W, AMOXOR.W,
+    AMOAND.W, AMOOR.W, AMOMIN.W, AMOMAX.W,
+    AMOMINU.W, AMOMAXU.W,
+    LR.D, SC.D, AMOSWAP.D, AMOADD.D, AMOXOR.D,
+    AMOAND.D, AMOOR.D, AMOMIN.D, AMOMAX.D,
+    AMOMINU.D, AMOMAXU.D,
+    FLW, FSW,
+    FMADD.S, FMSUB.S, FNMSUB.S, FNMADD.S,
+    FADD.S, FSUB.S, FMUL.S, FDIV.S, FSQRT.S,
+    FSGNJ.S, FSGNJN.S, FSGNJX.S,
+    FMIN.S, FMAX.S,
+    FCVT.W.S, FCVT.WU.S, FCVT.S.W, FCVT.S.WU,
+    FMV.X.W, FMV.W.X,
+    FEQ.S, FLT.S, FLE.S,
+    FLD, FSD,
+    FMADD.D, FMSUB.D, FNMSUB.D, FNMADD.D,
+    FADD.D, FSUB.D, FMUL.D, FDIV.D, FSQRT.D,
+    FSGNJ.D, FSGNJN.D, FSGNJX.D,
+    FMIN.D, FMAX.D,
+    FCVT.W.D, FCVT.WU.D, FCVT.D.W, FCVT.D.WU,
+    FCVT.S.D, FCVT.D.S,
+    FMV.X.D, FMV.D.X,
+    FEQ.D, FLT.D, FLE.D,
+    CSRRW, CSRRS, CSRRC,
+    CSRRWI, CSRRSI, CSRRCI,
+    FENCE.I,
+    FENCE,
+    ECALL, EBREAK,
+    MRET, SRET, URET,
+    WFI,
+    SFENCE.VMA,
+    NOP, LI, LA, MV,
+    NOT, NEG, NEGW,
+    SEQZ, SNEZ, SLTZ, SGTZ,
+    BEQZ, BNEZ, BLEZ, BGEZ, BLTZ, BGTZ,
+    BGT, BLE, BGTU, BLEU,
+    J, JR, RET,
+    CALL, TAIL,
+    RDINSTRET, RDCYCLE, RDTIME,
+    CSRR, CSRW, CSRS, CSRC,
+    CSRWI, CSRSI, CSRCI
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{arm}{
+  keywords={
+    ADC, ADD, AND, BIC, CMN, CMP, EOR, MOV, MVN,
+    RSB, RSC, SBC, SUB, TST, TEQ,
+    MLA, MLS, MUL, SMLAL, SMULL, UMLAL, UMULL,
+    QADD, QSUB, QDADD, QDSUB,
+    QADD16, QADD8, QASX, QSAX,
+    QSUB16, QSUB8, QSAX, QSUBADDX,
+    ASR, LSL, LSR, ROR, RRX,
+    B, BL, BX, BLX,
+    BXJ,
+    BEQ, BNE, BCS, BHS, BCC, BLO,
+    BMI, BPL, BVS, BVC,
+    BHI, BLS, BGE, BLT, BGT, BLE,
+    BAL,
+    LDR, LDRB, LDRH, LDRSB, LDRSH,
+    LDRD, LDM, LDMIA, LDMIB, LDMDA, LDMDB,
+    LDRT, LDRBT, LDRHT, LDRSBT, LDRSHT,
+    STR, STRB, STRH, STRD,
+    STM, STMIA, STMIB, STMDA, STMDB,
+    STRT, STRBT, STRHT,
+    PUSH, POP,
+    SWP, SWPB,
+    REV, REV16, REVSH,
+    BFC, BFI, BFXIL, SBFX, UBFX,
+    CLZ,
+    LDREX, LDREXB, LDREXH, LDREXD,
+    STREX, STREXB, STREXH, STREXD,
+    DMB, DSB, ISB,
+    MCR, MCRR, MRC, MRRC,
+    MRS, MSR,
+    CPS, SETEND, SVC, BKPT,
+    CLREX, WFE, WFI, SEV,
+    YIELD, NOP,
+    VLDR, VSTR,
+    VMOV, VABS, VNEG,
+    VADD, VSUB, VMUL, VDIV,
+    VMLA, VMLS, VNMLA, VNMLS, VNMUL,
+    VMAX, VMIN,
+    VSQRT,
+    VCMP, VCMPE,
+    VCVT,
+    VCLZ, VCLS,
+    VAND, VORR, VEOR, VBIC, VMVN,
+    VLD1, VLD2, VLD3, VLD4,
+    VST1, VST2, VST3, VST4,
+    ADR, ADCS, ADDS, SUBS, MOVS, ANDS, ORRS, EORS
+  },
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{@},
+  morecomment=[l]{;},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{style=codestyle, language=C}
+
+% disponi sezioni
+\usepackage{titlesec}
+
+\titleformat{\section}
+	{\sffamily\Large\bfseries} 
+	{\thesection}{1em}{} 
+\titleformat{\subsection}
+	{\sffamily\large\bfseries}   
+	{\thesubsection}{1em}{} 
+\titleformat{\subsubsection}
+	{\sffamily\normalsize\bfseries} 
+	{\thesubsubsection}{1em}{}
+
+% tikz
+\usepackage{tikz}
+
+% float
+\usepackage{float}
+
+% grafici
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+% disponi alberi
+\usepackage{forest}
+
+\forestset{
+	rectstyle/.style={
+		for tree={rectangle,draw,font=\large\sffamily}
+	},
+	roundstyle/.style={
+		for tree={circle,draw,font=\large}
+	}
+}
+
+% disponi algoritmi
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\makeatletter
+\renewcommand{\ALG@name}{Algorithm}
+\makeatother
+
+% disponi numeri di pagina
+\usepackage{fancyhdr}
+\fancyhf{} 
+\fancyfoot[L]{\sffamily{\thepage}}
+
+\makeatletter
+\fancyhead[L]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@title \ \@date}}} 
+\fancyhead[R]{\raisebox{1ex}[0pt][0pt]{\sffamily{\@author}}}
+\makeatother
+
+\begin{document}
+\pagestyle{fancy}
+\maketitle
+
+We want to study the delay experienced in a NAND topology \textbf{MPROM} (\textit{Mask-Programmable Read Only Memoery}).
+Of course, in reality this will be due to wire capacities and resistances, in addition to capacities and resistances tied to MOS transistors.
+
+\section{Simplified model}
+
+In this discussion we consider the simplified model:
+\begin{itemize}
+	\item No wire capacity or resistance will be considered;
+	\item A simplified model of an NMOS transistor is used, in which only the drain-source channel resistance ($R_d$) and capacitance ($C_d$).
+\end{itemize}
+
+\section{NAND topology}
+
+Let us first consider a NAND topology memory, which we will base further considerations on.
+
+\begin{center}
+\begin{tikzpicture}[transform shape]
+	% Paths, nodes and wires:
+	\node[vcc] at (0, 3){};
+	\draw (0, 2) to[american resistor, l_={$R_\text{pull-up}$}] (0, -0);
+	\draw (0, 0) -| (0.5, -0);
+	\draw (0, 3) -| (0, 2);
+	\node[nmos] at (0, -1){};
+	\draw (0, -0) -| (0, -0.23);
+	\draw (-0.98, -1) -- (-2, -1);
+	\node[nmos] at (0, -3){};
+	\draw (0, -3.77) -| (0, -4);
+	\draw (-0.98, -3) -- (-2, -3);
+	\node[ground] at (0, -4){};
+	\draw (0.5, -2.25) -- (0.5, -5);
+	\node[vcc] at (2.98, 3){};
+	\draw (2.98, 2) to[american resistor, l_={$R_\text{pull-up}$}] (2.98, -0);
+	\draw (2.98, 0) -| (3.48, -0);
+	\draw (2.98, 3) -| (2.98, 2);
+	\node[nmos] at (2.98, -1){};
+	\draw (2.98, -0) -| (2.98, -0.23);
+	\draw (1.02, -1) -- (-0.25, -1);
+	\node[nmos] at (2.98, -3){};
+	\draw (2.98, -3.77) -| (2.98, -4);
+	\draw (1.02, -3) -- (-0.25, -3);
+	\node[ground] at (2.98, -4){};
+	\node[shape=rectangle, draw, line width=1pt, minimum width=0.965cm, minimum height=3.965cm] at (-2.5, -2){};
+	\node[shape=rectangle, rotate=90, minimum width=3.465cm, minimum height=0.465cm] at (-2.5, -2){} node[anchor=center, align=center, text width=3.077cm, inner sep=6pt, rotate=90] at (-2.5, -2){Decoder};
+	\draw (-3, -1) -- (-4, -1);
+	\draw (0.5, -0) -| (0.5, -1.75);
+	\draw (3.48, -0) -- (3.48, -1.75);
+	\draw (3.48, -2.25) -| (3.48, -5);
+	\draw (-3, -3) -- (-4, -3);
+	\node[shape=rectangle, minimum width=0.965cm, minimum height=0.465cm] at (-4.5, -1){} node[anchor=east, align=right, text width=0.577cm, inner sep=6pt] at (-4, -1){$a_0$};
+	\node[shape=rectangle, minimum width=0.965cm, minimum height=0.465cm] at (-4.5, -3){} node[anchor=east, align=right, text width=0.577cm, inner sep=6pt] at (-4, -3){$a_n$};
+	\node[ieeestd not port, rotate=-90] at (0.5, -6){};
+	\node[ieeestd not port, rotate=-90] at (3.48, -6){};
+	\draw (0.5, -5) -- (0.5, -5.123);
+	\draw (3.48, -5) -| (3.48, -5.123);
+	\draw (3.48, -6.877) -| (3.48, -7);
+	\draw (0.5, -6.877) -| (0.5, -7);
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (0.5, -7.25){} node[anchor=center, align=center, text width=0.077cm, inner sep=6pt] at (0.5, -7.25){$b_m$};
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (3.48, -7.25){} node[anchor=center, align=center, text width=0.077cm, inner sep=6pt] at (3.48, -7.25){$b_0$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.715cm] at (-4.375, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (-4.375, -2){$...$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (0, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (0, -2){\footnotesize $...$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (0.5, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (0.5, -2){\footnotesize $...$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (2.98, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (2.98, -2){\footnotesize $...$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (3.48, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (3.48, -2){\footnotesize $...$};
+	\draw (1.5, -1) -- (2, -1);
+	\draw (1.5, -3) -- (2, -3);
+	\node[shape=rectangle, xscale=-1, yscale=-1, minimum width=0.965cm, minimum height=0.465cm] at (1.25, -1){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=-180] at (1.25, -1){\footnotesize $...$};
+	\node[shape=rectangle, xscale=-1, yscale=-1, minimum width=0.965cm, minimum height=0.465cm] at (1.25, -3){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=-180] at (1.25, -3){\footnotesize $...$};
+	\node[shape=rectangle, xscale=-1, yscale=-1, minimum width=0.965cm, minimum height=0.465cm] at (2, -7.25){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=-180] at (2, -7.25){$...$};
+	\node[ocirc] at (0, -5.75){};
+	\node[ocirc] at (3, -5.75){};
+	\draw (3, -5.75) |- (2.5, -5.75);
+	\draw (0, -5.75) -- (-0.5, -5.75);
+	\node[shape=rectangle, minimum width=0.965cm, minimum height=0.465cm] at (-1, -5.75){} node[anchor=east, align=right, text width=0.577cm, inner sep=6pt] at (-0.5, -5.75){$e_{nb}$};
+	\node[shape=rectangle, minimum width=0.965cm, minimum height=0.465cm] at (2, -5.75){} node[anchor=east, align=right, text width=0.577cm, inner sep=6pt] at (2.5, -5.75){$e_{nb}$};
+\end{tikzpicture}
+\end{center}
+
+The horizontal lines at the NMOS gates are the \textbf{word lines} $WL_0$ ... $WL_n$.
+The vertical lines to the inverters are the \textbf{bit lines} $BL_0$ ... $BL_m$.
+
+The \textbf{decoder}, in the NAND topology, keeps every line but the selected one at logic \textit{high}.
+A "1" at a certain position in the memory can thus be encoded by shorting the channel of the corresponding MOS, ensuring conduction to ground happens even when that MOS is disabled (that is, selected).
+
+\section{Elmore delay}
+
+We model the delay in the network through \textbf{Elmore delay}.
+The idea is that the total delay in an RC network is given by the sum of delays measured at each capacitor.
+
+For our discussion, we focus on the delay of a single bit line.
+
+\begin{center}
+\begin{tikzpicture}[transform shape]
+	% Paths, nodes and wires:
+	\node[vcc] at (0, 3){};
+	\draw (0, 2) to[american resistor, l_={$R_\text{pull-up}$}] (0, -0);
+	\draw (0, 0) -| (0.5, -0);
+	\draw (0, 3) -| (0, 2);
+	\draw (0, -0) -| (0, -0.23);
+	\node[ground] at (0, -4){};
+	\draw (0.5, -2.25) -- (0.5, -5);
+	\draw (0.5, -0) -| (0.5, -1.75);
+	\node[ieeestd not port, rotate=-90] at (0.5, -6){};
+	\draw (0.5, -5) -- (0.5, -5.123);
+	\draw (0.5, -6.877) -| (0.5, -7);
+	\node[shape=rectangle, minimum width=0.465cm, minimum height=0.465cm] at (0.5, -7.25){} node[anchor=center, align=center, text width=0.077cm, inner sep=6pt] at (0.5, -7.25){$b_i$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (0, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (0, -2){\footnotesize $...$};
+	\node[shape=rectangle, rotate=90, minimum width=0.965cm, minimum height=0.465cm] at (0.5, -2){} node[anchor=center, align=center, text width=0.577cm, inner sep=6pt, rotate=90] at (0.5, -2){\footnotesize $...$};
+	\node[ocirc] at (0, -5.75){};
+	\draw (0, -5.75) -- (-0.5, -5.75);
+	\node[shape=rectangle, minimum width=0.965cm, minimum height=0.465cm] at (-1, -5.75){} node[anchor=east, align=right, text width=0.577cm, inner sep=6pt] at (-0.5, -5.75){$e_{nb}$};
+	\draw (0, -0.98) to[american resistor, /tikz/circuitikz/bipoles/length=0.700cm, l_={$R_d$}] (0, -1.75);
+	\draw (0, -0.98) -| (0, -0.23);
+	\draw (0, -0.5) -- (-1, -0.5) -- (-1, -0.75);
+	\draw (-1, -0.75) to[capacitor, /tikz/circuitikz/bipoles/length=0.700cm, l_={$C_d$}] (-1, -1.5);
+	\node[ground, xscale=0.5, yscale=0.5] at (-1, -1.5){};
+	\draw (0, -3) to[american resistor, /tikz/circuitikz/bipoles/length=0.700cm, l_={$R_d$}] (0, -3.77);
+	\draw (0, -3) -| (0, -2.25);
+	\draw (0, -2.52) -- (-1, -2.52) -- (-1, -2.77);
+	\draw (-1, -2.77) to[capacitor, /tikz/circuitikz/bipoles/length=0.700cm, l_={$C_d$}] (-1, -3.52);
+	\node[ground, xscale=0.5, yscale=0.5] at (-1, -3.52){};
+	\draw (0, -3.75) -| (0, -3.77) -| (0, -4);
+\end{tikzpicture}
+\end{center}
+
+We don't consider any MOS to be selected, and instead model the intrinsic channel resistance $R_d$ and channel capacitance $C_d$ of each one.
+
+We start by considering the delay measured at each capacitor $i$, with $i = 0$ being the top capacity, and $i_n$ being the bottom one.
+Since each capacitor sees the resistance above it, we get the following relation on time characteristics:
+$$
+\begin{aligned}
+	\tau_0 &= R_\text{pull-up} C_d \\
+	\tau_1 &= (R_\text{pull-up} + R_d) C_d \\
+	\tau_2 &= (R_\text{pull-up} + 2 R_d) C_d
+\end{aligned}
+$$
+Or more concisely:
+$$
+\tau_i = (R_\text{pull-up} + i R_d) C_d
+$$
+From this we get the total delay as the sum of all capacitor delays along the bit line:
+$$
+\tau_\text{tot} = \sum_{i = 0}^n \tau_i = \sum_{i = 0}^n (R_\text{pull-up} + i R_d) C_d
+$$
+
+At this point we consider the effect from the pull-up resistor $R_\text{pull-up}$ and the intrinsic capacitor resistors $R_d$ separately:
+$$
+\tau_\text{tot} = R_\text{pull-up} \cdot n C_d + \sum_{i = 0}^n i R_d C_d
+$$
+
+At this point it's useful to define the following \textit{equivalent} capacitances and resistances:
+$$
+\begin{aligned}
+	C_{eq} &= n C_d \\
+	R_{eq} &= n R_d
+\end{aligned}
+$$
+
+These, after substituting in the equation above, give:
+$$
+\tau_\text{tot} = R_\text{pull-up} \cdot C_{eq} + \sum_{i = 0}^n i \frac{R_{eq} C_{eq}}{n^2}
+= R_\text{pull-up} \cdot C_{eq} + \frac{R_{eq} C_{eq}}{n^2} \sum_{i = 0}^n i
+$$
+
+At this point all that's left is applying (one of many) Euler's formula:
+$$
+\tau_\text{tot} = R_\text{pull-up} \cdot C_{eq} + \frac{R_{eq} C_{eq}}{n^2} \frac{n (n - 1)}{2} = R_\text{pull-up} \cdot C_{eq} + \frac{R_{eq} C_{eq}}{n} \frac{(n - 1)}{2}
+$$
+
+This result becomes more useful in the limit of infinity, so:
+$$
+\lim_{n \rightarrow +\infty} \tau_\text{tot} = \lim_{n \rightarrow +\infty} R_\text{pull-up} \cdot C_{eq} + \frac{R_{eq} C_{eq}}{n} \frac{(n - 1)}{2}
+= R_\text{pull-up} \cdot C_{eq} + \frac{1}{2} R_{eq} C_{eq}
+$$
+
+Which at the left hand side is the standard result from Elmore delay.
+
+\end{document}
