@@ -448,7 +448,7 @@ Latly, we show a picture of the general timing parameters for a memory access (a
 From when address is stable and $\overline{CS}$ (active low) is low, we note the following delays:
 \begin{itemize}
 	\item $t_{OE}$ is the \textbf{minimum Output Enable} time, which is the time before the output takes some value, but is not yet stable. After $t_{OE}$ the value on DataOut might be wrong, but DataOut is not in high impedance anymore;
-	\item $t_{ACS}$ is the \textbf{maxmimum Chip Select Access} time, after which the DataOut will be stable;
+	\item $t_{ACS}$ is the \textbf{maximum Chip Select Access} time, after which the DataOut will be stable;
 	\item $t_{OD}$ is the \textbf{maximum Output Disable} time, after which the output returns to high impedance.
 \end{itemize}
 
@@ -510,7 +510,7 @@ This is fine, as writing an OTPROM is as we said an one-time only operation.
 As for other characteristics, we see that a \textbf{read} operation is mostly identical in performance to Mask Programmable ROMs.
 The disadvantages are higher resistances of the fuse compared to a short circuit, which get a bit slower compared to a Mask Programmable ROM.
 
-OTPROMs are also \textit{unntestable}: they need to be produced in small size to have a good yield.
+OTPROMs are also \textit{untestable}: they need to be produced in small size to have a good yield.
 
 The number of defective ICs in a wafer does not depend on the IC size, but smaller ICs of course have less chance to be detective.
 This means that usually there are more small ICs in a wafer than large ICs.
@@ -540,15 +540,17 @@ Negative charges increase the threshold;
 Positive charges decrease the threshold.
 \end{itemize}
 
-\newpage
 \textbf{\textsf{Programming}}
 
 The floating gate is completely isolated, and to program it we use \textit{hot electron programming}:
 \begin{itemize}
-	\item By applying a high programming voltage $V_p$ to the gate, a rich channel forms (as the gate is pulled high). This is not enough to lower $V_T$!
+	\item By applying a high programming voltage $V_p$ to the gate, a rich channel forms (as the gate is pulled high). Note that this alone is not enough to lower $V_T$!
+
 	\item By applying a high programming voltage $V_p'$ to the drain-source channel, electrons in the channel are subject to strong electrical fields.
-Due to strong vertical electrical field from the gate, the high energy electrons may overcome the $SiO2$ barrier, reach the floating gate. The result is that the gate is pulled low and $V_T$ increases.
+High speed electrons travel through the channel, which might interact with the silicon substrate. Due to strong vertical electrical field from the gate, the high energy electrons may overcome the $SiO_2$ barrier, reaching the floating gate. The result is that the gate is pulled low (from the added electrons) and $V_T$ increases.
 \end{itemize}
+
+\newpage
 
 \par\smallskip
 \textbf{\textsf{Performance}}
@@ -644,12 +646,13 @@ Another variant of floating-gate transistor is the \textbf{FLOTOX} (\textit{FLOa
 
 The FLOTOX differs from the FAMOS in its erasure properties: it is \textit{electrically erasable}.
 
-This is achieved through the \textit{tunneling effect}.
-The tunneling effect is  a quantum mechanical phenomenon, where a particle (electron) can pass a potential barrier even if it has insufficient energy.
+This is achieved through the \textit{tunneling effect}, specifically \textbf{Fowler–Nordheim tunneling}.
+This tunneling effect is  a quantum mechanical phenomenon, where a particle (electron) can pass a potential barrier even if it has insufficient energy, if subject to a strong enough electric field.
+This is the case of electrons to and from the gate, as they have to cross the oxide ($SiO_2$) layer.
 
-A thinner oxide layer on the drain (source) side makes tunneling easier.
-Electrons come from the drain (source) region rather than from the substrate or channel.
-An higher electrical field is necessary for this.
+In a FLOTOX thinner oxide layer on the drain (source) side makes tunneling easier.
+Electrons in a FLOTOX NMOS (PMOS) come from the drain (source) region rather than from the substrate or channel.
+An higher electrical field than normal on the gate is necessary for this.
 
 \par\smallskip
 \textbf{\textsf{Programming}}
@@ -659,10 +662,10 @@ The floating gate is completely isolated, and to program it we use
 \begin{itemize}
     \item By applying a high programming voltage $V_p$ to the control
     gate, a strong electric field is established across the thin
-    tunnel oxide.
+    tunnel oxide;
 
     \item The strong electric field allows electrons to tunnel through
-    the thin $SiO_2$ barrier from the substrate onto the floating gate.
+    the thin $SiO_2$ barrier from the substrate onto the floating gate;
 
     \item The floating gate accumulates negative charge. As a result,
     the threshold voltage increases:
@@ -684,6 +687,13 @@ To erase the cell, the polarity of the applied voltage is reversed:
     \[
         Q_{FG}\rightarrow 0 \quad\Rightarrow\quad V_T \downarrow.
     \]
+\end{itemize}
+
+In both of these operations the source is left floating or grounded at $0 \, \mathrm{V}$.
+This means that the only dipole involved is the gate-drain one, and to summarize:
+\begin{itemize}
+	\item $V_{GD} >> 0$: electrons jump from drain to gate, \textit{increasing} $V_{TH}$;
+	\item $V_{GD} << 0$: electrons jump from gate to drain, \textit{decreasing} $V_{TH}$.
 \end{itemize}
 
 \par\smallskip
@@ -716,40 +726,40 @@ The straightforward implementation (but it doesn't work!) is:
 \end{itemize}
 This has a problem: programming a transistor erases another one.
 
+\begin{center}
+	\includegraphics[scale=0.22]{../figures/flotox_prog.png}
+\end{center}
+
 \begin{itemize}
     \item To program $T_1$:
-    $
+    $$
         \text{Gate: } WL_0 = 12\,V,
         \qquad
         \text{Drain: } BL_1 = 0\,V
-    $
+    $$
 
     \item To avoid programming $T_2$:
-    $
+    $$
         WL_1 = 0\,V
-    $
+    $$
 
     \item To avoid programming $T_3$:
-    $
+    $$
         BL_0 = 12\,V,
         \qquad
         V_{GD} = 0
-    $
+    $$
 
     \item However, $T_4$ is erased:
-    $
+    $$
         WL_1 = 0\,V,
         \qquad
         BL_0 = 12\,V
-    $
+    $$
 
 \end{itemize}
 
 The solution is to use an access transistor for each bit cell.
-
-\begin{center}
-	\includegraphics[scale=0.22]{../figures/flotox_prog.png}
-\end{center}
 
 \subsubsection{Electrically Erasable Programmable ROM}
 
@@ -781,7 +791,7 @@ Let's look at how the main operations are carried out:
 		
 		We then enter the \textit{programming} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
 
-		At this point, to program we raise the word line (that is the gate) to $V_p$, and the selected bit lines (that is the drains) to $0 \, \matrhm{V}$. The rest of the lines are kept at $V_p$; 
+		At this point, to program we raise the word line (that is the gate) to $V_p$, and the selected bit lines (that is the drains) to $0 \, \mathrm{V}$. The rest of the lines are kept at $V_p$; 
 
 	\item For \textbf{erasing}, we select the word by raising the word line, and the data (to erase) in the word by raising the D line.
 
