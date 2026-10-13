@@ -807,12 +807,14 @@ Let's look at the interface we use DRAMs with in a bit more detail.
 \end{center}
 
 For the overall structure we see that we multiplex two halves of the address in time, using row and column registers.
-This requires the additional control signals \textbf{RAS} (\textit{Row AddreSs}) and \textbf{CAS} (\textit{Column AddreSs}), usually active low.
+This requires the additional control signals \textbf{RAS} (\textit{Row Address Strobe}) and \textbf{CAS} (\textit{Column Address Strobe}), usually active low.
+\textit{Strobe} signals are signals used to notify the memory when an address is ready (column or row).
 
 As for \textit{refreshes} (see the previous paragraph), we have that when a row is opened,
 all data is refreshed.
 Special circuits for automatic refresh are needed if refresh is automatic.
 Refresh can also issued by a microprocessor (CAS before RAS).
+Usually, when refreshes are issued by the microprocessor (or other external circuits), at least one read per each wordline has to be performed manually in a certain time period (the $T_{refresh}$ we calculated in the previous section).
 Of course, as we saw, there is an \textit{overhead} due to refresh.
 
 Let us now look at the timings for a simple read operations, to get an idea of the typical timing of the interface.
@@ -838,7 +840,7 @@ Because of this, some variations exist.
 	\item Since the row address is sufficient to open a row (or page), \textbf{Fast Page} Mode exploits the fact that all words in the same row are sensed, even those that are not explicitly read, and must also be rewritten. Once a row is open, other words within the same row can be accessed by specifying only the column address; these words need not be contiguous. To read another word in Fast Page Mode, a normal read operation is performed while keeping RAS active. CAS is then deactivated (set high), a new column address is presented at the address pins, and CAS is reactivated (set low) to latch the new column address internally. After a minimum delay, the new output data becomes valid and stable;
 
 	\item \textit{Extended Data Out} (\textbf{EDO}) Mode is similar to Fast Page Mode, but with an additional register added at the output of the memory. The Column Address can change while keeping the data of the previous operation on the DataOut Bus.
-This is not possible in Fast Page Mode, and the additional register implements a sort of small pipeline, increasing performance;
+This is not possible in Fast Page Mode, and the additional register implements a sort of small pipeline, increasing performance (we can change the column address while reading a word);
 
 \item \textit{Synchronous DRAM} (\textbf{SDRAM}): all operations synchronized on the active edge of a clock. This simplifies internal structure compared to asynchronous memories.
 Simple circuits improve performance.
