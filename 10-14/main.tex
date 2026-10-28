@@ -381,71 +381,71 @@ From the figure we see how a standard address is divided in multiple regions, th
 The parameters ($s$ and $w$, as well as the full address size $k$) are defined below.
 
 \begin{itemize}
-\item
-\textbf{Mainsize}: the size of DRAM main memory (in words). We have:
-$$
-k = \log_2 ( \text{Mainsize} ) 
-$$
-\item
-\textbf{Cachesize}: the size of SRAM (in words);
-\item
-\textbf{Linesize}: the number of words in a cache line. We have:
-$$
-w = \log_2 ( \text{Linesize} )
-$$
-\item
-\textbf{Nlines}: the number of cache lines. It's defined as:
-$$
-\text{Nlines} = \frac{\text{Cachesize}}{\text{Linesize}} 
-$$
-We also define:
-$$
-r = \log_2 ( \text{Nlines} )
-$$
-\item
-\textbf{Nblocks}: the number of blocks in DRAM. It's defined as:
-$$
-\text{Nblocks} = \text{Mainsize}{Linesize}
-$$
-We also define:
-$$
-s = \log_2 ( \text{Nblocks} )
-$$
+	\item
+	      \textbf{Mainsize}: the size of DRAM main memory (in words). We have:
+	      $$
+		      k = \log_2 ( \text{Mainsize} )
+	      $$
+	\item
+	      \textbf{Cachesize}: the size of SRAM (in words);
+	\item
+	      \textbf{Linesize}: the number of words in a cache line. We have:
+	      $$
+		      w = \log_2 ( \text{Linesize} )
+	      $$
+	\item
+	      \textbf{Nlines}: the number of cache lines. It's defined as:
+	      $$
+		      \text{Nlines} = \frac{\text{Cachesize}}{\text{Linesize}}
+	      $$
+	      We also define:
+	      $$
+		      r = \log_2 ( \text{Nlines} )
+	      $$
+	\item
+	      \textbf{Nblocks}: the number of blocks in DRAM. It's defined as:
+	      $$
+		      \text{Nblocks} = \text{Mainsize}{Linesize}
+	      $$
+	      We also define:
+	      $$
+		      s = \log_2 ( \text{Nblocks} )
+	      $$
 \end{itemize}
 
 \subsubsection{CAM cache}
 
 The first approach introduced involved a CAM.
-Let's give a quick demonstration. 
+Let's give a quick demonstration.
 
 \begin{center}
 	\includegraphics[scale=0.22]{../figures/cam_cache.png}
 \end{center}
 
 \begin{itemize}
-	\item 
-Say the cache line is 4 words large, with the whole cache initially empty.
-The processor issues a read for the word at address \texttt{0x0022} (the Read Address). 
-This belongs to the ninth block (block8), and the block address is \texttt{0x0020} (the Block Address). 
-Say we mean to store block8 in the sixth cache line (line5): to do this we store its address in the sixth location of the CAM.
-After this is done, we return word2 from the cache line.
+	\item
+	      Say the cache line is 4 words large, with the whole cache initially empty.
+	      The processor issues a read for the word at address \texttt{0x0022} (the Read Address).
+	      This belongs to the ninth block (block8), and the block address is \texttt{0x0020} (the Block Address).
+	      Say we mean to store block8 in the sixth cache line (line5): to do this we store its address in the sixth location of the CAM.
+	      After this is done, we return word2 from the cache line.
 
 	\item
-		Next, assume the processor issues a read for the word at address \texttt{0x0023} (the Read Address). This belongs to the ninth block (block8), as well, so when we match the Block Address \texttt{0x0020} to the CAM, we get a HIT, and the CAM returns the line5.
-At this point we can quickly read word3 from the cache line
+	      Next, assume the processor issues a read for the word at address \texttt{0x0023} (the Read Address). This belongs to the ninth block (block8), as well, so when we match the Block Address \texttt{0x0020} to the CAM, we get a HIT, and the CAM returns the line5.
+	      At this point we can quickly read word3 from the cache line
 \end{itemize}
 
 There are some clear \textit{policies} to define for this:
 \begin{itemize}
-	\item 
-When reading from DRAM and storing in cache, we must decide where to write the data.
-This is the \textbf{mapping} policy;
-\item 
-If the cache is full and new data has to be written, some previous data must be erased.
-This is the \textbf{replacement} policy;
-\item 
-When writing some data, cache and main memory should be both updated.
-this is the \textbf{consistency} policy.
+	\item
+	      When reading from DRAM and storing in cache, we must decide where to write the data.
+	      This is the \textbf{mapping} policy;
+	\item
+	      If the cache is full and new data has to be written, some previous data must be erased.
+	      This is the \textbf{replacement} policy;
+	\item
+	      When writing some data, cache and main memory should be both updated.
+	      this is the \textbf{consistency} policy.
 
 \end{itemize}
 
@@ -461,7 +461,7 @@ Such an unique mapping, in hardware, is easily implemented via a modulo hash ope
 In practice, we don't need to compute anything, as the index can be directly obtained
 from the address word by proper masking and/or shifting:
 $$
-\text{Line} = (\text{Address} >> 2) \% (\text{Nlines} - 1) 
+	\text{Line} = (\text{Address} >> 2) \% (\text{Nlines} - 1)
 $$
 in binary, where $(\text{Address} >> 2)$ is nothing more than the \textit{Block Address}.
 
@@ -470,10 +470,10 @@ Only one of them is loaded in cache at any given time (so we have to \textit{evi
 
 Consider blocks in main memory mapped to the same cache line.
 \begin{itemize}
-	\item 
-	The address of each block always has the $w$ least significant bits at 0, so we do not need to store this information in the CAM.
 	\item
-	The \textit{Line} index is the same for all blocks assigned to the same cache line, as it corresponds to the cache line to which they are mapped, so we also do not need to store this information in the CAM.
+	      The address of each block always has the $w$ least significant bits at 0, so we do not need to store this information in the CAM.
+	\item
+	      The \textit{Line} index is the same for all blocks assigned to the same cache line, as it corresponds to the cache line to which they are mapped, so we also do not need to store this information in the CAM.
 \end{itemize}
 
 Only the \textit{TAG}s differ: the TAG is made of the upper $s - r$ bits of the address.
@@ -489,15 +489,15 @@ different TAG.
 At this point, given the address of some data, what we need to do is:
 \begin{itemize}
 	\item Match the TAG with the CAM at location pointed by \textit{Line} index (only if the entry is valid).
-		The CAM is actually made of \textit{Nlines} separate CAMs of a single word;
-	\item 
-On MISS, we read the memory block from DRAM at address \textit{Blockaddress}. 
-The TAG is stored in the CAM, in the location pointed by \textit{Lineindex}, so we can instantly match (and rewrite for misses). The block data is stored in the SRAM, in the line pointed by the \textit{Line} index, possibly replacing other data already present.
-Then, a validity bit is set for the line, and we can read the word at \textit{Word Offset} in the line pointed by the \textit{Line} index.
+	      The CAM is actually made of \textit{Nlines} separate CAMs of a single word;
+	\item
+	      On MISS, we read the memory block from DRAM at address \textit{Blockaddress}.
+	      The TAG is stored in the CAM, in the location pointed by \textit{Lineindex}, so we can instantly match (and rewrite for misses). The block data is stored in the SRAM, in the line pointed by the \textit{Line} index, possibly replacing other data already present.
+	      Then, a validity bit is set for the line, and we can read the word at \textit{Word Offset} in the line pointed by the \textit{Line} index.
 
-A word can be spent on the validity bit: this is concatenated to the TAG, and when we match we match TAGs with the validity bit at 1. If the cacheline was never written to then the validity bit is at 0 and we definitely don't match;
-	\item 
-On HIT, we just read the word at \textit{Word Offset} in the line pointed by the \textit{Line} index. 
+	      A word can be spent on the validity bit: this is concatenated to the TAG, and when we match we match TAGs with the validity bit at 1. If the cacheline was never written to then the validity bit is at 0 and we definitely don't match;
+	\item
+	      On HIT, we just read the word at \textit{Word Offset} in the line pointed by the \textit{Line} index.
 \end{itemize}
 
 Let's look at the \textit{performance} of this.
@@ -511,7 +511,7 @@ The disadvantages are that we may replace some data even if the cache is not ful
 
 This is the one we introduced in 9.2.4.
 No pre-determined association is defined between a main memory block and a line: when loaded from DRAM, a block is stored in the first available cache line.
-This means that there is no pre-determined \textit{Line} index. 
+This means that there is no pre-determined \textit{Line} index.
 
 \begin{center}
 	\includegraphics[scale=0.22]{../figures/cache_flassoc.png}
@@ -523,10 +523,10 @@ At this point, given the address of some data, we match the TAG with the entire 
 \begin{itemize}
 	\item We first match the TAG with the CAM;
 	\item On MISS, we read the memory block from DRAM at address \textit{Blockaddress}.
-	Need a replacement policy if cache is full.
-	After that, the block data is stored in the SRAM, in the same line as TAG.
-	A validity bit is set, and we read the word at \textit{Word Offset} of the line;
-\item On HIT we read the word at \textit{Word Offset} in the line that generated high when matching with the tag.
+	      Need a replacement policy if cache is full.
+	      After that, the block data is stored in the SRAM, in the same line as TAG.
+	      A validity bit is set, and we read the word at \textit{Word Offset} of the line;
+	\item On HIT we read the word at \textit{Word Offset} in the line that generated high when matching with the tag.
 \end{itemize}
 
 Let's talk about performance.
@@ -546,11 +546,11 @@ Cache lines are grouped into \textbf{sets}:
 \end{itemize}
 From this we have that:
 $$
-\text{Nsets} = \frac{\text{Nlines}}{\text{Setlines}}
+	\text{Nsets} = \frac{\text{Nlines}}{\text{Setlines}}
 $$
 And the bits needed to identify a set are:
 $$
-d = \log_2 ( \text{Nsets} )
+	d = \log_2 ( \text{Nsets} )
 $$
 
 We have \textit{direct association} of a main memory block towards a set, and \textit{fully Associative association} within that set.
@@ -563,16 +563,16 @@ As with common direct mapping, the set index is $\text{Set} = \text{Blockindex} 
 
 At this point, fiven the address of some data, we:
 \begin{itemize}
-\item
-Match the TAG with the CAM of the \textit{Set} pointed by the \textit{Set} index (only valid entries).
-There are \textit{Nsets} separate CAMs, each of \textit{Setlines} entries;
-\item
-On MISS, we Read the memory block from DRAM at address \textit{Blockaddress}. The TAG is stored in the CAM of the \textit{Set}, in the next empty line.
-We of course need a replacement policy if the set is full (\textbf{LRU}, \textit{Least Recently Used}, is a good candidate).
-The block data is then stored in the SRAM, in the same line as TAG.
-A validity bit is set for the line, and we read the word at \textit{Word Offset} in the line.
-\item
-On HIT, we read the word at \textit{Word Offset} in the line that generated HIT when matching.
+	\item
+	      Match the TAG with the CAM of the \textit{Set} pointed by the \textit{Set} index (only valid entries).
+	      There are \textit{Nsets} separate CAMs, each of \textit{Setlines} entries;
+	\item
+	      On MISS, we Read the memory block from DRAM at address \textit{Blockaddress}. The TAG is stored in the CAM of the \textit{Set}, in the next empty line.
+	      We of course need a replacement policy if the set is full (\textbf{LRU}, \textit{Least Recently Used}, is a good candidate).
+	      The block data is then stored in the SRAM, in the same line as TAG.
+	      A validity bit is set for the line, and we read the word at \textit{Word Offset} in the line.
+	\item
+	      On HIT, we read the word at \textit{Word Offset} in the line that generated HIT when matching.
 \end{itemize}
 
 \subsubsection{Cache replacement policies}
@@ -583,15 +583,15 @@ We have a few options:
 \begin{itemize}
 	\item \textbf{Direct mapping}: we have no choice, may replace a cache line even if the cache is not full;
 	\item \textbf{Associative mapping}: set associative mapping may replace a cache line even if the cache is not full (but the target set is full). The algorithms are:
-		\begin{itemize}
-			\item \textbf{LRU} (\textit{Least Recently Used}): we store timestamps of last usages. The con is the need to sort timestamps (within a set or within the full cache, for Set and Fully associative, respectively). Intel processors used some interesting heuristics to approximate this in the 486 era;
+	      \begin{itemize}
+		      \item \textbf{LRU} (\textit{Least Recently Used}): we store timestamps of last usages. The con is the need to sort timestamps (within a set or within the full cache, for Set and Fully associative, respectively). Intel processors used some interesting heuristics to approximate this in the 486 era;
 
-			\item \textbf{LFU} (\textit{Least Frequently Used}) we use counters to know the number of accesses. We need to sort number of accesses (within a set or within the full cache, for Set and Fully associative, respectively);
+		      \item \textbf{LFU} (\textit{Least Frequently Used}) we use counters to know the number of accesses. We need to sort number of accesses (within a set or within the full cache, for Set and Fully associative, respectively);
 
-			\item \textbf{FIFO} (\textit{First In, First Out}): we restart from first line when the bottom (of a set or the full cache) is reached. A simple pointer is required (one for each set, or one for the full cache, for Set and Fully associative, respectively);
+		      \item \textbf{FIFO} (\textit{First In, First Out}): we restart from first line when the bottom (of a set or the full cache) is reached. A simple pointer is required (one for each set, or one for the full cache, for Set and Fully associative, respectively);
 
-			\item \textbf{Random} choice is not that useful, but sometimes involved in lower steps of more complex algorithms.
-		\end{itemize}
+		      \item \textbf{Random} choice is not that useful, but sometimes involved in lower steps of more complex algorithms.
+	      \end{itemize}
 
 \end{itemize}
 
@@ -604,14 +604,14 @@ This is important especially in multi-core systems and with peripherals accessin
 A few approaches:
 \begin{itemize}
 	\item \textbf{Write through}: all writes go to main memory as well as cache.
-Multiple CPUs can monitor main memory traffic to keep local caches up to date
-When a core makes a write, the other cores invalidate the cache entry relative to the written block. This involves lots of traffic, which slows down write operation.
-On the other hand it has the best consistency.
-Plus note that on average, only 15\% of memory references are writes.
-\item \textbf{Write fatback} the update is initially made in cache only. An update bit is then set for cache line (usually called the \textit{dirty bit}).
-If line is to be replaced in cache, we write back to main memory if dirty bit is set.
-This saves a lot of traffic on the memory bus, and makes for improved performance.
-The tradeoff is of course the fact that other caches get out of sync with the dirty ones (or in fact they might have different dirty values to write back concurrently).
+	      Multiple CPUs can monitor main memory traffic to keep local caches up to date
+	      When a core makes a write, the other cores invalidate the cache entry relative to the written block. This involves lots of traffic, which slows down write operation.
+	      On the other hand it has the best consistency.
+	      Plus note that on average, only 15\% of memory references are writes.
+	\item \textbf{Write fatback} the update is initially made in cache only. An update bit is then set for cache line (usually called the \textit{dirty bit}).
+	      If line is to be replaced in cache, we write back to main memory if dirty bit is set.
+	      This saves a lot of traffic on the memory bus, and makes for improved performance.
+	      The tradeoff is of course the fact that other caches get out of sync with the dirty ones (or in fact they might have different dirty values to write back concurrently).
 \end{itemize}
 
 \subsection{Programmable Logic Devices}
@@ -621,13 +621,13 @@ A \textbf{PLD} (\textit{Programmable Logic Device}) is a way to implement custom
 We said (in some course, don't remember which) that there are a few approaches to computation logic design:
 \begin{itemize}
 	\item \textbf{Full custom IC}s: these obviously give the best performance and power consumption, but with very high NRE costs (masks, design). Designing a custom IC requires a long time-to-market, and is good only for demanding very high volume designs;
-	\item \textbf{Gate array}s: these have very good performance and power, with high NRE costs (masks). We only need to build the higher layers masks, not the full IC like in full custom. Still, this has long time-to-market, and is good for high volume designs. 
+	\item \textbf{Gate array}s: these have very good performance and power, with high NRE costs (masks). We only need to build the higher layers masks, not the full IC like in full custom. Still, this has long time-to-market, and is good for high volume designs.
 
-		Note that, altough \textbf{FPGA}s (\textit{Field Programmable Gate Array}) have "gate array" in their name, they are usually considered PLDs.
-		The good mental model is that gate arrays require additional IC routing after manufacturing, whereas PLDs are programmable after manufacturing, typically using SRAM configuration bits, flash, or antifuses;
+	      Note that, altough \textbf{FPGA}s (\textit{Field Programmable Gate Array}) have "gate array" in their name, they are usually considered PLDs.
+	      The good mental model is that gate arrays require additional IC routing after manufacturing, whereas PLDs are programmable after manufacturing, typically using SRAM configuration bits, flash, or antifuses;
 	\item \textbf{Programmable Logic Device}s: good performance and power (compared to software), with low NRE costs (compared to a custom IC).
-There are no masks involved, and the user buys an already manufactured integrated circuit.
-This involves higher per-unit costs, so it's good for low volume designs and prototypes.
+	      There are no masks involved, and the user buys an already manufactured integrated circuit.
+	      This involves higher per-unit costs, so it's good for low volume designs and prototypes.
 \end{itemize}
 
 To summarize, a PLD is an integrated circuit (hardware device) that contains logic elements of various complexities.

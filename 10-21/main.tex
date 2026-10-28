@@ -373,8 +373,8 @@ A LUT basically implements an $n$-input, $1$-output combinational logic circuit,
 
 Note that an $n$-input,-$1$-output LUT is like a $2^n \times 1$ memory with:
 \begin{itemize}
-\item A single row, so need of a row decoder, and a row that is always selected;
-\item $2^n$ columns, where the MUX is the column decoder and column multiplexer of the memory.
+	\item A single row, so need of a row decoder, and a row that is always selected;
+	\item $2^n$ columns, where the MUX is the column decoder and column multiplexer of the memory.
 \end{itemize}
 
 \begin{center}
@@ -408,9 +408,9 @@ FPGAs also feature \textbf{I/O blocks} such as the ones saw for CPLDs in 12.1.
 Because FPGAs are usually more complex, though, the I/O blocks are usually more complex too.
 In this they have:
 \begin{itemize}
-\item Output buffer with Enable signal;
-\item Combinational or sequential inputs and outputs;
-\item Optional Pull-Up, Clamp and Bus Hold circuits, configurable by controlling the selection signals of multiplexers
+	\item Output buffer with Enable signal;
+	\item Combinational or sequential inputs and outputs;
+	\item Optional Pull-Up, Clamp and Bus Hold circuits, configurable by controlling the selection signals of multiplexers
 \end{itemize}
 
 \begin{center}
@@ -422,8 +422,8 @@ In this they have:
 FPGAs, being more complex and versatile than other logic devices, usually feature additional blocks such as:
 \begin{itemize}
 	\item \textbf{Memories} and \textbf{FIFO} (\textit{First-In, First-Out}) queues.
-		These are usually SRAMs, but not control SRAM cells like we saw before: actual SRAM topologies in the order of kilobytes, with address decoders and bit multiplexers.
-		Sometimes interfaces for external dynamic memories are available.
+	      These are usually SRAMs, but not control SRAM cells like we saw before: actual SRAM topologies in the order of kilobytes, with address decoders and bit multiplexers.
+	      Sometimes interfaces for external dynamic memories are available.
 
 	\item  \textbf{Carry chains} between different CLBs or LEs: these allow implementing efficient adders;
 	\item Embedded hardware \textbf{multipliers} or \textbf{DSP} (\textit{Digital Signal Processing}) blocks;
@@ -438,9 +438,9 @@ Let's do a few performance and design considerations.
 First off, the kind of technology used to program the FPGA is slighlty varied:
 \begin{itemize}
 	\item \textbf{SRAM} is dominant, used for LUTs, but also to control MUXes or pass transistors. Controlling standard CMOS technology, it can be reprogrammed on the fly, which makes for a standard technology which allows to easily embed other blocks (which is the reason FPGAs are usually at the cutting-edge of a given technology).
-The main con is the large size, power consumption, and the fact that SRAM is not permanent;
-\item \textbf{Fuse and Antifuse} is sometimes used as its small and permanent, but it cannot be reprogrammed nor tested;
-\item \textbf{EEPROM} or \textbf{Flash} can be reprogrammed, but don't represent a standard proces.
+	      The main con is the large size, power consumption, and the fact that SRAM is not permanent;
+	\item \textbf{Fuse and Antifuse} is sometimes used as its small and permanent, but it cannot be reprogrammed nor tested;
+	\item \textbf{EEPROM} or \textbf{Flash} can be reprogrammed, but don't represent a standard proces.
 \end{itemize}
 
 We can then compare to other PLD technologies, namely \textbf{CPLD}s.
@@ -462,10 +462,10 @@ This is easier than wrangling LUTs manually, as it usually involves:
 	\item \textbf{Initial Synthesis}, which generates synthesizable boolean expressions independent of the target implementation;
 	\item \textbf{Functional Simulation}: similar to Behavioral Simulation, also known as \textbf{RTL} (\textit{Register Transfer Level}) simulation. This still has no timing information;
 	\item \textbf{Logic Synthesis}. This is the hard part. It involves echnology independent optimizations, technology mapping and Place \& Route. At this point we need a device model to be known, provided by the manufacturer, and we need the pin assignments.
-	Logic synth. is driven by timing constraints, as we want to look for best implementation on a given technology. As we said, it's a very complex problem, solved via simulated annealing, genetic algorithms, ecc... which may get different results at any run;
-\item \textbf{Timing analysis} and \textbf{Timing Simulation}: we can finally compare the circuit with timing constraints, also known as gate level simulation. This is far slower than other simulation kinds;
-\item \textbf{Assembler}: generates the Bit Stream for the target device, and as such all SRAM configuration bits;
-\item \textbf{Programmer} writes the Bit Stream on the actual device through its JTAG Interface. The SRAM acts like a very long shift register, which is serially programmed, to reduce pin counts (and allow JTAG chaining, more on the good ol'wikipediaz).
+	      Logic synth. is driven by timing constraints, as we want to look for best implementation on a given technology. As we said, it's a very complex problem, solved via simulated annealing, genetic algorithms, ecc... which may get different results at any run;
+	\item \textbf{Timing analysis} and \textbf{Timing Simulation}: we can finally compare the circuit with timing constraints, also known as gate level simulation. This is far slower than other simulation kinds;
+	\item \textbf{Assembler}: generates the Bit Stream for the target device, and as such all SRAM configuration bits;
+	\item \textbf{Programmer} writes the Bit Stream on the actual device through its JTAG Interface. The SRAM acts like a very long shift register, which is serially programmed, to reduce pin counts (and allow JTAG chaining, more on the good ol'wikipediaz).
 \end{enumerate}
 
 \end{document}

@@ -381,34 +381,34 @@ If there is no match, $ML_i$ will be discharged.
 There are 4 main cases to study here:
 \begin{enumerate}
 	\item Contaning 1, matching 1:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam1.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam1.png}
+	      \end{center}
 	\item Contaning 1, matching 0:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam2.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam2.png}
+	      \end{center}
 	\item Contaning 0, matching 0:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam3.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam3.png}
+	      \end{center}
 	\item Contaning 0, matching 1:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam4.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam4.png}
+	      \end{center}
 \end{enumerate}
 
 We then have other 2 cases, which relate to the \textit{don't care} search state.
 We can perform a search by not caring if we set both bit lines to 0.
 \begin{enumerate}
 	\item Contaning 1, don't care:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam5.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam5.png}
+	      \end{center}
 	\item Contaning 0, don't care:
-	\begin{center}
-		\includegraphics[scale=0.1]{../figures/cam/cam6.png}
-	\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.1]{../figures/cam/cam6.png}
+	      \end{center}
 \end{enumerate}
 
 At this point we have documented the behavoir of the CAM cell enough to look at the actual topology:
@@ -419,7 +419,7 @@ At this point we have documented the behavoir of the CAM cell enough to look at 
 Note that:
 \begin{itemize}
 	\item Each Match Line spans an entire word, but not an entire row!
-	This means that if all bits in Word $i$ match, the Match Line $ML_i$ is high. If on the other hand at least one bit in Word $i$ does not match, the Match Line $ML_i$ is low;
+	      This means that if all bits in Word $i$ match, the Match Line $ML_i$ is high. If on the other hand at least one bit in Word $i$ does not match, the Match Line $ML_i$ is low;
 	\item Then note the \textit{priority encoder}. If at least one Match Line is high, the priority encoder asserts HIT, and it generates the corresponding address (the highest). On the other hand, if all Match Lines are low, the priority encoder asserts MISS.
 
 
@@ -429,7 +429,7 @@ Note that:
 
 Let's look into how an actual \textbf{associative SRAM} is built from this premise.
 
-In the simplest case an associative SRAM is only a circuit with the topology shown in the last section. 
+In the simplest case an associative SRAM is only a circuit with the topology shown in the last section.
 When such an Associative SRAM is switched ON the content is random.
 
 Let's assume some data is written, but only partially occupies the memory: we want to match only against the written data.
@@ -482,7 +482,7 @@ We saw a few options:
 
 At this point we note that if SRAM is small, it becomes cheap, so there is some value in building a hierarchy of different memories to get high performance at low cost.
 \begin{itemize}
-	\item Expensive (and fast) memories should be used to store little, frequently accessed data. An SRAM is a great fit for this; 
+	\item Expensive (and fast) memories should be used to store little, frequently accessed data. An SRAM is a great fit for this;
 	\item Cheap (and slow) memories should be used to store the bulk of the data. DRAMs is also a great fit for this.
 \end{itemize}
 
@@ -498,35 +498,35 @@ We refer by \textbf{MISS} to the situation where data is queried but not present
 
 \begin{itemize}
 	\item For a MISS we have to check both the cache and the DRAM for actual data, so the total time the read operation takes is:
-$$
-t_\text{MISS} = t_\text{cache} + t_\text{DRAM}
-$$
+	      $$
+		      t_\text{MISS} = t_\text{cache} + t_\text{DRAM}
+	      $$
 	\item For a HIT we have to check only the cache, so the total time the read operation takes is:
-$$
-t_\text{HIT} = t_\text{cache}
-$$
+	      $$
+		      t_\text{HIT} = t_\text{cache}
+	      $$
 \end{itemize}
 
 By defining the hit rate $H$ as:
 $$
-H = \frac{n_\text{HIT}}{n_\text{TOT}}
+	H = \frac{n_\text{HIT}}{n_\text{TOT}}
 $$
 
 We get that the average time is:
 $$
-t_\text{avg} = H t_\text{HIT} + (1 - H) t_\text{MISS}
-= H t_\text{cache} + (1 - H) (t_\text{cache} + t_\text{DRAM}) 
+	t_\text{avg} = H t_\text{HIT} + (1 - H) t_\text{MISS}
+	= H t_\text{cache} + (1 - H) (t_\text{cache} + t_\text{DRAM})
 $$
 
 Clearly, higher $H$ is better.
 
 \subsubsection{Predictions}
 
-To (somewhat) accurately predict the data that the microprocessor will need we exploit \textbf{locality} of data. 
+To (somewhat) accurately predict the data that the microprocessor will need we exploit \textbf{locality} of data.
 There are 2 types of locality:
 \begin{itemize}
 	\item \textbf{Temporal} locality: the same data is used more often if it was recently referenced;
-	\item \textbf{Spatial} locality: data around the data which was just used is more likely to be used next. 
+	\item \textbf{Spatial} locality: data around the data which was just used is more likely to be used next.
 \end{itemize}
 
 \textit{Instructions}, for instnace, fit exactly in this framework as they are highly local (if we fetch instruction at \texttt{0x12} we will likely fetch at \texttt{0x16} next, assuming 32 bit instructions).

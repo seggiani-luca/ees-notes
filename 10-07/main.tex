@@ -390,9 +390,9 @@ Now:
 Clearly, the mask topology of the NAND topology is more complicated.
 We have the delay of the address decoder, given by:
 \begin{enumerate}
-\item Delay of the address lines inverters , which are driving half of the NAND gates, and have large parasitic capacitance.
-\item Delay of the NAND gates, with large parasitic resistance when all pull-down transistors are ON;
-\item Lastly there's the delay of the Word Line inverters, driving all transistors in the bit cells in a row, with large parasitic capacitance and resistance as the word Line is long.
+	\item Delay of the address lines inverters , which are driving half of the NAND gates, and have large parasitic capacitance.
+	\item Delay of the NAND gates, with large parasitic resistance when all pull-down transistors are ON;
+	\item Lastly there's the delay of the Word Line inverters, driving all transistors in the bit cells in a row, with large parasitic capacitance and resistance as the word Line is long.
 \end{enumerate}
 
 This tradeoff comes at the gain of higher \textit{densities} overall, meaning NAND memories are usually less performant but smaller.
@@ -408,7 +408,7 @@ Let's look at the simulated delay, specifically of the address decoder.
 We see the 3 delay source cited above ($t_{inv_1}$, $t_{NAND}$, and $t_{inv_2}$).
 The total delay is:
 $$
-t_{delay} = t_{inv_1} + t_{NAND} + t_{inv_2}
+	t_{delay} = t_{inv_1} + t_{NAND} + t_{inv_2}
 $$
 
 Note that this is the example with 64 bit cells in a row:
@@ -425,16 +425,16 @@ When a bit is read, we have to discharge $C_L$ down to 0.
 
 \begin{itemize}
 	\item In a \textbf{NOR} structure, the parasitic capacitance dominates.
-	The resistance of the bit line is small (metal), and all capacitances are in parallel. This means that:
-	$$
-	\tau = R_{DSon} \cdot C_L = R_{DSon} \cdot C_{drain} \cdot n_{tr}
-	$$
-	where $n_{tr}$ is the number of transistors;
+	      The resistance of the bit line is small (metal), and all capacitances are in parallel. This means that:
+	      $$
+		      \tau = R_{DSon} \cdot C_L = R_{DSon} \cdot C_{drain} \cdot n_{tr}
+	      $$
+	      where $n_{tr}$ is the number of transistors;
 	\item In NAND topology the parasitic resistance dominates: it is the channel resistance of all transistors in the series.
-	The structure can be studied using the \textit{Elmore} delay, and we get that:
-	$$
-	\tau = \frac{RC}{2}, \quad R = n_{tr} \cdot R_{DSon}, \quad C = n_{tr} \cdot C_{drain}
-	$$
+	      The structure can be studied using the \textit{Elmore} delay, and we get that:
+	      $$
+		      \tau = \frac{RC}{2}, \quad R = n_{tr} \cdot R_{DSon}, \quad C = n_{tr} \cdot C_{drain}
+	      $$
 \end{itemize}
 
 \par\smallskip
@@ -516,12 +516,12 @@ The number of defective ICs in a wafer does not depend on the IC size, but small
 This means that usually there are more small ICs in a wafer than large ICs.
 Note that the yield $y$ is roughly given by:
 $$
-y = \frac{n_{ICok}}{n_{ICtot}} = 1 - \frac{n_{ICdefective}}{n_{ICtot}}
+	y = \frac{n_{ICok}}{n_{ICtot}} = 1 - \frac{n_{ICdefective}}{n_{ICtot}}
 $$
 
 \subsection{Programmable Read Only Memories}
 
-OTPROMs are suboptimal as they can be written \textit{only once}. 
+OTPROMs are suboptimal as they can be written \textit{only once}.
 Because of this, more advanced solutions which allow memory to be rewritten (that is, \textit{reprogrammed}), a number of times.
 We call these \textbf{PROM}s (\textit{Programmable Read Only Memories}).
 
@@ -532,12 +532,12 @@ One example of such a transistor is the \textbf{FAMOS} (\textit{Floating gate Av
 
 They are similar to a MOS transistor, with an dditional polysilicon layer between two thin $SiO2$ layers below the gate.
 This means the gate is \textit{floating}.
-Charges trapped in the floating gate change the threshold voltage $V_T$, where 
+Charges trapped in the floating gate change the threshold voltage $V_T$, where
 \begin{itemize}
-	\item 
-Negative charges increase the threshold;
 	\item
-Positive charges decrease the threshold.
+	      Negative charges increase the threshold;
+	\item
+	      Positive charges decrease the threshold.
 \end{itemize}
 
 \textbf{\textsf{Programming}}
@@ -547,7 +547,7 @@ The floating gate is completely isolated, and to program it we use \textit{hot e
 	\item By applying a high programming voltage $V_p$ to the gate, a rich channel forms (as the gate is pulled high). Note that this alone is not enough to lower $V_T$!
 
 	\item By applying a high programming voltage $V_p'$ to the drain-source channel, electrons in the channel are subject to strong electrical fields.
-High speed electrons travel through the channel, which might interact with the silicon substrate. Due to strong vertical electrical field from the gate, the high energy electrons may overcome the $SiO_2$ barrier, reaching the floating gate. The result is that the gate is pulled low (from the added electrons) and $V_T$ increases.
+	      High speed electrons travel through the channel, which might interact with the silicon substrate. Due to strong vertical electrical field from the gate, the high energy electrons may overcome the $SiO_2$ barrier, reaching the floating gate. The result is that the gate is pulled low (from the added electrons) and $V_T$ increases.
 \end{itemize}
 
 \newpage
@@ -585,7 +585,7 @@ After a sufficiently long amount of time (minutes) all electrons are removed, an
 
 For this reason we need a window on the integrated circuit (which we'll tape off when the circuit is at work to avoid accidental exposure to UV light).
 We also cannot target a \textit{single} transistor: all transistors are erased at the same time.
-This makes PROM erasure an usually out of the circuit operation, as with programming, done with external hardware in a lab. 
+This makes PROM erasure an usually out of the circuit operation, as with programming, done with external hardware in a lab.
 
 \subsubsection{Programmable ROM}
 
@@ -603,7 +603,7 @@ All FAMOS transistors are not programmed after fabrication, so they behave norma
 The initial content of the memory, as a result, is all 1s, and programming a transistor (raising the $V_T$ higher, disconnecting it) turns a logic 1 into a logic 0.
 
 As we said, the memory can be reset to the initial state by shining UV rays through a window.
-All programmed transistors are erased, and all non programmed transistors are not affected: the memory contents return to all 1s. 
+All programmed transistors are erased, and all non programmed transistors are not affected: the memory contents return to all 1s.
 
 To correctly program a PROM we proceed similarly to OTPROMs:
 \begin{itemize}
@@ -634,10 +634,10 @@ This restores the normal transistor behavior, but applies to the entire memory a
 
 This means PROMs have almost completely superseded OTPROMs:
 \begin{itemize}
-\item Much more flexible;
-\item Cheaper during prototyping;
-\item Can be reused;
-\item Still, not suitable for data that is frequently changed.
+	\item Much more flexible;
+	\item Cheaper during prototyping;
+	\item Can be reused;
+	\item Still, not suitable for data that is frequently changed.
 \end{itemize}
 
 \subsubsection{FLOTOX transistors}
@@ -660,33 +660,33 @@ An higher electrical field than normal on the gate is necessary for this.
 The floating gate is completely isolated, and to program it we use
 \textit{Fowler--Nordheim tunneling}:
 \begin{itemize}
-    \item By applying a high programming voltage $V_p$ to the control
-    gate, a strong electric field is established across the thin
-    tunnel oxide;
+	\item By applying a high programming voltage $V_p$ to the control
+	      gate, a strong electric field is established across the thin
+	      tunnel oxide;
 
-    \item The strong electric field allows electrons to tunnel through
-    the thin $SiO_2$ barrier from the substrate onto the floating gate;
+	\item The strong electric field allows electrons to tunnel through
+	      the thin $SiO_2$ barrier from the substrate onto the floating gate;
 
-    \item The floating gate accumulates negative charge. As a result,
-    the threshold voltage increases:
-    \[
-        Q_{FG}<0 \quad\Rightarrow\quad V_T \uparrow.
-    \]
+	\item The floating gate accumulates negative charge. As a result,
+	      the threshold voltage increases:
+	      \[
+		      Q_{FG}<0 \quad\Rightarrow\quad V_T \uparrow.
+	      \]
 \end{itemize}
 
 To erase the cell, the polarity of the applied voltage is reversed:
 \begin{itemize}
-    \item A high voltage of opposite polarity is applied to the control
-    gate, producing a strong electric field across the tunnel oxide.
+	\item A high voltage of opposite polarity is applied to the control
+	      gate, producing a strong electric field across the tunnel oxide.
 
-    \item Electrons tunnel from the floating gate through the thin
-    $SiO_2$ layer into the substrate.
+	\item Electrons tunnel from the floating gate through the thin
+	      $SiO_2$ layer into the substrate.
 
-    \item The floating gate loses its negative charge, causing the
-    threshold voltage to decrease:
-    \[
-        Q_{FG}\rightarrow 0 \quad\Rightarrow\quad V_T \downarrow.
-    \]
+	\item The floating gate loses its negative charge, causing the
+	      threshold voltage to decrease:
+	      \[
+		      Q_{FG}\rightarrow 0 \quad\Rightarrow\quad V_T \downarrow.
+	      \]
 \end{itemize}
 
 In both of these operations the source is left floating or grounded at $0 \, \mathrm{V}$.
@@ -709,8 +709,8 @@ Let's make a comparison of programming mechanisms:
 	\item Hot Electron Programming is Self Regulated, Tunneling is not;
 
 	\item Tunneling requires careful timing to achieve good consistency:
-	the resulting distribution of $V_T$ after programming has a larger standard deviation,
-	and requires larger margins during operations;
+	      the resulting distribution of $V_T$ after programming has a larger standard deviation,
+	      and requires larger margins during operations;
 
 	\item FLOTOX transistors are larger and harder to fabricate: lower yield, higher costs.
 \end{itemize}
@@ -731,31 +731,31 @@ This has a problem: programming a transistor erases another one.
 \end{center}
 
 \begin{itemize}
-    \item To program $T_1$:
-    $$
-        \text{Gate: } WL_0 = 12\,V,
-        \qquad
-        \text{Drain: } BL_1 = 0\,V
-    $$
+	\item To program $T_1$:
+	      $$
+		      \text{Gate: } WL_0 = 12\,V,
+		      \qquad
+		      \text{Drain: } BL_1 = 0\,V
+	      $$
 
-    \item To avoid programming $T_2$:
-    $$
-        WL_1 = 0\,V
-    $$
+	\item To avoid programming $T_2$:
+	      $$
+		      WL_1 = 0\,V
+	      $$
 
-    \item To avoid programming $T_3$:
-    $$
-        BL_0 = 12\,V,
-        \qquad
-        V_{GD} = 0
-    $$
+	\item To avoid programming $T_3$:
+	      $$
+		      BL_0 = 12\,V,
+		      \qquad
+		      V_{GD} = 0
+	      $$
 
-    \item However, $T_4$ is erased:
-    $$
-        WL_1 = 0\,V,
-        \qquad
-        BL_0 = 12\,V
-    $$
+	\item However, $T_4$ is erased:
+	      $$
+		      WL_1 = 0\,V,
+		      \qquad
+		      BL_0 = 12\,V
+	      $$
 
 \end{itemize}
 
@@ -763,7 +763,7 @@ The solution is to use an access transistor for each bit cell.
 
 \subsubsection{Electrically Erasable Programmable ROM}
 
-We use FLOTOX transistors to realize \textbf{EEPROM}s (\textit{Electrically Erasable Programmable ROMs}). 
+We use FLOTOX transistors to realize \textbf{EEPROM}s (\textit{Electrically Erasable Programmable ROMs}).
 
 \begin{center}
 	\includegraphics[scale=0.22]{../figures/eeprom.png}
@@ -773,7 +773,7 @@ All bit cells have a FLOTOX transistor, with thin oxide on the drain side.
 
 All bit cells also have an access transistor;
 drain connected to the bit bine, source connected to the FLOTOX,
-gate driven by the address decoder (via dedicated $AWL_i$ lines). 
+gate driven by the address decoder (via dedicated $AWL_i$ lines).
 
 Access transistors are activated when the word is selected.
 
@@ -788,16 +788,16 @@ This happens \textit{electrically} and \textit{in circuit}.
 Let's look at how the main operations are carried out:
 \begin{itemize}
 	\item For \textbf{programming}, we select the word by raising the word line, and the data in the word by raising the D line (which as always acts as an input for programming).
-		
-		We then enter the \textit{programming} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
 
-		At this point, to program we raise the word line (that is the gate) to $V_p$, and the selected bit lines (that is the drains) to $0 \, \mathrm{V}$. The rest of the lines are kept at $V_p$; 
+	      We then enter the \textit{programming} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
+
+	      At this point, to program we raise the word line (that is the gate) to $V_p$, and the selected bit lines (that is the drains) to $0 \, \mathrm{V}$. The rest of the lines are kept at $V_p$;
 
 	\item For \textbf{erasing}, we select the word by raising the word line, and the data (to erase) in the word by raising the D line.
 
-		We then enter the \textit{erasing} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
+	      We then enter the \textit{erasing} mode by enabling $AWL$ on the word line, that is enabling the access transistors. We keep these OFF on other lines to avoid affecting other FLOTOX transistors.
 
-		At this point, to erase we lower the word line (that is the gate) to $0 \, \mathrm{V}$, and the selected bit lines (that is the drains) to $V_p$. The rest of the lines are kept at $0 \, \mathrm{V}$.
+	      At this point, to erase we lower the word line (that is the gate) to $0 \, \mathrm{V}$, and the selected bit lines (that is the drains) to $V_p$. The rest of the lines are kept at $0 \, \mathrm{V}$.
 \end{itemize}
 
 \subsubsection{Performance of EEPROMs}

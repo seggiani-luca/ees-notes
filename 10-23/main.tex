@@ -378,28 +378,28 @@ There are a number of protocols:
 Interconnections can be at several levels:
 \begin{itemize}
 	\item \textit{Within} an integrated circuit:
-\begin{itemize}
-\item Metal layers, parallel bits
-\item Lots of wires, high performance
-\item Low parasitics, low noise
-\item Delays can be accurately estimated (Elmore)
-\end{itemize}
-\item Between \textit{integrated circuits} on the board
-\begin{itemize}
-\item Copper lines on a PCB, parallel or serial
-\item Higher noise, higher delays than in an integrated circuit
-\end{itemize}
-\item Between \textit{boards} in the same embedded system:
-\begin{itemize}
-\item Cables made of wires, parallel or serial
-\item Even higher noise and delays
-\end{itemize}
-\item Between \textit{embedded systems}:
-\begin{itemize}
-\item Cable made of wires or wireless connections
-\item Unpredictable delays and extremely high noise
-\item Need to use at least error detection in many cases
-\end{itemize}
+	      \begin{itemize}
+		      \item Metal layers, parallel bits
+		      \item Lots of wires, high performance
+		      \item Low parasitics, low noise
+		      \item Delays can be accurately estimated (Elmore)
+	      \end{itemize}
+	\item Between \textit{integrated circuits} on the board
+	      \begin{itemize}
+		      \item Copper lines on a PCB, parallel or serial
+		      \item Higher noise, higher delays than in an integrated circuit
+	      \end{itemize}
+	\item Between \textit{boards} in the same embedded system:
+	      \begin{itemize}
+		      \item Cables made of wires, parallel or serial
+		      \item Even higher noise and delays
+	      \end{itemize}
+	\item Between \textit{embedded systems}:
+	      \begin{itemize}
+		      \item Cable made of wires or wireless connections
+		      \item Unpredictable delays and extremely high noise
+		      \item Need to use at least error detection in many cases
+	      \end{itemize}
 \end{itemize}
 
 The goal of interconnections is to transfer bits as quickly as possible, while not sacrificing metrics:
@@ -413,9 +413,9 @@ The goal of interconnections is to transfer bits as quickly as possible, while n
 
 Interconnections are defined at different \textit{levels}, as we usually see in the OSI model:
 \begin{itemize}
-	\item \textbf{Physical}, which refers to the actual electrical wire interconnects. 
+	\item \textbf{Physical}, which refers to the actual electrical wire interconnects.
 	\item \textbf{Protocol}, which refers to how the signals these wires transmit are organized;
-	\item \textbf{Application}, of interest from the computer engineering point of view, refers to the actual application messages our systems are sending to each other. 
+	\item \textbf{Application}, of interest from the computer engineering point of view, refers to the actual application messages our systems are sending to each other.
 \end{itemize}
 
 Physical and protocol focus on how to transfer bits from a transmitter to a receiver.
@@ -434,7 +434,7 @@ The delay is affected by an \textit{uncertainty}, called \textbf{skew}.
 
 Once the \textit{skew} is known, the delay can be expressed as:
 $$
-t_d = t_\text{prop} \pm \frac{t_k}{2}
+	t_d = t_\text{prop} \pm \frac{t_k}{2}
 $$
 Where $t_\text{prop}$ is an average propagation delay.
 
@@ -446,34 +446,34 @@ The delay depends  on the receiving gate threshold, between $V_{IL}$ and $V_{IH}
 
 We see that at the receiver we get an exponential ramp with time constant:
 $$
-\tau = C_{in} \cdot (R_{in} \parallel R_{out})
+	\tau = C_{in} \cdot (R_{in} \parallel R_{out})
 $$
 
 Now, based on the input gate threshold, the delay time sits between $t_\text{min}$ and $t_\text{max}$:
 $$
-\begin{aligned}
-	t_\text{min} &= t_1 - t_0 \\
-	t_\text{max} &= t_2 - t_0 \\
-\end{aligned}
+	\begin{aligned}
+		t_\text{min} & = t_1 - t_0 \\
+		t_\text{max} & = t_2 - t_0 \\
+	\end{aligned}
 $$
 Where $t_1$ is where we meet $V_{IL}$ and $t_2$ is where we meet $V_{HL}$.
 
 The \textbf{skew} $t_k$ is exactly:
 $$
-t_k = t_\text{max} - t_\text{min} = t_2 - t_1
+	t_k = t_\text{max} - t_\text{min} = t_2 - t_1
 $$
 
 So we know that to correctly characterize the entire interconnection we have to:
 \begin{itemize}
 	\item Find the minimum of all minimum delays $t_\text{min}$;
 	\item Find the maximum of all maximum delays $t_\text{max}$;
-\item Compute the average $t_\text{avg}$ and skew $t_k$.
+	\item Compute the average $t_\text{avg}$ and skew $t_k$.
 \end{itemize}
 $$
-\begin{aligned}
-	t_\text{avg} &= \frac{t_\text{min} + t_\text{max}}{2} = \frac{t_1 + t_2 - 2 t_0}{2} \\
-	t_k &= t_\text{max} - t_\text{min} = t_2 - t_1
-\end{aligned}
+	\begin{aligned}
+		t_\text{avg} & = \frac{t_\text{min} + t_\text{max}}{2} = \frac{t_1 + t_2 - 2 t_0}{2} \\
+		t_k          & = t_\text{max} - t_\text{min} = t_2 - t_1
+	\end{aligned}
 $$
 
 To summarize, we model an interconnection as lumped parasitic resistance $R_w$ and capacitance $C_w$.
@@ -487,105 +487,105 @@ In short, wire length causes different parasitic resistance $R_w$ and capacitanc
 Let's see some popular models for delays in interconnects:
 \begin{itemize}
 	\item \textbf{\textsf{Exponential}} \\
-Let's complete the previous model by putting the \textit{wire} back into the picture. As always, we model it with a parasitic capacitance and resistance:
-\begin{center}
-	\includegraphics[scale=0.2]{../figures/skewire.png}
-\end{center}
+	      Let's complete the previous model by putting the \textit{wire} back into the picture. As always, we model it with a parasitic capacitance and resistance:
+	      \begin{center}
+		      \includegraphics[scale=0.2]{../figures/skewire.png}
+	      \end{center}
 
-In this case our time constant changes:
-$$
-\tau = (C_\text{in} + C_w) \cdot (R_\text{in} \parallel (R_\text{out} + R_w) )
-$$
+	      In this case our time constant changes:
+	      $$
+		      \tau = (C_\text{in} + C_w) \cdot (R_\text{in} \parallel (R_\text{out} + R_w) )
+	      $$
 
-Note that this situation is made even more complex by the fact that the wire constants $C_w$ and $R_w$ \textit{change} with the length of the wire, meaning that we have an added layer of uncertainty.
+	      Note that this situation is made even more complex by the fact that the wire constants $C_w$ and $R_w$ \textit{change} with the length of the wire, meaning that we have an added layer of uncertainty.
 
 	\item \textbf{\textsf{Transmission lines}} \\
-The idea is to model an interconnection using distributed parasitics: we take a wire and divide its length $l$ into $N$ segments, each lumped.
-This means each segment has length $\Delta x = \frac{l}{N}$.
-We are interested in what happens if we take the limit of elements going to infinity ($N \rightarrow + \infty$).
+	      The idea is to model an interconnection using distributed parasitics: we take a wire and divide its length $l$ into $N$ segments, each lumped.
+	      This means each segment has length $\Delta x = \frac{l}{N}$.
+	      We are interested in what happens if we take the limit of elements going to infinity ($N \rightarrow + \infty$).
 
-\begin{center}
-	\includegraphics[scale=0.22]{../figures/trans_line.png}
-\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.22]{../figures/trans_line.png}
+	      \end{center}
 
-If considering only inductance and capacitance, this is the \textbf{ideal transmission line with no losses}.
-Signal propagates with a certain speed, with possible reflections, and the delay depends on the position of the receiver along the line.
-For this we can compute an average and a skew.
+	      If considering only inductance and capacitance, this is the \textbf{ideal transmission line with no losses}.
+	      Signal propagates with a certain speed, with possible reflections, and the delay depends on the position of the receiver along the line.
+	      For this we can compute an average and a skew.
 
-Note that, if the resistances are also included, losses are introduced in the model and we get the \textbf{ideal transmission line with losses}.
+	      Note that, if the resistances are also included, losses are introduced in the model and we get the \textbf{ideal transmission line with losses}.
 	\item \textbf{\textsf{Elmore delay}} \\
-Note that this already appeared in 7.0.2, for NAND topology memory timings.
-There's a useful note here: \url{https://raw.githubusercontent.com/seggiani-luca/ees-notes/fcbb33c4bfdef8fc531aa81c04cddb69d309ad2a/notes/nand_topology_delay/main.pdf}.
+	      Note that this already appeared in 7.0.2, for NAND topology memory timings.
+	      There's a useful note here: \url{https://raw.githubusercontent.com/seggiani-luca/ees-notes/fcbb33c4bfdef8fc531aa81c04cddb69d309ad2a/notes/nand_topology_delay/main.pdf}.
 
-The idea once again is to model an interconnection using distributed parasitics, by dividing the wire into $N$ segments, each with a lumped model.
-For complex interconnections, we can determine a tree stemming from a single node $s$, where each segment is characterized by resistance $R_j$, and capacitance $C_j$.
+	      The idea once again is to model an interconnection using distributed parasitics, by dividing the wire into $N$ segments, each with a lumped model.
+	      For complex interconnections, we can determine a tree stemming from a single node $s$, where each segment is characterized by resistance $R_j$, and capacitance $C_j$.
 
-\begin{center}
-	\includegraphics[scale=0.22]{../figures/elmore.png}
-\end{center}
-Matematically, the time constant $\tau_i$ of the delay at node $i$ is given by the sum of all RC segments up to $i$:
-$$
-\tau_i = \sum_{k = 1}^N C_j R_{ik}
-$$
-Where $R_{ik}$ is the shared path resistance between node $i$ and $k$:
-$$
-R_{ik} = \sum R_j \ \text{where} \ \left( R_j \in \text{path}(s, i) \cap \text{path}(s, k) \right)
-$$
+	      \begin{center}
+		      \includegraphics[scale=0.22]{../figures/elmore.png}
+	      \end{center}
+	      Matematically, the time constant $\tau_i$ of the delay at node $i$ is given by the sum of all RC segments up to $i$:
+	      $$
+		      \tau_i = \sum_{k = 1}^N C_j R_{ik}
+	      $$
+	      Where $R_{ik}$ is the shared path resistance between node $i$ and $k$:
+	      $$
+		      R_{ik} = \sum R_j \ \text{where} \ \left( R_j \in \text{path}(s, i) \cap \text{path}(s, k) \right)
+	      $$
 
-\item \textbf{\textsf{Elmore delay line}} \\
+	\item \textbf{\textsf{Elmore delay line}} \\
 
-Elmore delay is easily applied to an RC segment line:
+	      Elmore delay is easily applied to an RC segment line:
 
-\begin{center}
-	\includegraphics[scale=0.22]{../figures/elm_line.png}
-\end{center}
+	      \begin{center}
+		      \includegraphics[scale=0.22]{../figures/elm_line.png}
+	      \end{center}
 
-The shared path resistance is always the sum of
-all resistance between root $s$ and the considered node.
-For the last node $i$ the shared path resistance with node $k$ is always:
-$$
-R_{ik} = R_{kk} = \sum_{j=0}^k R_j
-$$
+	      The shared path resistance is always the sum of
+	      all resistance between root $s$ and the considered node.
+	      For the last node $i$ the shared path resistance with node $k$ is always:
+	      $$
+		      R_{ik} = R_{kk} = \sum_{j=0}^k R_j
+	      $$
 
-At this point we have that, for a wire of length $l$ divided into $N$ identical segments:
-\begin{itemize}
-\item All resistances are identical: $R_i = r \frac{l}{N}$ (where $r$ is the resistance per unit of length);
-\item All capacitances are identical: $C_i = c \frac{l}{N}$ (where $c$ is the capacitance per unit of length).
-\end{itemize}
+	      At this point we have that, for a wire of length $l$ divided into $N$ identical segments:
+	      \begin{itemize}
+		      \item All resistances are identical: $R_i = r \frac{l}{N}$ (where $r$ is the resistance per unit of length);
+		      \item All capacitances are identical: $C_i = c \frac{l}{N}$ (where $c$ is the capacitance per unit of length).
+	      \end{itemize}
 
-This means we can apply Gauss's formula:
-$$
-\tau_\text{tot} = \tau_N = R_i C_i \frac{N(N + 1)}{2} = R_\text{tot} C_\text{tot} \frac{N + 1}{2N}
-$$
+	      This means we can apply Gauss's formula:
+	      $$
+		      \tau_\text{tot} = \tau_N = R_i C_i \frac{N(N + 1)}{2} = R_\text{tot} C_\text{tot} \frac{N + 1}{2N}
+	      $$
 
-In the limit this is:
-$$
-\tau \rightarrow \frac{1}{2} N^2 R_i C_i
-$$
+	      In the limit this is:
+	      $$
+		      \tau \rightarrow \frac{1}{2} N^2 R_i C_i
+	      $$
 
-Where:
-$$
-\begin{aligned}
-	R_\text{tot} = N R_i \\
-	C_\text{tot} = N C_i
-\end{aligned}
-$$
+	      Where:
+	      $$
+		      \begin{aligned}
+			      R_\text{tot} = N R_i \\
+			      C_\text{tot} = N C_i
+		      \end{aligned}
+	      $$
 
-Which should be the case we saw in our notes.
+	      Which should be the case we saw in our notes.
 
-There is as slight notation difference between this in the notes:
-\begin{itemize}
-	\item In the notes we took each capacitor at contributing $t_i$ to the total delay time, thus giving:
-$$
-t_\text{tot} = \sum_i t_i
-$$
-\item Here we took $t_i$ as the delay at node $i$, already containing the delay from previous nodes (see the formula above for $\tau_i$), thus giving:
-$$
-t_\text{tot} = t_N
-$$
-\end{itemize}
+	      There is as slight notation difference between this in the notes:
+	      \begin{itemize}
+		      \item In the notes we took each capacitor at contributing $t_i$ to the total delay time, thus giving:
+		            $$
+			            t_\text{tot} = \sum_i t_i
+		            $$
+		      \item Here we took $t_i$ as the delay at node $i$, already containing the delay from previous nodes (see the formula above for $\tau_i$), thus giving:
+		            $$
+			            t_\text{tot} = t_N
+		            $$
+	      \end{itemize}
 
-Nevertheless, the result we get in both cases is the same, we just changed the definitions of the derivations.
+	      Nevertheless, the result we get in both cases is the same, we just changed the definitions of the derivations.
 
 \end{itemize}
 
@@ -595,7 +595,7 @@ To transmit a word of $n$ bits, bits are transmitted according to a synchronizat
 The synchronization signal is a clock, where:
 \begin{itemize}
 	\item The clock frequency is $f_\text{ck}$;
-	\item The clock period is $t_\text{ck} = \frac{1}{f_\text{ck}}$. 
+	\item The clock period is $t_\text{ck} = \frac{1}{f_\text{ck}}$.
 \end{itemize}
 Note that the clock shall be transmitted as well as the signal.
 There are several ways of communicating the clock.
@@ -609,30 +609,30 @@ Assume the transmitted symbols represent single bits: we can increase performanc
 
 \begin{itemize}
 	\item \textbf{\textsf{Parallel}} \\
-This is the idea of \textbf{parallel}, as opposed to \textbf{serial}, transmission.
-We transmit an entire word using $n$ parallel wires, with an additional wire for the clock.
+	      This is the idea of \textbf{parallel}, as opposed to \textbf{serial}, transmission.
+	      We transmit an entire word using $n$ parallel wires, with an additional wire for the clock.
 
-This increases performance linearly:
-\begin{itemize}
-	\item The number of bits per second becomes $\text{Thr}_\text{bits} = n f_\text{ck}$;
-	\item The number of bits per seconds stays $\text{Thr}_\text{word} = f_\text{ck}$, assuming the $n$ parallel lines form a complete word. Because of this, the number of bits is often a power of 2.
-\end{itemize}
+	      This increases performance linearly:
+	      \begin{itemize}
+		      \item The number of bits per second becomes $\text{Thr}_\text{bits} = n f_\text{ck}$;
+		      \item The number of bits per seconds stays $\text{Thr}_\text{word} = f_\text{ck}$, assuming the $n$ parallel lines form a complete word. Because of this, the number of bits is often a power of 2.
+	      \end{itemize}
 
-Parallel is certainly performant, but this comes at a cost we need a lot of wires for large busses, and its not good for long interconnections as its heavy, bulky, and of large size;
-	
-\item \textbf{\textsf{Serial}} \\
-\textbf{Serial} is parallel's chill cousin, where we usually transmit the word and the clock using a single wire.
-Bits are multiplexed in time, one per clock cycle, and one after the other, sequentially (LSB or MSB first).
-This inevitably introduces latency at the word level.
-A problem is also that the clock must usually be embedded in some way with the data, which needs special encodings for clock recovery.
+	      Parallel is certainly performant, but this comes at a cost we need a lot of wires for large busses, and its not good for long interconnections as its heavy, bulky, and of large size;
 
-The effects on performance are:
-\begin{itemize}
-	\item The number of bits per second becomes $\text{Thr}_\text{bits} = f_\text{ck}$;
-	\item The number of bits per seconds becomes $\text{Thr}_\text{word} = \frac{ f_\text{ck}}{n}$, assuming again that $n$ is the number of bits in a complete word.
-\end{itemize}
+	\item \textbf{\textsf{Serial}} \\
+	      \textbf{Serial} is parallel's chill cousin, where we usually transmit the word and the clock using a single wire.
+	      Bits are multiplexed in time, one per clock cycle, and one after the other, sequentially (LSB or MSB first).
+	      This inevitably introduces latency at the word level.
+	      A problem is also that the clock must usually be embedded in some way with the data, which needs special encodings for clock recovery.
 
-With them being mostly opposite, serial is way cheaper and simpler than parallel, if not a bit less performant.
+	      The effects on performance are:
+	      \begin{itemize}
+		      \item The number of bits per second becomes $\text{Thr}_\text{bits} = f_\text{ck}$;
+		      \item The number of bits per seconds becomes $\text{Thr}_\text{word} = \frac{ f_\text{ck}}{n}$, assuming again that $n$ is the number of bits in a complete word.
+	      \end{itemize}
+
+	      With them being mostly opposite, serial is way cheaper and simpler than parallel, if not a bit less performant.
 
 \end{itemize}
 
@@ -645,61 +645,61 @@ Let's consider first a simplified model (no skew $t_k$), and then a more accurat
 
 \begin{itemize}
 	\item \textbf{\textsf{No skew}} \\
-With no transmission delays and perfect synchronization,
-the maximum $f_\text{ck}$ depends on $t_s$ and $t_h$ of the receiving flip-flops only:
-$$
-t_\text{ck} > t_s + t_h, \quad f_\text{ck} < \frac{1}{t_s + t_h}
-$$
+	      With no transmission delays and perfect synchronization,
+	      the maximum $f_\text{ck}$ depends on $t_s$ and $t_h$ of the receiving flip-flops only:
+	      $$
+		      t_\text{ck} > t_s + t_h, \quad f_\text{ck} < \frac{1}{t_s + t_h}
+	      $$
 
-This is fine as, if clock and data have different (but known) delays, the transmitter properly produces the clock earlier or later so
-that setup and hold times are satisfied at the receiver.
+	      This is fine as, if clock and data have different (but known) delays, the transmitter properly produces the clock earlier or later so
+	      that setup and hold times are satisfied at the receiver.
 
 
-To satisfy these contraints we define 4 parameters:
-\begin{itemize}
-	\item $t_1^{TX}$: time the data is stable at the TX side before the active clock edge;
-	\item $t_1^{RX}$: time the data is stable at the RX side before the active clock edge;
-	\item $t_2^{TX}$: time the data is stable at the TX side after the active clock edge;
-	\item $t_2^{RX}$: time the data is stable at the RX side after the active clock edge.
-\end{itemize}
+	      To satisfy these contraints we define 4 parameters:
+	      \begin{itemize}
+		      \item $t_1^{TX}$: time the data is stable at the TX side before the active clock edge;
+		      \item $t_1^{RX}$: time the data is stable at the RX side before the active clock edge;
+		      \item $t_2^{TX}$: time the data is stable at the TX side after the active clock edge;
+		      \item $t_2^{RX}$: time the data is stable at the RX side after the active clock edge.
+	      \end{itemize}
 
-It must be that:
-$$
-t_1^{RX} \geq t_s, \quad t_2^{RX} \geq t_h
-$$
-	
-\item \textbf{\textsf{Skew}} \\
-Let's reintroduce skew. This means the delay is not the constant $t_\text{prop}$ (unknown but not significant) anymore, but a varying:
-$$
-t_d = t_\text{prop} \pm \frac{t_k}{2}
-$$
-Where $t_k$ is our skew.
+	      It must be that:
+	      $$
+		      t_1^{RX} \geq t_s, \quad t_2^{RX} \geq t_h
+	      $$
 
-With the phase delay between data and clock not maintained, delays are unpredictable and different in clock and data.
-Delays change from one bit transmission to the next, and the transmitter should consider the worst case scenario.
+	\item \textbf{\textsf{Skew}} \\
+	      Let's reintroduce skew. This means the delay is not the constant $t_\text{prop}$ (unknown but not significant) anymore, but a varying:
+	      $$
+		      t_d = t_\text{prop} \pm \frac{t_k}{2}
+	      $$
+	      Where $t_k$ is our skew.
 
-For the setup time we have two sources of badness:
-\begin{itemize}
-\item Clock arrives early at RX after:
-$$
-t_d^{ck} = t_\text{prop} - \frac{t_k}{2}
-$$
-\item Data arrives late at RX after:
-$$
-t_d^{data} = t_\text{prop} + \frac{t_k}{2}
-$$
-\end{itemize}
+	      With the phase delay between data and clock not maintained, delays are unpredictable and different in clock and data.
+	      Delays change from one bit transmission to the next, and the transmitter should consider the worst case scenario.
 
-$$t_1^{RX} = t_1^{TX} + t_d^{ck} - t_d^{data} = t_1^{TX} - t_k$$
-Since it should be that $t_1^{RX} > t_s$, it has to be that:
-$$
-t_1^{TX} > t_s + t_k
-$$
+	      For the setup time we have two sources of badness:
+	      \begin{itemize}
+		      \item Clock arrives early at RX after:
+		            $$
+			            t_d^{ck} = t_\text{prop} - \frac{t_k}{2}
+		            $$
+		      \item Data arrives late at RX after:
+		            $$
+			            t_d^{data} = t_\text{prop} + \frac{t_k}{2}
+		            $$
+	      \end{itemize}
 
-Via similar hold time considerations ($t_2$) we get the frequency constraint:
-$$
-f_\text{ck} < \frac{1}{t_s + t_h + 2 t_k}
-$$
+	      $$t_1^{RX} = t_1^{TX} + t_d^{ck} - t_d^{data} = t_1^{TX} - t_k$$
+	      Since it should be that $t_1^{RX} > t_s$, it has to be that:
+	      $$
+		      t_1^{TX} > t_s + t_k
+	      $$
+
+	      Via similar hold time considerations ($t_2$) we get the frequency constraint:
+	      $$
+		      f_\text{ck} < \frac{1}{t_s + t_h + 2 t_k}
+	      $$
 
 \end{itemize}
 
